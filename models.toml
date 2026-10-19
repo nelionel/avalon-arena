@@ -1,0 +1,118 @@
+# Models that can take a seat: bin/avalon run --seat P1=model:haiku-5.5
+#                          or: bin/avalon arena --models haiku-5.5,gpt-6-luna,qwen-3.8-flash-next
+#
+# Override any field (a base_url through an SSH tunnel, another backend) in
+# models.local.toml, which git ignores. Keys are never stored here: each model
+# reads the environment variable named by key_env, or the same name in
+# secrets/credentials.env.
+#
+# Backends:
+#   anthropic   Anthropic Messages API (key_env, optional base_url)
+#   claude-cli  a signed-in Claude Code CLI on this machine (`claude -p`; AVALON_CLAUDE_BINARY to pick one)
+#   openai      any OpenAI-compatible chat completions endpoint (vLLM, OpenAI, OpenRouter, ...)
+#   codex       a signed-in Codex CLI on this machine (ChatGPT login; AVALON_CODEX_BINARY to pick one)
+
+[models."haiku-5.5"]
+label = "Haiku 5.5"
+maker = "Anthropic"
+color = "#d97757"
+backend = "anthropic"
+model = "claude-haiku-5-5"
+key_env = "ANTHROPIC_API_KEY"
+max_tokens = 8000
+thinking_budget = 4000
+
+[models."gpt-6-luna"]
+label = "GPT-6 Luna"
+maker = "OpenAI"
+color = "#10a37f"
+backend = "codex"
+model = "gpt-6-luna"
+effort = "medium"
+
+[models."qwen-3.8-flash-next"]
+label = "Qwen3.8 Flash Next"
+maker = "Qwen"
+color = "#615ced"
+backend = "openai"
+model = "Qwen/Qwen3.8-Flash-Next-FP8"
+base_url = "http://127.0.0.1:8000/v1"   # bin/serve-qwen, or an SSH tunnel to it
+max_tokens = 16000
+concurrency = 16
+params = { temperature = 1.0, top_p = 0.95, top_k = 20, chat_template_kwargs = { reasoning_effort = "medium" } }
+
+# Alternatives for the same models; pick them with --models or in models.local.toml.
+
+[models."haiku-5.5-cli"]
+label = "Haiku 5.5"
+maker = "Anthropic"
+color = "#d97757"
+backend = "claude-cli"
+model = "claude-haiku-5-5"
+effort = "medium"
+
+[models."gpt-6-luna-api"]
+label = "GPT-6 Luna"
+maker = "OpenAI"
+color = "#10a37f"
+backend = "openai"
+model = "gpt-6-luna"
+base_url = "https://api.openai.com/v1"
+key_env = "OPENAI_API_KEY"
+token_param = "max_completion_tokens"
+max_tokens = 16000
+params = { reasoning_effort = "medium" }
+
+# Haiku 5.5 played by Claude Code subagents (Agent tool, model "haiku"): the referee writes each
+# turn to games/.relay/<game>-<seat>-NNN.request.md and waits for the matching .reply.txt.
+# See ARENA.md, "Subagent players".
+[models."haiku-5.5-subagent"]
+label = "Haiku 5.5"
+maker = "Anthropic"
+color = "#d97757"
+backend = "relay"
+model = "claude-haiku-5-5 via Claude Code subagents"
+timeout = 1800
+
+# All three through OpenRouter: one key (OPENROUTER_API_KEY), the same reasoning effort for every
+# model, and per-seat sticky routing so prompt caches stay warm. OpenRouter carries Qwen3.8 Flash,
+# the production model built on the Flash Next preview served by bin/serve-qwen, not the preview itself.
+# Pin a provider for reproducible comparisons with e.g. params.provider = { order = ["anthropic"], allow_fallbacks = false }.
+[models."haiku-5.5-or"]
+label = "Haiku 5.5"
+maker = "Anthropic"
+color = "#d97757"
+backend = "openai"
+model = "anthropic/claude-haiku-5.5"
+base_url = "https://openrouter.ai/api/v1"
+key_env = "OPENROUTER_API_KEY"
+max_tokens = 16000
+cache = true                       # Anthropic caches only marked prompt sections
+concurrency = 16                   # two tournament games at once (8 seats each)
+params = { reasoning = { effort = "medium" } }
+
+[models."gpt-6-luna-or"]
+label = "GPT-6 Luna"
+maker = "OpenAI"
+color = "#10a37f"
+backend = "openai"
+model = "openai/gpt-6-luna"
+base_url = "https://openrouter.ai/api/v1"
+key_env = "OPENROUTER_API_KEY"
+max_tokens = 16000                 # OpenAI caches automatically; its reasoning text is not returned
+concurrency = 8
+params = { reasoning = { effort = "medium" } }
+
+[models."qwen-3.8-flash-or"]
+label = "Qwen3.8 Flash"
+maker = "Qwen"
+color = "#8b5cf6"
+backend = "openai"
+model = "qwen/qwen3.8-flash"
+base_url = "https://openrouter.ai/api/v1"
+key_env = "OPENROUTER_API_KEY"
+max_tokens = 16000                 # reasoning budget: effort "medium" is about half of max_tokens
+cache = true                       # Alibaba caches only marked prompt sections
+concurrency = 8
+timeout = 600                      # thinks up to ~9k tokens a move at ~40 tokens/s through OpenRouter
+params = { temperature = 1.0, top_p = 0.95, top_k = 20, reasoning = { effort = "medium" } }

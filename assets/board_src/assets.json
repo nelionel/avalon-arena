@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "assets": [
+    {
+      "name": "board",
+      "path": "svg/board.svg",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "name": "board-blank",
+      "path": "svg/board-blank.svg",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "name": "board-background",
+      "path": "svg/board-background.svg",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "name": "board-transparent",
+      "path": "svg/board-transparent.svg",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "name": "castle",
+      "path": "svg/castle.svg",
+      "width": 792,
+      "height": 424
+    },
+    {
+      "name": "mission-1",
+      "path": "svg/mission-1.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "mission-2",
+      "path": "svg/mission-2.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "mission-3",
+      "path": "svg/mission-3.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "mission-4",
+      "path": "svg/mission-4.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "mission-5",
+      "path": "svg/mission-5.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "mission-empty",
+      "path": "svg/mission-empty.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "mission-current",
+      "path": "svg/mission-current.svg",
+      "width": 208,
+      "height": 304
+    },
+    {
+      "name": "rejections-0",
+      "path": "svg/rejections-0.svg",
+      "width": 440,
+      "height": 152
+    },
+    {
+      "name": "rejections-1",
+      "path": "svg/rejections-1.svg",
+      "width": 440,
+      "height": 152
+    },
+    {
+      "name": "rejections-2",
+      "path": "svg/rejections-2.svg",
+      "width": 440,
+      "height": 152
+    },
+    {
+      "name": "rejections-3",
+      "path": "svg/rejections-3.svg",
+      "width": 440,
+      "height": 152
+    },
+    {
+      "name": "rejections-4",
+      "path": "svg/rejections-4.svg",
+      "width": 440,
+      "height": 152
+    },
+    {
+      "name": "rejections-5",
+      "path": "svg/rejections-5.svg",
+      "width": 440,
+      "height": 152
+    },
+    {
+      "name": "icons/success",
+      "path": "svg/icons/success.svg",
+      "width": 72,
+      "height": 72
+    },
+    {
+      "name": "icons/fail",
+      "path": "svg/icons/fail.svg",
+      "width": 72,
+      "height": 72
+    },
+    {
+      "name": "icons/current-ring",
+      "path": "svg/icons/current-ring.svg",
+      "width": 192,
+      "height": 192
+    },
+    {
+      "name": "icons/current-pointer",
+      "path": "svg/icons/current-pointer.svg",
+      "width": 72,
+      "height": 72
+    },
+    {
+      "name": "icons/proposal-filled",
+      "path": "svg/icons/proposal-filled.svg",
+      "width": 72,
+      "height": 72
+    },
+    {
+      "name": "icons/proposal-empty",
+      "path": "svg/icons/proposal-empty.svg",
+      "width": 72,
+      "height": 72
+    }
+  ]
+}

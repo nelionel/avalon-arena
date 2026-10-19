@@ -1,0 +1,59 @@
+{
+  "canvas": {
+    "width": 1254,
+    "height": 1254
+  },
+  "castle": {
+    "x": 232,
+    "y": 140,
+    "width": 792,
+    "height": 424
+  },
+  "missionRow": {
+    "y": 624,
+    "firstX": 78,
+    "spacing": 222,
+    "componentViewBox": [
+      0,
+      0,
+      208,
+      304
+    ],
+    "circleCenter": [
+      104,
+      140
+    ],
+    "circleRadius": 90
+  },
+  "rejectionTrack": {
+    "x": 407,
+    "y": 1008,
+    "width": 440,
+    "height": 152
+  },
+  "demoState": {
+    "currentMission": 3,
+    "teamSizes": [
+      2,
+      3,
+      3,
+      4,
+      4
+    ],
+    "missionResults": [
+      "fail",
+      "success",
+      null,
+      null,
+      null
+    ],
+    "requiredFails": [
+      1,
+      1,
+      1,
+      2,
+      1
+    ],
+    "rejectedProposals": 2
+  }
+}

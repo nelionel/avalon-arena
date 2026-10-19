@@ -1,0 +1,816 @@
+{
+  "original_source": {
+    "merlin": "chibi_merlin_octopus_mage_sprite_sheet.png",
+    "percival": "percival_knight_emote_spritesheet.png",
+    "loyal_servant": "four_frame_blue_knight_sprite_sheet.png",
+    "mordred": "pixel_art_crowned_monster_sprite_sheet.png",
+    "morgana": "morgana_purple_sorceress_sprite_sheet.png",
+    "assassin": "chibi_pixel_assassin_sprite_sheet.png",
+    "oberon": "pixel_oberon_forest_king_sprite_sheet.png"
+  },
+  "registration": {
+    "merlin": {
+      "source": "chibi_merlin_octopus_mage_sprite_sheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            9,
+            -30
+          ],
+          "erased_effects": [],
+          "bottom": 590,
+          "torso_center": 301.0
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            23,
+            -30
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                541,
+                302,
+                582,
+                341
+              ],
+              "component_pixels": 634
+            },
+            {
+              "source_bbox": [
+                558,
+                340,
+                591,
+                361
+              ],
+              "component_pixels": 447
+            },
+            {
+              "source_bbox": [
+                572,
+                378,
+                602,
+                391
+              ],
+              "component_pixels": 383
+            }
+          ],
+          "bottom": 590,
+          "torso_center": 287.0
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -5,
+            30
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                94,
+                141,
+                120,
+                183
+              ],
+              "component_pixels": 586
+            },
+            {
+              "source_bbox": [
+                55,
+                180,
+                97,
+                216
+              ],
+              "component_pixels": 636
+            },
+            {
+              "source_bbox": [
+                50,
+                231,
+                91,
+                251
+              ],
+              "component_pixels": 568
+            }
+          ],
+          "bottom": 530,
+          "torso_center": 315.0
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            8,
+            25
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                496,
+                332,
+                584,
+                406
+              ],
+              "component_pixels": 2452
+            }
+          ],
+          "bottom": 535,
+          "torso_center": 302.5
+        }
+      ]
+    },
+    "percival": {
+      "source": "percival_knight_emote_spritesheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            -16,
+            -22
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                63,
+                223,
+                102,
+                269
+              ],
+              "component_pixels": 862
+            },
+            {
+              "source_bbox": [
+                34,
+                259,
+                84,
+                294
+              ],
+              "component_pixels": 990
+            },
+            {
+              "source_bbox": [
+                29,
+                310,
+                73,
+                333
+              ],
+              "component_pixels": 688
+            }
+          ],
+          "bottom": 582,
+          "torso_center": 326.0
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            1,
+            -22
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                537,
+                258,
+                599,
+                329
+              ],
+              "component_pixels": 1545
+            },
+            {
+              "source_bbox": [
+                529,
+                293,
+                559,
+                321
+              ],
+              "component_pixels": 372
+            }
+          ],
+          "bottom": 582,
+          "torso_center": 309.0
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -23,
+            20
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                47,
+                246,
+                95,
+                314
+              ],
+              "component_pixels": 1125
+            },
+            {
+              "source_bbox": [
+                66,
+                280,
+                95,
+                323
+              ],
+              "component_pixels": 581
+            }
+          ],
+          "bottom": 540,
+          "torso_center": 333.0
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            -6,
+            17
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                69,
+                199,
+                112,
+                253
+              ],
+              "component_pixels": 1109
+            },
+            {
+              "source_bbox": [
+                504,
+                212,
+                544,
+                263
+              ],
+              "component_pixels": 964
+            },
+            {
+              "source_bbox": [
+                46,
+                247,
+                91,
+                280
+              ],
+              "component_pixels": 953
+            },
+            {
+              "source_bbox": [
+                522,
+                253,
+                565,
+                284
+              ],
+              "component_pixels": 788
+            }
+          ],
+          "bottom": 543,
+          "torso_center": 316.5
+        }
+      ]
+    },
+    "loyal_servant": {
+      "source": "four_frame_blue_knight_sprite_sheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            -30,
+            3
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                77,
+                200,
+                110,
+                243
+              ],
+              "component_pixels": 883
+            },
+            {
+              "source_bbox": [
+                42,
+                236,
+                79,
+                267
+              ],
+              "component_pixels": 807
+            }
+          ],
+          "bottom": 557,
+          "torso_center": 339.5
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            10,
+            4
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                542,
+                292,
+                559,
+                332
+              ],
+              "component_pixels": 678
+            },
+            {
+              "source_bbox": [
+                553,
+                335,
+                584,
+                384
+              ],
+              "component_pixels": 926
+            }
+          ],
+          "bottom": 556,
+          "torso_center": 299.5
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -42,
+            69
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                62,
+                232,
+                105,
+                274
+              ],
+              "component_pixels": 1062
+            },
+            {
+              "source_bbox": [
+                42,
+                285,
+                82,
+                314
+              ],
+              "component_pixels": 847
+            }
+          ],
+          "bottom": 491,
+          "torso_center": 351.5
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            14,
+            70
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                489,
+                178,
+                523,
+                230
+              ],
+              "component_pixels": 1083
+            },
+            {
+              "source_bbox": [
+                515,
+                219,
+                563,
+                265
+              ],
+              "component_pixels": 1221
+            }
+          ],
+          "bottom": 490,
+          "torso_center": 296.5
+        }
+      ]
+    },
+    "mordred": {
+      "source": "pixel_art_crowned_monster_sprite_sheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            -12,
+            -7
+          ],
+          "erased_effects": [],
+          "bottom": 567,
+          "torso_center": 322.5
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            5,
+            -7
+          ],
+          "erased_effects": [],
+          "bottom": 567,
+          "torso_center": 305.0
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -20,
+            37
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                70,
+                165,
+                109,
+                216
+              ],
+              "component_pixels": 1196
+            },
+            {
+              "source_bbox": [
+                42,
+                223,
+                85,
+                254
+              ],
+              "component_pixels": 904
+            }
+          ],
+          "bottom": 523,
+          "torso_center": 329.5
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            0,
+            37
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                516,
+                201,
+                557,
+                249
+              ],
+              "component_pixels": 1185
+            },
+            {
+              "source_bbox": [
+                536,
+                251,
+                579,
+                282
+              ],
+              "component_pixels": 917
+            }
+          ],
+          "bottom": 523,
+          "torso_center": 309.5
+        }
+      ]
+    },
+    "morgana": {
+      "source": "morgana_purple_sorceress_sprite_sheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            -18,
+            16
+          ],
+          "erased_effects": [],
+          "bottom": 544,
+          "torso_center": 328.0
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            2,
+            7
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                520,
+                244,
+                550,
+                278
+              ],
+              "component_pixels": 579
+            },
+            {
+              "source_bbox": [
+                523,
+                275,
+                564,
+                313
+              ],
+              "component_pixels": 439
+            },
+            {
+              "source_bbox": [
+                551,
+                300,
+                582,
+                335
+              ],
+              "component_pixels": 577
+            }
+          ],
+          "bottom": 553,
+          "torso_center": 308.0
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -36,
+            47
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                533,
+                269,
+                574,
+                332
+              ],
+              "component_pixels": 762
+            },
+            {
+              "source_bbox": [
+                521,
+                291,
+                553,
+                344
+              ],
+              "component_pixels": 641
+            }
+          ],
+          "bottom": 513,
+          "torso_center": 346.5
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            -6,
+            48
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                492,
+                242,
+                573,
+                334
+              ],
+              "component_pixels": 3739
+            }
+          ],
+          "bottom": 512,
+          "torso_center": 316.5
+        }
+      ]
+    },
+    "assassin": {
+      "source": "chibi_pixel_assassin_sprite_sheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            -20,
+            0
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                41,
+                251,
+                80,
+                297
+              ],
+              "component_pixels": 842
+            },
+            {
+              "source_bbox": [
+                25,
+                295,
+                57,
+                324
+              ],
+              "component_pixels": 565
+            }
+          ],
+          "bottom": 560,
+          "torso_center": 330.5
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            22,
+            0
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                555,
+                338,
+                589,
+                375
+              ],
+              "component_pixels": 651
+            },
+            {
+              "source_bbox": [
+                575,
+                372,
+                606,
+                396
+              ],
+              "component_pixels": 501
+            }
+          ],
+          "bottom": 560,
+          "torso_center": 288.0
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -14,
+            50
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                48,
+                251,
+                85,
+                293
+              ],
+              "component_pixels": 803
+            },
+            {
+              "source_bbox": [
+                27,
+                289,
+                61,
+                317
+              ],
+              "component_pixels": 617
+            }
+          ],
+          "bottom": 510,
+          "torso_center": 324.0
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            12,
+            50
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                541,
+                238,
+                578,
+                282
+              ],
+              "component_pixels": 781
+            },
+            {
+              "source_bbox": [
+                566,
+                270,
+                601,
+                303
+              ],
+              "component_pixels": 664
+            }
+          ],
+          "bottom": 510,
+          "torso_center": 298.5
+        }
+      ]
+    },
+    "oberon": {
+      "source": "pixel_oberon_forest_king_sprite_sheet.png",
+      "registration": [
+        {
+          "pose": 0,
+          "pixel_translation": [
+            -17,
+            4
+          ],
+          "erased_effects": [],
+          "bottom": 556,
+          "torso_center": 327.0
+        },
+        {
+          "pose": 1,
+          "pixel_translation": [
+            6,
+            4
+          ],
+          "erased_effects": [],
+          "bottom": 556,
+          "torso_center": 304.0
+        },
+        {
+          "pose": 2,
+          "pixel_translation": [
+            -12,
+            45
+          ],
+          "erased_effects": [
+            {
+              "source_bbox": [
+                52,
+                294,
+                98,
+                339
+              ],
+              "component_pixels": 999
+            },
+            {
+              "source_bbox": [
+                39,
+                337,
+                83,
+                361
+              ],
+              "component_pixels": 919
+            },
+            {
+              "source_bbox": [
+                43,
+                368,
+                81,
+                402
+              ],
+              "component_pixels": 698
+            }
+          ],
+          "bottom": 515,
+          "torso_center": 322.5
+        },
+        {
+          "pose": 3,
+          "pixel_translation": [
+            1,
+            46
+          ],
+          "erased_effects": [],
+          "bottom": 514,
+          "torso_center": 309.0
+        }
+      ]
+    }
+  },
+  "animations": {
+    "merlin": {
+      "gif_frames": 12,
+      "gif_kib": 1067,
+      "transparent": true,
+      "removed_effect_pixels": 5706
+    },
+    "percival": {
+      "gif_frames": 12,
+      "gif_kib": 961,
+      "transparent": true,
+      "removed_effect_pixels": 9977
+    },
+    "loyal_servant": {
+      "gif_frames": 12,
+      "gif_kib": 678,
+      "transparent": true,
+      "removed_effect_pixels": 7507
+    },
+    "mordred": {
+      "gif_frames": 12,
+      "gif_kib": 781,
+      "transparent": true,
+      "removed_effect_pixels": 4202
+    },
+    "morgana": {
+      "gif_frames": 12,
+      "gif_kib": 1156,
+      "transparent": true,
+      "removed_effect_pixels": 6737
+    },
+    "assassin": {
+      "gif_frames": 12,
+      "gif_kib": 811,
+      "transparent": true,
+      "removed_effect_pixels": 5424
+    },
+    "oberon": {
+      "gif_frames": 12,
+      "gif_kib": 899,
+      "transparent": true,
+      "removed_effect_pixels": 2616
+    }
+  }
+}

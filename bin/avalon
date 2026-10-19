@@ -1,0 +1,3 @@
+#!/bin/bash
+export AVALON_CWD="$PWD"   # bot paths are relative to where you ran this
+cd "$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)" && exec python3 -m avalon.cli "$@"

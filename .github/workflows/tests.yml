@@ -1,0 +1,45 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Engine rules
+        run: python3 tests/test_engine.py
+      - name: Local bots
+        run: python3 tests/test_bots.py
+      - name: Model arena (stand-in models)
+        run: python3 tests/test_arena.py
+      - name: Referee recovery
+        run: python3 tests/test_recovery.py
+      - name: Codex driver
+        run: python3 tests/test_codex_driver.py
+      - name: Public views
+        run: python3 tests/test_public_views.py
+      - name: Tournament (stand-in model)
+        run: python3 tests/test_tournament.py
+      - name: Example bot game, as a contributor runs it
+        run: |
+          bin/avalon run --players 7 --seat P1=bots/example_bot.py --seed 1
+          bin/avalon audit "$(ls games | head -1)" | python3 -c "import json, sys; s = json.load(sys.stdin)['summary']; print(s); sys.exit(1 if s['failed'] else 0)"
+      - name: Arena dry run with stand-in models
+        run: bin/avalon arena --mock --games 2 --seed 1
+      - name: Tournament dry run, 8 baseline copies over 8 games
+        run: |
+          bin/avalon teams demo "$RUNNER_TEMP/teams"
+          bin/avalon tournament --teams "$RUNNER_TEMP/teams" --games 8 --mock --seed 1 --parallel 4

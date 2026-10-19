@@ -1,0 +1,31 @@
+#!/bin/bash
+# The three-way match: Haiku 5.5 vs GPT-6 Luna vs Qwen3.8 Flash Next.
+# Run it where Claude Code and Codex are signed in (e.g. your laptop); Qwen comes from a
+# vLLM server, here or through an SSH tunnel to the GPU box (QWEN_SSH).
+#
+#   QWEN_SSH=my-gpu-box bin/three-way        # tunnel to Qwen, check all three models, play 3 games
+#   GAMES=6 PARALLEL=3 PLAYERS=6 bin/three-way
+#   MOCK=1 bin/three-way                     # free dry run with stand-in models
+set -euo pipefail
+cd "$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+MODELS="${MODELS:-haiku-5.5-cli,gpt-6-luna,qwen-3.8-flash-next}"
+EXTRA=()
+if [ -n "${MOCK:-}" ]; then
+  EXTRA=(--mock)
+else
+  if [ -n "${QWEN_SSH:-}" ]; then
+    ssh -N -o ExitOnForwardFailure=yes -L "${QWEN_PORT:-8000}:127.0.0.1:${QWEN_PORT:-8000}" "$QWEN_SSH" &
+    TUNNEL=$!
+    trap 'kill $TUNNEL 2>/dev/null || true' EXIT
+    for _ in $(seq 30); do          # wait until Qwen answers through the tunnel
+      curl -s -m 2 "http://127.0.0.1:${QWEN_PORT:-8000}/v1/models" >/dev/null && break
+      kill -0 "$TUNNEL" 2>/dev/null || { echo "SSH tunnel to $QWEN_SSH failed" >&2; exit 1; }
+      sleep 1
+    done
+  fi
+  echo "Checking each model with one tiny real request..."
+  bin/avalon models --ping ${MODELS//,/ }
+fi
+bin/avalon arena --models "$MODELS" --players "${PLAYERS:-6}" --games "${GAMES:-3}" --parallel "${PARALLEL:-3}" \
+  --tag "${TAG:-three-way-$(date +%Y%m%d-%H%M)}" "${EXTRA[@]}"
+echo "Watch and replay: bin/avalon dashboard, then open http://127.0.0.1:8777 (Arena tab)."

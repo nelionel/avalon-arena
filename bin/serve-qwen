@@ -1,0 +1,20 @@
+#!/bin/bash
+# Serve Qwen3.8-Flash-Next (FP8) for the arena on 127.0.0.1:8000 (OpenAI-compatible), on 2 H200-class GPUs.
+#
+#   uv venv --python 3.12 ~/qwen-venv && VIRTUAL_ENV=~/qwen-venv uv pip install "vllm>=0.30.0"
+#   ~/qwen-venv/bin/vllm download-kernels          # prebuilt kernels: no CUDA compiler needed
+#   VLLM=~/qwen-venv/bin/vllm bin/serve-qwen       # weights download on first start (~173 GiB)
+#
+# On a shared box, run it through the scheduler, e.g. on the H200:
+#   h2 submit -n avalon-qwen-server --gpus 2 --mem 200 -t 90m -- bin/serve-qwen
+# The flags below avoid every kernel that would otherwise be JIT-compiled at startup.
+set -euo pipefail
+export VLLM_ALLREDUCE_USE_FLASHINFER=0
+exec "${VLLM:-vllm}" serve "${QWEN_MODEL:-Qwen/Qwen3.8-Flash-Next-FP8}" \
+  --served-model-name Qwen/Qwen3.8-Flash-Next-FP8 \
+  --host 127.0.0.1 --port "${QWEN_PORT:-8000}" \
+  --tensor-parallel-size "${QWEN_TP:-2}" --enable-expert-parallel --moe-backend triton --gdn-prefill-backend triton \
+  --gpu-memory-utilization 0.85 --max-num-seqs 64 --max-model-len 131072 \
+  --enable-prefix-caching --kv-cache-dtype fp8 --attention-config.indexer_kv_dtype fp8 \
+  --compilation-config '{"pass_config": {"fuse_allreduce_rms": false}}' \
+  --reasoning-parser qwen3 --disable-custom-all-reduce

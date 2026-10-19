@@ -1,0 +1,13 @@
+:root {
+  --avalon-background: #FCF8EA;
+  --avalon-ink: #0B3C30;
+  --avalon-sage: #B3C1A6;
+  --avalon-sage-outline: #ADBA9E;
+  --avalon-gold: #D29A25;
+  --avalon-blue: #477A9D;
+  --avalon-red: #B94F40;
+  --avalon-white: #FCF8EA;
+  --avalon-muted: #64765E;
+}
+.avalon-board { width: 100%; height: auto; display: block; }
+.avalon-pixel { image-rendering: pixelated; }

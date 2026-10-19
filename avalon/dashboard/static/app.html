@@ -1,0 +1,1399 @@
+<title>Avalon Referee Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap">
+<style>
+/* Layout: the supplied castle board with players around it (below it on narrow screens)
+   beside a speech card that pairs what the speaker said with what they privately thought. Transport and
+   chapter strip below; the chronicle, beliefs, terminals, verification and statistics panes underneath. */
+:root {
+  --bg: #eef0f3; --panel: #ffffff; --panel-2: #f5f6f8; --line: #d9dde4; --line-2: #c3c9d3;
+  --ink: #161a22; --ink-2: #4a5160; --ink-3: #646b7b;
+  --good: #2f6fb5; --good-soft: #e3edf8; --evil: #b8323a; --evil-soft: #f8e5e6;
+  --brass: #8c5f0f; --brass-soft: #f4ead6;
+  --ok: #2b7a4b; --ok-soft: #e1f0e7; --warn: #936000; --warn-soft: #f5ebd6; --crit: #c2410c; --crit-soft: #fbe8de;
+  --felt: #22423a; --felt-hi: #2f5a4e; --rim: #9a7631; --felt-ink: #eef3ee; --felt-ink-2: #b8cbbf; --felt-line: #3d6b5d;
+  --seat: #ffffff; --seat-ink: #161a22;
+  --term-bg: #10131a; --term-fg: #d5d9e2; --term-line: #2a2f3b;
+  --shadow: 0 1px 2px rgba(22, 26, 34, .06), 0 6px 18px rgba(22, 26, 34, .07);
+  --scrim: rgba(14, 17, 24, .38);
+  --f-display: "Alegreya SC", "Palatino Linotype", Palatino, Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, Menlo, Consolas, "Noto Sans Symbols 2", "Noto Sans Math", monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1118; --panel: #161a24; --panel-2: #1c212d; --line: #272d3b; --line-2: #39425a;
+    --ink: #e8eaf0; --ink-2: #b0b6c4; --ink-3: #8f96a6;
+    --good: #4f8fd6; --good-soft: #17263b; --evil: #d6545b; --evil-soft: #351b20;
+    --brass: #d1a24a; --brass-soft: #2e2615;
+    --ok: #4fb87e; --ok-soft: #142a1f; --warn: #e0a83c; --warn-soft: #2e2512; --crit: #f2733a; --crit-soft: #351a0f;
+    --felt: #183129; --felt-hi: #22443a; --rim: #b48a3c; --felt-ink: #eef3ee; --felt-ink-2: #a9bdb1; --felt-line: #2f5649;
+    --seat: #1f2533; --seat-ink: #e8eaf0;
+    --term-bg: #0a0c11; --term-fg: #d5d9e2; --term-line: #232836;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 8px 24px rgba(0, 0, 0, .3);
+    --scrim: rgba(0, 0, 0, .55);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1118; --panel: #161a24; --panel-2: #1c212d; --line: #272d3b; --line-2: #39425a;
+  --ink: #e8eaf0; --ink-2: #b0b6c4; --ink-3: #8f96a6;
+  --good: #4f8fd6; --good-soft: #17263b; --evil: #d6545b; --evil-soft: #351b20;
+  --brass: #d1a24a; --brass-soft: #2e2615;
+  --ok: #4fb87e; --ok-soft: #142a1f; --warn: #e0a83c; --warn-soft: #2e2512; --crit: #f2733a; --crit-soft: #351a0f;
+  --felt: #183129; --felt-hi: #22443a; --rim: #b48a3c; --felt-ink: #eef3ee; --felt-ink-2: #a9bdb1; --felt-line: #2f5649;
+  --seat: #1f2533; --seat-ink: #e8eaf0;
+  --term-bg: #0a0c11; --term-fg: #d5d9e2; --term-line: #232836;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 8px 24px rgba(0, 0, 0, .3);
+  --scrim: rgba(0, 0, 0, .55);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); margin: 0; }
+button, select, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+code, pre, .mono { font-family: var(--f-mono); font-size: 12.5px; }
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 700; text-wrap: balance; margin: 0; letter-spacing: .01em; }
+.wrap { max-width: 1360px; margin: 0 auto; padding-inline: 20px; padding-block: 0 56px; }
+@media (max-width: 600px) { .wrap { padding-inline: 16px; } }
+.muted { color: var(--ink-3); }
+.small { font-size: 13px; }
+.label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; }
+.num { font-variant-numeric: lining-nums tabular-nums; }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-block: 10px; }
+.brand { display: flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; }
+.brand svg { flex: none; }
+.brand h1 { font-size: 21px; line-height: 1.1; }
+.brand .sub { font-size: 12.5px; color: var(--ink-3); }
+.pickers { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; }
+.pick { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pick label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; }
+.sel { background: var(--panel); border: 1px solid var(--line-2); border-radius: 8px; padding: 6px 10px; font-size: 14px; max-width: min(92vw, 380px); cursor: pointer; }
+.sel:hover { border-color: var(--ink-3); }
+.btn { background: var(--panel); border: 1px solid var(--line-2); border-radius: 8px; padding: 6px 11px; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-3); }
+.btn:disabled { opacity: .45; cursor: default; border-color: var(--line-2); }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 600; }
+.seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.seg button { background: var(--panel); border: 0; padding: 6px 11px; cursor: pointer; font-size: 14px; }
+.seg button + button { border-left: 1px solid var(--line-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 600; border: 1px solid var(--line-2); background: var(--panel); white-space: nowrap; }
+.pill.live { color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.pill.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: pulse 1.6s ease-in-out infinite; }
+.pill.err { color: var(--crit); border-color: var(--crit); background: var(--crit-soft); }
+.pill.good { color: var(--good); border-color: var(--good); background: var(--good-soft); }
+.pill.evil { color: var(--evil); border-color: var(--evil); background: var(--evil-soft); }
+.pill.brass { color: var(--brass); border-color: var(--brass); background: var(--brass-soft); }
+@keyframes pulse { 50% { opacity: .35; } }
+
+.persp-note { margin-top: 12px; border: 1px solid var(--brass); background: var(--brass-soft); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+
+/* ---------------- stage: the table + speech card ---------------- */
+.stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, 1fr); gap: 18px; margin-top: 16px; align-items: start; }
+@media (max-width: 1020px) { .stage { grid-template-columns: 1fr; } }
+.tablecard { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 12px; min-width: 0; }
+.tablebox { width: 100%; }
+.table-scene { position: relative; width: 100%; aspect-ratio: 1; }
+.board-art { position: absolute; width: 76%; left: 50%; top: 50%; transform: translate(-50%, -50%); overflow: hidden; border-radius: 10px; background: #fcf8ea; }
+.board-art > svg { display: block; width: 100%; height: auto; }
+.table-seats { position: absolute; inset: 0; }
+.table-status { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px 2px; text-align: center; border-top: 1px solid var(--line); }
+.table-status .phase { font: 700 17px/1.2 var(--f-display); letter-spacing: .02em; }
+.table-status .phase2 { font-size: 13px; color: var(--ink-2); line-height: 1.35; }
+.reveal { display: flex; gap: 5px; justify-content: center; margin-top: 2px; }
+.rcard { width: 22px; height: 31px; border-radius: 4px; display: grid; place-items: center; font: 700 11px var(--f-display); color: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .4); animation: flip .45s ease-out both; }
+.rcard.s { background: var(--good); } .rcard.f { background: var(--evil); }
+@keyframes flip { from { transform: rotateY(90deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.winbanner { font: 700 18px var(--f-display); padding: 2px 10px; border-radius: 8px; }
+.winbanner.good { background: var(--good); color: #fff; } .winbanner.evil { background: var(--evil); color: #fff; }
+
+.seatn { position: absolute; transform: translate(-50%, -50%); width: 104px; display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: 0; padding: 0; cursor: pointer; z-index: 2; color: var(--ink); }
+.av { width: 76px; height: 76px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, var(--seat), var(--panel-2)); color: var(--seat-ink); display: grid; place-items: center; font: 700 19px/1 var(--f-display); border: 3px solid var(--line-2); box-shadow: var(--shadow); position: relative; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.av img { width: 118%; height: 118%; object-fit: contain; margin-top: -14%; pointer-events: none; image-rendering: auto; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .35)); }
+.av .sid { position: absolute; top: -7px; left: -7px; background: var(--ink); color: var(--bg); font: 700 11.5px/1 var(--f-body); border-radius: 999px; padding: 3px 6px; letter-spacing: .02em; z-index: 1; }
+.ch-unknown img { filter: grayscale(1) brightness(.8) contrast(.9); opacity: .7; }
+.ch-evil img { filter: grayscale(1) sepia(1) saturate(4.5) hue-rotate(-40deg) brightness(.85); }
+.ch-maybe img { filter: grayscale(1) sepia(1) saturate(2.5) hue-rotate(215deg); }
+.qmark { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font: 700 18px var(--f-display); color: var(--bg); background: var(--ink-3); border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; }
+.sp-char { width: 132px; height: 132px; flex: none; border-radius: 16px; background: radial-gradient(circle at 50% 42%, var(--panel-2), var(--panel)); border: 2px solid var(--line); display: grid; place-items: center; position: relative; overflow: hidden; }
+.sp-char img { width: 100%; height: 100%; object-fit: contain; }
+.sp-char.good { border-color: var(--good); } .sp-char.evil { border-color: var(--evil); } .sp-char.maybe { border-color: var(--brass); }
+.seatn.good .av { border-color: var(--good); } .seatn.evil .av { border-color: var(--evil); }
+.seatn.maybe .av { border-color: var(--brass); border-style: dashed; }
+.seatn.speaking .av { transform: scale(1.14); box-shadow: 0 0 0 4px var(--brass-soft), 0 0 0 7px var(--brass), var(--shadow); }
+.seatn.dim .av { opacity: .55; }
+.seatn.speaking .nm { margin-top: 7px; }
+.seatn.viewer .av::after { z-index: 2; content: "you"; position: absolute; bottom: -8px; font: 700 9.5px var(--f-body); background: var(--ink); color: var(--bg); border-radius: 999px; padding: 0 5px; letter-spacing: .04em; }
+.seatn .nm { font-size: 12px; font-weight: 600; line-height: 1.15; text-align: center; max-width: 96px; color: var(--ink); background: var(--panel); border-radius: 6px; padding: 1px 5px; }
+.seatn .nm:empty { display: none; }
+.mdl { --mc: var(--ink-3); display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; line-height: 1.25; padding: 1px 7px 1px 5px; border-radius: 999px; border: 1px solid var(--mc); background: color-mix(in srgb, var(--mc) 14%, var(--panel)); color: var(--ink); white-space: nowrap; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+.mdl::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mc); flex: none; }
+.term.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.mdl.lg { font-size: 12.5px; padding: 2px 9px 2px 7px; max-width: none; }
+.arena-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 16px; align-items: start; }
+@media (max-width: 1180px) { .arena-grid { grid-template-columns: minmax(0, 1fr); } }
+.arena-card { min-width: 0; }
+.arena-card .tbl td, .arena-card .tbl th { padding: 8px 10px; }
+.lbbar { display: inline-block; vertical-align: middle; width: 70px; height: 7px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--line); overflow: hidden; margin-right: 8px; }
+.lbbar > span { display: block; height: 100%; background: var(--mc); }
+.launch h3, .arena-card h3 { margin: 0 0 10px; font-size: 15px; }
+.launch .opt { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 6px; cursor: pointer; }
+.launch .opt.off { opacity: .55; cursor: default; }
+.launch .opt small { display: block; color: var(--ink-3); font-size: 11.5px; overflow-wrap: anywhere; }
+.launch .opt > span:last-child { min-width: 0; }
+.launch .opt .mdl { flex: none; }
+.launch .row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 10px 0; font-size: 13.5px; }
+.launch .row select, .launch .row input[type=number] { padding: 4px 6px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--panel); width: 64px; }
+.launch .msg { font-size: 13px; margin-top: 8px; color: var(--ink-2); overflow-wrap: anywhere; }
+.launch .msg.err { color: var(--crit); }
+.seatn .st { font-size: 11px; color: var(--ink-2); line-height: 1.2; max-width: 112px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; }
+.mark { position: absolute; width: 21px; height: 21px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; box-shadow: 0 1px 3px rgba(0, 0, 0, .35); }
+.mark.crown { top: -9px; left: 50%; transform: translateX(-50%); background: var(--rim); color: #fff; }
+.mark.team { bottom: -5px; right: -7px; background: var(--brass-soft); color: var(--brass); border: 1.5px solid var(--brass); }
+.mark.vote { top: -5px; right: -9px; }
+.mark.vote.approve { background: var(--ok); color: #fff; } .mark.vote.reject { background: var(--ink-3); color: #fff; }
+.mark.card { top: 50%; left: -15px; transform: translateY(-50%); background: var(--ink-2); color: var(--panel); border-radius: 4px; width: 16px; height: 22px; }
+.mark.card.f { background: var(--evil); color: #fff; } .mark.card.s { background: var(--good); color: #fff; }
+.table-bubble { margin: 10px 0 0; background: var(--panel-2); color: var(--ink); border-left: 3px solid var(--brass); border-radius: 4px; padding: 8px 10px; font-size: 13px; line-height: 1.4; }
+.table-bubble.whisper { border-color: var(--evil); }
+@media (max-width: 560px) {
+  .table-scene { aspect-ratio: auto; }
+  .board-art { position: static; width: 100%; transform: none; }
+  .table-seats { position: static; display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 20px 6px; padding: 20px 2px 14px; }
+  .seatn { position: relative; left: auto !important; top: auto !important; transform: none; width: 100%; } .av { width: 46px; height: 46px; font-size: 14px; border-width: 2px; } .av .sid { font-size: 9.5px; padding: 2px 4px; } .sp-char { width: 84px; height: 84px; }
+  .seatn .nm { font-size: 10.5px; } .seatn .st { font-size: 10px; max-width: 70px; }
+  .seatn .mdl { max-width: 100%; font-size: 9.5px; padding: 1px 5px 1px 4px; }
+  .mark { width: 16px; height: 16px; font-size: 9px; }
+}
+
+/* speech card */
+.speech { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 16px 18px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.sp-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sp-av { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font: 700 16px var(--f-display); background: var(--panel-2); border: 3px solid var(--line-2); flex: none; }
+.sp-av.good { border-color: var(--good); } .sp-av.evil { border-color: var(--evil); } .sp-av.narr { border-color: var(--rim); color: var(--brass); }
+.sp-who { font: 700 18px/1.1 var(--f-display); }
+.sp-ctx { font-size: 12.5px; color: var(--ink-3); }
+.sp-words { font-size: 17.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; position: relative; padding-left: 16px; }
+.sp-words::before { content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 3px; border-radius: 3px; background: var(--brass); }
+.sp-words.whisper::before { background: var(--evil); }
+.sp-narr { font-size: 16px; color: var(--ink-2); }
+.priv { border-top: 1px dashed var(--line-2); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.priv h5 { margin: 0; font: 600 11.5px var(--f-body); text-transform: uppercase; letter-spacing: .08em; color: var(--brass); display: flex; align-items: center; gap: 6px; }
+.priv .mdx { font-size: 14px; color: var(--ink-2); max-height: 230px; overflow: auto; }
+.cot { font-size: 13.5px; color: var(--ink-2); font-style: italic; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 170px; overflow: auto; background: var(--panel-2); border-radius: 8px; padding: 8px 10px; }
+.bel { display: grid; grid-template-columns: 34px minmax(0, 1fr) 40px; gap: 4px 8px; align-items: center; font-size: 12.5px; }
+.bel .b { height: 9px; border-radius: 0 4px 4px 0; background: var(--evil); min-width: 2px; }
+.bel .t { justify-self: end; font-variant-numeric: lining-nums tabular-nums; color: var(--ink-2); }
+.bel .who { font-weight: 700; display: flex; align-items: center; gap: 4px; }
+.truth { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.truth.good { background: var(--good); } .truth.evil { background: var(--evil); } .truth.unk { background: var(--line-2); }
+.votegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; }
+.vg { border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.vg i { font-style: normal; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; color: #fff; }
+.vg.approve i { background: var(--ok); } .vg.reject i { background: var(--ink-3); }
+
+/* transport */
+.transport { margin-top: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.tp-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.tp-row input[type=range] { flex: 1 1 240px; accent-color: var(--brass); min-width: 0; }
+.beatlbl { font-size: 13.5px; color: var(--ink-2); min-width: 0; }
+.chapters { display: flex; gap: 6px; flex-wrap: wrap; }
+.chap { border: 1px solid var(--line-2); background: var(--panel-2); border-radius: 999px; padding: 2px 10px; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.chap.on { border-color: var(--brass); background: var(--brass-soft); color: var(--brass); font-weight: 700; }
+.chap .q { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: var(--line-2); }
+.chap .q.s { background: var(--good); } .chap .q.f { background: var(--evil); }
+.vstat { font-size: 13px; }
+
+/* tabs and panes */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-top: 28px; overflow-x: auto; }
+.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 9px 14px; cursor: pointer; font: 700 16px var(--f-display); color: var(--ink-3); white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brass); }
+.tabs .count { font: 600 12px var(--f-body); color: var(--ink-3); margin-left: 4px; }
+.pane { padding-top: 18px; }
+.empty { padding: 30px; text-align: center; color: var(--ink-3); border: 1px dashed var(--line-2); border-radius: 12px; }
+
+/* chronicle */
+.quest-block { margin-bottom: 26px; }
+.quest-block > h3 { font-size: 19px; margin-bottom: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.card h4 { font-size: 16px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.card .meta { font-size: 12.5px; color: var(--ink-3); font-family: var(--f-body); font-weight: 500; letter-spacing: 0; }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; height: 24px; border-radius: 6px; font: 600 13px var(--f-body); border: 1px solid var(--line-2); background: var(--panel-2); }
+.chip.good { border-color: var(--good); color: var(--good); background: var(--good-soft); }
+.chip.evil { border-color: var(--evil); color: var(--evil); background: var(--evil-soft); }
+.chips { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.msgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; align-items: start; margin-top: 8px; }
+.msg { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: var(--panel-2); min-width: 0; }
+.msg.passed { background: transparent; border-style: dashed; color: var(--ink-3); }
+.msg-h { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 4px; }
+.msg-h .who { font: 700 15px var(--f-display); }
+.msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.why { margin-top: 8px; border-top: 1px dashed var(--line-2); padding-top: 6px; }
+.why summary { cursor: pointer; font-size: 12.5px; color: var(--brass); font-weight: 600; }
+.why .mdx { font-size: 13.5px; color: var(--ink-2); margin-top: 4px; }
+.verdict { font-weight: 700; } .verdict.ok { color: var(--ok); } .verdict.no { color: var(--crit); }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: var(--line-2); display: inline-block; }
+.dot.good { background: var(--good); } .dot.evil { background: var(--evil); }
+.mdx p { margin: .3em 0; } .mdx h5 { font: 700 14px var(--f-body); margin: .6em 0 .2em; }
+.mdx ul { margin: .2em 0; padding-left: 1.2em; } .mdx blockquote { margin: .3em 0; padding-left: 10px; border-left: 3px solid var(--line-2); color: var(--ink-2); }
+.mdx code { background: var(--panel-2); border-radius: 4px; padding: 0 3px; }
+
+/* beliefs */
+.heat { border-collapse: separate; border-spacing: 3px; font-size: 12px; }
+.heat th { font-weight: 600; color: var(--ink-3); padding: 2px 4px; white-space: nowrap; font-size: 11.5px; }
+.heat td { width: 34px; height: 26px; text-align: center; border-radius: 5px; font-variant-numeric: lining-nums tabular-nums; }
+.heat td.lbl { width: auto; text-align: left; font-weight: 700; padding-right: 8px; white-space: nowrap; }
+.heat .chip { white-space: nowrap; }
+.sparks { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.spark { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.spark svg { display: block; width: 100%; height: auto; }
+
+/* terminals */
+.terms { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 14px; }
+.termbox { border-radius: 12px; overflow: hidden; border: 1px solid var(--term-line); background: var(--term-bg); min-width: 0; }
+.termbar { display: flex; align-items: center; gap: 8px; padding: 7px 12px; background: var(--term-line); color: var(--term-fg); font-size: 13px; flex-wrap: wrap; }
+.termbar b { font-family: var(--f-display); font-size: 15px; }
+.term { margin: 0; padding: 10px 12px; color: var(--term-fg); background: var(--term-bg); height: 360px; overflow: auto; font: 11.5px/1.35 var(--f-mono); white-space: pre; }
+
+/* tables, kpis, charts */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+table.tbl { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+.tbl th { text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--panel-2); }
+.tbl td { padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+.tbl td code { font-size: 12px; overflow-wrap: anywhere; }
+.ok-mark { color: var(--ok); font-weight: 700; } .bad-mark { color: var(--crit); font-weight: 700; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.kpi .v { font: 700 28px/1.1 var(--f-body); font-variant-numeric: lining-nums tabular-nums; }
+.kpi .v.ok { color: var(--ok); } .kpi .v.bad { color: var(--crit); }
+.layers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 10px; margin-bottom: 18px; }
+.layer { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--panel); font-size: 13.5px; }
+.layer b { display: block; font: 700 15px var(--f-display); margin-bottom: 2px; }
+.chart { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; position: relative; }
+.chart svg { display: block; width: 100%; height: auto; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-2); margin-top: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font-size: 12.5px; padding: 5px 8px; border-radius: 6px; white-space: nowrap; z-index: 5; transform: translate(-50%, -110%); }
+.bars .row { display: grid; grid-template-columns: minmax(110px, 230px) minmax(0, 1fr) 52px; gap: 10px; align-items: center; padding: 4px 0; font-size: 13.5px; }
+.bars .bar { height: 14px; border-radius: 0 4px 4px 0; min-width: 2px; }
+.bar.good { background: var(--good); } .bar.evil { background: var(--evil); } .bar.n { background: var(--ink-3); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; align-items: start; margin-bottom: 14px; }
+
+/* drawer */
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 40; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(660px, 100vw); background: var(--bg); z-index: 41; border-left: 1px solid var(--line); display: flex; flex-direction: column; box-shadow: var(--shadow); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.drawer-h { padding: 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line); background: var(--panel); }
+.drawer-h .row1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.drawer-h h2 { font-size: 28px; }
+.drawer-h .close { margin-left: auto; }
+.drawer-h .tabs { margin-top: 2px; border-bottom: 0; }
+.drawer-b { overflow: auto; padding: 16px 18px 40px; flex: 1; }
+.dturn { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+.dturn-h { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13px; color: var(--ink-3); }
+.dturn-h b { color: var(--ink); font: 700 15px var(--f-display); }
+pre.json { background: var(--panel-2); border-radius: 8px; padding: 8px 10px; overflow-x: auto; margin: 8px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tl { display: flex; flex-direction: column; gap: 8px; }
+.tl .it { border-left: 3px solid var(--line-2); padding: 4px 0 4px 10px; font-size: 13.5px; min-width: 0; }
+.tl .it.prompt { border-color: var(--brass); } .tl .it.say { border-color: var(--good); }
+.tl .it.think { border-color: var(--ink-3); color: var(--ink-2); font-style: italic; }
+.tl .it.feedback { border-color: var(--warn); } .tl .it.denied { border-color: var(--crit); }
+.tl .it .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); font-weight: 600; }
+.tl .it pre { margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto; background: var(--panel-2); padding: 6px 8px; border-radius: 6px; }
+.st-ok { color: var(--ok); } .st-bad { color: var(--crit); } .st-warn { color: var(--warn); }
+.spin { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--line-2); border-top-color: var(--brass); animation: rot .9s linear infinite; display: inline-block; vertical-align: -1px; }
+@keyframes rot { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .pill.live::before, .spin, .rcard, .bubble { animation: none !important; } .av { transition: none; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 34 34" aria-hidden="true">
+        <circle cx="17" cy="17" r="15.5" fill="none" stroke="var(--brass)" stroke-width="2"></circle>
+        <path d="M9 21.5 L10.5 12 L14.2 16 L17 10.5 L19.8 16 L23.5 12 L25 21.5 Z" fill="var(--brass)"></path>
+        <rect x="9" y="23" width="16" height="2.4" rx="1.2" fill="var(--brass)"></rect>
+      </svg>
+      <div style="min-width:0">
+        <h1>Avalon Referee Table</h1>
+        <div class="sub" id="sub">Independent Avalon player agents</div>
+      </div>
+    </div>
+    <div class="pickers">
+      <div class="pick"><label for="gameSel">Game</label><select class="sel" id="gameSel"></select></div>
+      <div class="pick"><label for="perspSel">Seen as</label><select class="sel" id="perspSel"></select></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="empty" id="loading" style="margin-top:24px">Loading game data...</div>
+</main>
+
+<script id="avalon-data" type="application/json"></script>
+<script>
+(() => {
+"use strict";
+/* AVALON_BOARD_RENDERER */
+const $ = (s, el = document) => el.querySelector(s);
+const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ESC[c]);
+const seatNum = (p) => parseInt(String(p).slice(1), 10);
+const bySeat = (a, b) => seatNum(a) - seatNum(b);
+const words = (s) => (String(s || "").match(/\S+/g) || []).length;
+const fmtS = (s) => (s == null ? "-" : s < 60 ? `${s.toFixed(1)}s` : `${Math.floor(s / 60)}m ${Math.round(s % 60)}s`);
+const pct = (v) => (v == null ? "-" : Math.round(v * 100) + "%");
+const KIND = { onboard: "Onboarding", propose: "Proposal", discuss: "Discussion", vote: "Team vote", quest: "Quest",
+  evil_huddle: "Evil huddle", assassinate: "Assassination", reflect: "Reflection", over: "Game over" };
+const REASON = { five_rejections: "five proposals rejected in one quest", three_failed_quests: "three quests failed",
+  three_successful_quests: "three quests succeeded", merlin_assassinated: "the Assassin found Merlin",
+  merlin_survived: "Merlin survived the Assassin" };
+const REASON_SIDE = { five_rejections: "evil", three_failed_quests: "evil", merlin_assassinated: "evil",
+  three_successful_quests: "good", merlin_survived: "good" };
+const ROLE_NAME = { merlin: "Merlin", percival: "Percival", servant: "Loyal Servant", morgana: "Morgana",
+  assassin: "Assassin", mordred: "Mordred", oberon: "Oberon", minion: "Minion of Mordred" };
+const ROLE_SIDE = { merlin: "good", percival: "good", servant: "good", morgana: "evil", assassin: "evil", mordred: "evil", oberon: "evil", minion: "evil" };
+
+const S = { mode: "live", games: [], gid: null, b: null, persp: "referee", tab: "chronicle", beat: null, beats: [],
+  playing: false, speed: 1, voice: "auto", seat: null, seatTab: "decisions", transcripts: {}, stats: null,
+  statsKind: null, beliefSeat: null, audio: null, timer: null, utter: null, cache: {} };
+const PUBLIC = !!window.AVALON_PUBLIC;   // tournament spectator server (bin/avalon dashboard --public)
+const store = { get(k) { try { return localStorage.getItem("avalon:" + k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem("avalon:" + k, v); } catch {} } };
+
+/* ---------- tiny renderers ---------- */
+function md(src) {
+  const lines = esc(src || "").split("\n");
+  const out = []; let para = [], list = [];
+  const inline = (s) => s.replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+    .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,;:!?]|$)/g, "$1<i>$2</i>");
+  const flush = () => {
+    if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; }
+    if (list.length) { out.push(`<ul>${list.map((x) => `<li>${inline(x)}</li>`).join("")}</ul>`); list = []; }
+  };
+  for (const raw of lines) {
+    const l = raw.trimEnd(); let m;
+    if (/^&lt;!--.*--&gt;$/.test(l.trim())) continue;
+    if ((m = l.match(/^#{1,6}\s+(.*)/))) { flush(); out.push(`<h5>${inline(m[1])}</h5>`); }
+    else if ((m = l.match(/^\s*(?:[-*]|\d+\.)\s+(.*)/))) { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } list.push(m[1]); }
+    else if ((m = l.match(/^&gt;\s?(.*)/))) { flush(); out.push(`<blockquote>${inline(m[1])}</blockquote>`); }
+    else if (!l.trim()) flush();
+    else { if (list.length) flush(); para.push(l.trim()); }
+  }
+  flush();
+  return `<div class="mdx">${out.join("")}</div>`;
+}
+const BASE16 = ["#1b1e26", "#e5534b", "#57ab5a", "#c69026", "#539bf5", "#b083f0", "#39c5cf", "#c5cad3",
+  "#636e7b", "#ff938a", "#6bc46d", "#daaa3f", "#6cb6ff", "#dcbdfb", "#56d4dd", "#f0f3f6"];
+function xterm256(n) {
+  if (n < 16) return BASE16[n];
+  if (n < 232) { n -= 16; const c = [0, 95, 135, 175, 215, 255]; return `rgb(${c[Math.floor(n / 36)]},${c[Math.floor(n / 6) % 6]},${c[n % 6]})`; }
+  const g = 8 + (n - 232) * 10; return `rgb(${g},${g},${g})`;
+}
+function ansi(s) {
+  if (!s) return "";
+  const re = /\x1b\[([0-9;:?]*)([A-Za-z])|\x1b\][^\x07]*\x07/g;
+  let out = "", last = 0, m;
+  const st = { fg: null, bg: null, b: false, d: false, i: false, u: false, v: false };
+  const put = (t) => {
+    if (!t) return;
+    const fg = st.v ? (st.bg || "var(--term-bg)") : st.fg, bg = st.v ? (st.fg || "var(--term-fg)") : st.bg;
+    const css = [];
+    if (fg) css.push("color:" + fg); if (bg) css.push("background:" + bg);
+    if (st.b) css.push("font-weight:600"); if (st.d) css.push("opacity:.62"); if (st.i) css.push("font-style:italic");
+    if (st.u) css.push("text-decoration:underline");
+    out += css.length ? `<span style="${css.join(";")}">${esc(t)}</span>` : esc(t);
+  };
+  while ((m = re.exec(s))) {
+    put(s.slice(last, m.index)); last = re.lastIndex;
+    if (m[2] !== "m") continue;
+    const c = (m[1] || "0").split(/[;:]/).map((x) => parseInt(x || "0", 10));
+    for (let i = 0; i < c.length; i++) {
+      const k = c[i];
+      if (k === 0) Object.assign(st, { fg: null, bg: null, b: false, d: false, i: false, u: false, v: false });
+      else if (k === 1) st.b = true; else if (k === 2) st.d = true; else if (k === 3) st.i = true; else if (k === 4) st.u = true;
+      else if (k === 7) st.v = true; else if (k === 22) { st.b = false; st.d = false; } else if (k === 23) st.i = false;
+      else if (k === 24) st.u = false; else if (k === 27) st.v = false;
+      else if (k >= 30 && k <= 37) st.fg = BASE16[k - 30]; else if (k >= 90 && k <= 97) st.fg = BASE16[k - 82];
+      else if (k >= 40 && k <= 47) st.bg = BASE16[k - 40]; else if (k >= 100 && k <= 107) st.bg = BASE16[k - 92];
+      else if (k === 39) st.fg = null; else if (k === 49) st.bg = null;
+      else if ((k === 38 || k === 48) && c[i + 1] === 5) { const col = xterm256(c[i + 2] || 0); if (k === 38) st.fg = col; else st.bg = col; i += 2; }
+      else if ((k === 38 || k === 48) && c[i + 1] === 2) { const col = `rgb(${c[i + 2] || 0},${c[i + 3] || 0},${c[i + 4] || 0})`; if (k === 38) st.fg = col; else st.bg = col; i += 4; }
+    }
+  }
+  put(s.slice(last));
+  return out;
+}
+
+/* ---------- perspective: what may this viewer know? ---------- */
+const B = () => S.b;
+const viewer = () => (S.persp === "referee" || S.persp === "public" ? null : S.persp);
+const isRef = () => S.persp === "referee" && !S.b.public_only;
+const finished = () => S.b && S.b.status && S.b.status.status === "finished";
+const roleKey = (p) => (S.b.roles || {})[p];
+const trueSide = (p) => (S.b.sides ? S.b.sides[p] : ROLE_SIDE[roleKey(p)] || null);
+function canSeePrivate(p) { return isRef() || (viewer() === p && !S.b.public_only); }
+function viewerIsEvil() { const v = viewer(); return v && trueSide(v) === "evil"; }
+function gameOverBy(turn) { return S.b.public_events.some((e) => e.type === "game_over" && e.turn <= turn); }
+/* side/role as known to the current viewer at a given turn: {side, label, sure} */
+function known(p, turn) {
+  if (isRef()) return { side: trueSide(p), label: (S.b.role_names || {})[p] || ROLE_NAME[roleKey(p)] || "", sure: true };
+  const over = S.b.public_events.find((e) => e.type === "game_over" && e.turn <= turn);
+  if (over) { const name = over.roles[p]; const key = Object.keys(ROLE_NAME).find((k) => ROLE_NAME[k] === name || (name || "").startsWith(ROLE_NAME[k])); return { side: ROLE_SIDE[key] || null, label: name, sure: true }; }
+  const v = viewer();
+  if (!v) return { side: null, label: "", sure: false };
+  if (p === v) return { side: trueSide(p), label: (S.b.role_names || {})[p] || "", sure: true };
+  const kn = (S.b.knowledge || {})[v] || {};
+  if ((kn.sees_evil || []).includes(p)) return { side: "evil", label: "Evil (you see them)", sure: true };
+  if ((kn.evil_teammates || []).includes(p)) return { side: "evil", label: "Evil teammate", sure: true };
+  if ((kn.merlin_candidates || []).includes(p)) return { side: "maybe", label: kn.morgana_in_play ? "Merlin or Morgana" : "Merlin", sure: false };
+  const huddle = S.b.events && S.b.events.find((e) => e.type === "evil_huddle" && e.turn <= turn);
+  if (huddle && viewerIsEvil()) { const evilNow = huddle.entries.map((x) => x.player); if (evilNow.includes(p)) return { side: "evil", label: "Evil (revealed in huddle)", sure: true }; }
+  return { side: null, label: "", sure: false };
+}
+function visibleEvents() {
+  if (isRef()) return S.b.events || S.b.public_events;
+  const pub = S.b.public_events.slice();
+  const v = viewer();
+  if (v && S.b.events) {
+    for (const e of S.b.events) {
+      if (e.type === "evil_huddle" && trueSide(v) === "evil") pub.push(e);
+      if (e.type === "quest_cards" && e.cards[v]) pub.push({ ...e, cards: { [v]: e.cards[v] }, own: true });
+    }
+    pub.sort((a, b) => a.turn - b.turn);
+  }
+  return pub;
+}
+function note(p, turn) { return canSeePrivate(p) && S.b.notes && S.b.notes[p] ? S.b.notes[p][String(turn)] : null; }
+function thoughts(p, turn) { return canSeePrivate(p) && S.b.thoughts && S.b.thoughts[p] ? S.b.thoughts[p][String(turn)] || [] : []; }
+function submission(p, turn) {
+  if (!canSeePrivate(p)) return null;
+  const t = S.b.turns.find((x) => x.turn === turn);
+  return t && t.seats[p] ? t.seats[p].submission : null;
+}
+function beliefsAt(p, turn) {
+  if (!canSeePrivate(p)) return null;
+  let best = null;
+  for (const t of S.b.turns) { if (t.turn > turn) break; const s = t.seats[p]; if (s && s.submission && s.submission.beliefs) best = { turn: t.turn, b: s.submission.beliefs, g: s.submission.role_guesses }; }
+  return best;
+}
+
+/* ---------- characters (art by role; only what the viewer may know) ---------- */
+const CHAR = { merlin: "merlin", percival: "percival", servant: "loyal_servant", morgana: "morgana", assassin: "assassin",
+  mordred: "mordred", oberon: "oberon", minion: "mordred" };
+function charOf(p, T) {
+  let key = null;
+  if (isRef() || gameOverBy(T) || viewer() === p) key = roleKey(p);
+  if (key && CHAR[key]) return { art: CHAR[key], cls: "" };
+  const kn = known(p, T);
+  if (kn.side === "evil") return { art: "loyal_servant", cls: "ch-evil" };
+  if (kn.side === "maybe") return { art: "loyal_servant", cls: "ch-maybe", q: true };
+  return { art: "loyal_servant", cls: "ch-unknown", q: true };
+}
+function winnerBy(T) { const e = S.b.public_events.find((x) => x.type === "game_over" && x.turn <= T); return e ? e.winner : null; }
+function expression(p, T) {
+  const w = winnerBy(T);
+  if (!w) return "default";                       // square eyes while the game is on
+  const side = known(p, T).side;
+  return side === w ? "happy" : "sad";            // ^ ^ for the winners, -_- for the losers
+}
+function charImg(p, T, talking) {
+  const c = charOf(p, T), ex = expression(p, T);
+  const name = `${c.art}_${ex}_${talking ? "talk" : "idle"}.webp`;
+  const src = (S.b.character_assets || {})[name] || `chars/${name}`;
+  return { cls: c.cls, html: `<img src="${src}" alt="" loading="lazy">${c.q ? '<span class="qmark">?</span>' : ""}` };
+}
+
+/* ---------- beats: the game as a sequence of moments ---------- */
+const fname = (turn, p, kind) => `${String(turn).padStart(4, "0")}_${p}_${kind}.mp3`;
+function buildBeats() {
+  const beats = [{ kind: "narr", turn: 0, chapter: "Setup", text: `${S.b.players.length} players take their seats. Roles are dealt in secret; each player reads their own role card.` }];
+  let chapter = "Setup";
+  for (const e of visibleEvents()) {
+    const t = e.turn;
+    if (e.type === "game_started") { chapter = "Quest 1"; beats.push({ kind: "narr", turn: t, chapter, text: `The game begins. ${e.leader} leads the first quest and must pick ${e.team_size} players.` }); }
+    else if (e.type === "proposal") {
+      chapter = `Quest ${e.quest}`;
+      if (e.message) beats.push({ kind: "say", turn: t, chapter, who: e.leader, text: e.message, sub: "pitch", file: fname(t, e.leader, "pitch"), ctx: `Proposal ${e.proposal} · proposes ${e.team.join(", ")}` });
+      else beats.push({ kind: "narr", turn: t, chapter, text: `${e.leader} proposes ${e.team.join(", ")} (proposal ${e.proposal}).` });
+    } else if (e.type === "discussion") {
+      const spoke = e.entries.filter((x) => x.message), passed = e.entries.filter((x) => !x.message).map((x) => x.player);
+      for (const x of spoke) beats.push({ kind: "say", turn: t, chapter, who: x.player, text: x.message, sub: `r${e.round}`, file: fname(t, x.player, `r${e.round}`), ready: x.ready, ctx: `Discussion round ${e.round}${x.ready ? " · ready to vote" : ""}` });
+      const ready = e.entries.filter((x) => x.ready).map((x) => x.player);
+      beats.push({ kind: "narr", turn: t, chapter, text: `Round ${e.round} closes. ${passed.length ? passed.join(", ") + " passed. " : ""}${ready.length ? "Ready to vote: " + ready.join(", ") + "." : "Nobody is ready to vote yet."}`, minor: true });
+    } else if (e.type === "team_amended") beats.push({ kind: "narr", turn: t, chapter, text: `${e.leader} changes the proposed team to ${e.team.join(", ")}.` });
+    else if (e.type === "discussion_closed") beats.push({ kind: "narr", turn: t, chapter, minor: true, text: `Discussion ends after ${e.rounds} round${e.rounds === 1 ? "" : "s"}: ${({ all_ready: "everyone is ready to vote", silence: "nobody spoke", max_rounds: "the round limit was reached" })[e.reason]}.` });
+    else if (e.type === "vote_result") beats.push({ kind: "vote", turn: t, chapter, e });
+    else if (e.type === "quest_cards") { S._cards = S._cards || {}; S._cards[t] = e; }
+    else if (e.type === "quest_result") beats.push({ kind: "quest", turn: t, chapter, e });
+    else if (e.type === "assassination_phase") { chapter = "Assassination"; beats.push({ kind: "narr", turn: t, chapter, text: "Good has completed three quests. Evil gets one chance: the Assassin will try to name Merlin." }); }
+    else if (e.type === "evil_huddle") { for (const x of e.entries) { if (x.message) beats.push({ kind: "say", turn: t, chapter, who: x.player, text: x.message, sub: "huddle", whisper: true, ctx: `Evil huddle (private to Evil)${x.suggested_target ? " · suggests " + x.suggested_target : ""}` }); } }
+    else if (e.type === "assassination") {
+      if (e.message) beats.push({ kind: "say", turn: t, chapter, who: e.assassin, text: e.message, sub: "assassin", file: fname(t, e.assassin, "assassin"), ctx: `Names ${e.target} as Merlin` });
+      beats.push({ kind: "narr", turn: t, chapter, text: `The Assassin ${e.assassin} names ${e.target} as Merlin. ${e.hit ? "Correct: Evil steals the game." : "Wrong: Merlin survives."}`, target: e.target });
+    } else if (e.type === "game_over") { chapter = "Endgame"; beats.push({ kind: "over", turn: t, chapter, e }); }
+    else if (e.type === "reflections") { for (const x of e.entries) { if (x.message) beats.push({ kind: "say", turn: t, chapter, who: x.player, text: x.message, sub: "reflect", file: fname(t, x.player, "reflect"), ctx: "Post-game reflection" }); } }
+  }
+  return beats;
+}
+function cardsFor(turn) { return (S._cards || {})[turn] || null; }
+
+/* ---------- board state at a turn ---------- */
+function boardAt(T) {
+  const b = S.b, info = b.info || {};
+  const sizes = info.quest_team_sizes || [], need = info.fails_required || [];
+  const quests = sizes.map((s, i) => ({ n: i + 1, size: s, need: need[i] || 1, res: null }));
+  let rej = 0, leader = null, team = null, winner = null, reason = null, propNo = null;
+  for (const e of b.public_events) {
+    if (e.turn > T) break;
+    if (e.type === "game_started") leader = e.leader;
+    else if (e.type === "proposal") { leader = e.leader; team = e.team; propNo = e.proposal; }
+    else if (e.type === "team_amended") team = e.team;
+    else if (e.type === "vote_result" && !e.approved) { rej++; }
+    else if (e.type === "quest_result") { quests[e.quest - 1].res = e; rej = 0; }
+    else if (e.type === "game_over") { winner = e.winner; reason = e.reason; }
+  }
+  const questsOver = winner || quests.filter((q) => q.res?.success).length >= 3 || quests.filter((q) => q.res && !q.res.success).length >= 3;
+  const curQ = questsOver ? -1 : quests.findIndex((q) => !q.res);
+  return { quests, rej, leader, team, winner, reason, curQ, propNo };
+}
+
+/* ---------- loading ---------- */
+async function getJSON(url) { const r = await fetch(url, { cache: "no-store" }); if (!r.ok) throw new Error(`${url}: ${r.status}`); return r.json(); }
+function setGame(bundle) {
+  stopPlayback();
+  S.b = bundle; S.gid = bundle.id; S._cards = {}; S.transcripts = {};
+  const opts = perspectiveOptions();
+  if (!opts.some((o) => o.v === S.persp)) S.persp = opts[0].v;
+  S.beats = buildBeats(); S.beat = null; S.beliefSeat = null;
+  render();
+}
+async function loadGame(gid) {
+  store.set("gid", gid);
+  if (S.mode === "live") return setGame(await getJSON(`/api/game/${encodeURIComponent(gid)}`));
+  if (S.cache[gid]) return setGame(S.cache[gid]);
+  $("#main").innerHTML = '<div class="empty" style="margin-top:24px">Loading game...</div>';
+  try { S.cache[gid] = await getJSON(`data/${encodeURIComponent(gid)}.json`); setGame(S.cache[gid]); }
+  catch (e) { $("#main").innerHTML = `<div class="empty" style="margin-top:24px">This game's data file is not published with the page (${esc(e.message)}).</div>`; }
+}
+async function loadGames() {
+  S.games = await getJSON("/api/games");
+  const want = new URLSearchParams(location.search).get("game") || store.get("gid");
+  const pick = S.games.find((g) => g.id === want) || S.games.find((g) => g.status === "running")
+    || S.games.find((g) => g.driver === "claude" && g.status === "finished") || S.games[0];
+  if (pick) await loadGame(pick.id);
+  else renderArenaOnly();
+  refreshStats();
+}
+async function refreshStats() { if (S.mode !== "live" || PUBLIC) return; try { S.stats = await getJSON("/api/stats"); if (S.tab === "stats") renderPane(); } catch (e) {} }
+async function poll() {
+  if (S.mode !== "live" || !S.gid || !S.b) return;
+  try {
+    const lv = await getJSON(`/api/game/${encodeURIComponent(S.gid)}/live`);
+    const grew = lv.turns_count !== S.b.turns.length || lv.status.status !== S.b.status.status;
+    if (grew) {
+      const following = S.beat == null;
+      const fresh = await getJSON(`/api/game/${encodeURIComponent(S.gid)}`);
+      const keepBeat = S.beat, playing = S.playing;
+      S.b = fresh; S._cards = {}; S.beats = buildBeats();
+      S.beat = following ? null : keepBeat;
+      if (lv.status.status === "finished") refreshStats();
+      render(); if (playing) S.playing = true;
+    } else {
+      S.b.status = lv.status; S.b.screens = lv.screens; S.b.procs = lv.procs; S.b.hooks = lv.hooks; if (lv.audio) S.b.audio = lv.audio;
+      if (!S.playing) renderStage();
+      if (S.tab === "terminals") renderPane();
+    }
+  } catch (e) { /* keep polling */ }
+}
+
+/* ---------- pickers ---------- */
+function gameLabel(g) {
+  const kind = g.driver === "codex" ? (g.model || "GPT-6 Luna") : g.driver === "scripted" ? "scripted bots" : g.driver === "bots" ? ((g.models && g.models.length ? lineupText(g.models) : "local bots") + (g.mock ? " (stand-ins)" : "")) : g.mock ? (g.adversarial ? "mock model, adversarial" : "mock model") : "Haiku";
+  const res = g.status === "running" ? "live now" : g.winner ? `${g.winner} won` : g.status;
+  return `${g.players}p · ${kind} · ${res} · ${String(g.id).slice(0, 15)}`;
+}
+function renderPickers() {
+  const gs = $("#gameSel");
+  const list = S.mode === "live" ? S.games : (S.games.length ? S.games : [{ id: S.b.id, players: S.b.players.length, driver: S.b.status.driver, mock: S.b.status.mock, winner: S.b.status.winner, status: S.b.status.status }]);
+  gs.innerHTML = list.map((g) => `<option value="${esc(g.id)}" ${g.id === S.gid ? "selected" : ""}>${esc(gameLabel(g))}</option>`).join("");
+  gs.disabled = list.length < 2;
+  const ps = $("#perspSel");
+  ps.innerHTML = perspectiveOptions().map((o) => `<option value="${esc(o.v)}" ${o.v === S.persp ? "selected" : ""}>${esc(o.l)}</option>`).join("");
+}
+function perspectiveOptions() {
+  if (S.b.public_only) return [{ v: "public", l: "Public record" }];
+  const opts = [{ v: "referee", l: "Referee (everything)" }, { v: "public", l: "Public record only" }];
+  for (const p of S.b.players) opts.push({ v: p, l: `As ${p}` });
+  return opts;
+}
+
+/* ---------- top-level render ---------- */
+function render() {
+  if (!S.b) return;
+  renderPickers();
+  const st = S.b.status || {};
+  $("#sub").textContent = `${S.b.players.length} players · ${st.driver === "codex" ? "Codex sessions (" + (st.model || "") + ")" : st.driver === "claude" ? "interactive Claude Code (" + (st.model || "") + ")" : st.driver === "bots" ? (Object.keys(S.b.lineup || {}).length ? lineupText(Object.values(S.b.lineup)) : "local bots") : "scripted bots"}${st.mock ? (st.driver === "bots" ? " · stand-in models (dry run)" : " · mock model") : ""}`;
+  const v = viewer();
+  const note = v ? `<div class="persp-note">You are seeing the game exactly as <b>${esc(v)}</b> (${esc((S.b.role_names || {})[v] || "")}) could: their role card and night-phase knowledge, their own private notes, reasoning and beliefs, and the public record. Nothing else.</div>`
+    : S.persp === "public" ? '<div class="persp-note">Public record only: what any player could read in the public repo. Roles stay hidden until the game ends.</div>' : "";
+  const recovery = ["error", "stopped", "aborted"].includes(st.status)
+    ? `<div class="persp-note" role="status"><b>Game ${esc(st.status)}${st.turn ? " at turn " + esc(st.turn) : ""}.</b>
+       ${st.recoverable && st.driver === "codex" ? `Accepted moves are saved. Continue with <code>bin/avalon resume ${esc(S.gid)}</code>.` : "The saved replay remains available."}
+       ${st.error ? `<details><summary>Details</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(st.error)}</pre></details>` : ""}</div>` : "";
+  $("#main").innerHTML = `${recovery}${note}
+    <section class="stage" id="stage"><div class="tablecard"><div class="tablebox" id="tablebox"></div></div><aside class="speech" id="speech"></aside></section>
+    <section class="transport" id="transport"></section>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+    <section class="pane" id="pane"></section>`;
+  renderStage(); renderTabs(); renderPane();
+  if (S.seat) renderDrawer();
+}
+
+/* ---------- the table ---------- */
+const curIdx = () => (S.beat == null ? S.beats.length - 1 : S.beat);
+function liveSeat(p) {
+  const st = S.b.status || {};
+  if (S.beat != null || st.status !== "running") return null;
+  if (!isRef() && viewer() !== p) return null;
+  const done = (st.seats_done || {})[p];
+  if (!(st.actors || []).includes(p)) return "waiting";
+  if (done) return done.status === "done" ? "✓ submitted" : "⚠ " + done.status;
+  const hooks = ((S.b.hooks || {})[p] || []).filter((h) => !st.opened_at || h.ts >= st.opened_at);
+  const last = [...hooks].reverse().find((h) => h.event === "PreToolUse");
+  if (!last) return "thinking";
+  const m = (last.input || "").match(/"(?:file_path|command|pattern)":\s*"([^"]+)/);
+  return `${last.tool} ${m ? m[1].split("/").pop() : ""}`;
+}
+function seatPos(i, n) {
+  const a = -Math.PI / 2 + (2 * Math.PI * i) / n;
+  return { x: 50 + 44 * Math.cos(a), y: 50 + 42.5 * Math.sin(a) };
+}
+function renderStage() {
+  const box = $("#tablebox"); if (!box || !S.b) return;
+  const i = curIdx(), beat = S.beats[i] || S.beats[0];
+  const T = beat.turn, bd = boardAt(T);
+  const players = S.b.players, n = players.length;
+  const voteE = beat.kind === "vote" ? beat.e : null;
+  const questE = beat.kind === "quest" ? beat.e : null;
+  const qcards = questE ? cardsFor(T) : null;
+  const board = AvalonBoard.renderBoard({
+    currentMission: bd.curQ < 0 ? null : bd.curQ + 1,
+    teamSizes: bd.quests.map((q) => q.size),
+    requiredFails: bd.quests.map((q) => q.need),
+    missionResults: bd.quests.map((q) => q.res ? (q.res.success ? "success" : "fail") : null),
+    rejectedProposals: bd.rej,
+  });
+  let html = `<div class="table-scene"><div class="board-art">${board}</div><div class="table-seats">`;
+  players.forEach((p, k) => {
+    const pos = seatPos(k, n), kn = known(p, T);
+    const cls = ["seatn", kn.side || "", beat.who === p ? "speaking" : "", viewer() === p ? "viewer" : "",
+      beat.kind === "say" && beat.who !== p ? "dim" : ""].join(" ");
+    const live = liveSeat(p);
+    let marks = "";
+    if (bd.leader === p && !bd.winner) marks += `<span class="mark crown" title="Leader">♛</span>`;
+    if (bd.team && bd.team.includes(p) && !bd.winner && (bd.curQ >= 0)) marks += `<span class="mark team" title="On the proposed team">◆</span>`;
+    if (voteE) marks += `<span class="mark vote ${voteE.votes[p]}" title="${esc(voteE.votes[p])}">${voteE.votes[p] === "approve" ? "✓" : "✗"}</span>`;
+    if (questE && questE.team.includes(p)) { const c = qcards && qcards.cards[p]; marks += `<span class="mark card ${c ? (c === "fail" ? "f" : "s") : ""}" title="${c ? "played " + c : "played a secret card"}">${c ? (c === "fail" ? "F" : "S") : "?"}</span>`; }
+    const ch = charImg(p, T, beat.kind === "say" && beat.who === p);
+    html += `<button class="${cls}" style="left:${pos.x}%;top:${pos.y}%" data-seat="${esc(p)}" aria-label="${esc(p)}${kn.label ? ", " + esc(kn.label) : ""}">
+      <span class="av ${ch.cls}">${ch.html}<span class="sid">${esc(p)}</span>${marks}</span><span class="nm">${kn.label ? esc(kn.label) : ""}</span>${mdl(modelOf(p))}${live ? `<span class="st">${live === "thinking" ? '<span class="spin"></span> ' : ""}${esc(live)}</span>` : ""}</button>`;
+  });
+  html += '</div></div>';
+  let phase = beat.chapter, phase2 = "";
+  if (bd.winner) { phase = ""; }
+  if (beat.kind === "say") phase2 = beat.ctx || "";
+  else if (beat.kind === "vote") phase2 = `Vote: ${beat.e.approved ? "approved" : "rejected"} ${beat.e.approvals}/${Object.keys(beat.e.votes).length}`;
+  else if (beat.kind === "quest") phase2 = `${beat.e.success ? "Quest succeeds" : "Quest fails"}: ${beat.e.fails} fail card${beat.e.fails === 1 ? "" : "s"}`;
+  else if (bd.team && !bd.winner) phase2 = `Team: ${bd.team.join(", ")}`;
+  const reveal = questE ? `<div class="reveal">${Array.from({ length: questE.successes }, () => '<span class="rcard s">S</span>').join("")}${Array.from({ length: questE.fails }, () => '<span class="rcard f">F</span>').join("")}</div>` : "";
+  const win = bd.winner && beat.kind !== "say" ? `<div class="winbanner ${bd.winner}">${bd.winner === "good" ? "Good" : "Evil"} wins</div><div class="phase2">${esc(REASON[bd.reason] || "")}</div>` : "";
+  html += `<div class="table-status">
+    ${win || `<div class="phase">${esc(phase)}</div><div class="phase2">${esc(phase2)}</div>`}${reveal}</div>`;
+  // Keep the speaking excerpt clear of the castle and mission markers.
+  if (beat.kind === "say") {
+    const short = beat.text.split(/\s+/).slice(0, 22).join(" ") + (words(beat.text) > 22 ? " ..." : "");
+    html += `<div class="table-bubble ${beat.whisper ? "whisper" : ""}"><b>${esc(beat.who)}:</b> ${esc(short)}</div>`;
+  }
+  box.innerHTML = html;
+  box.querySelectorAll(".seatn").forEach((x) => (x.onclick = () => openSeat(x.dataset.seat)));
+  renderSpeech(beat, bd); renderTransport();
+}
+
+function beliefBars(p, turn) {
+  const bl = beliefsAt(p, turn);
+  if (!bl) return "";
+  const rows = Object.keys(bl.b).sort(bySeat).map((q) => {
+    const v = bl.b[q], kn = isRef() || gameOverBy(turn) ? known(q, turn) : { side: null };
+    const guess = bl.g && bl.g[q] ? ` · thinks ${esc(bl.g[q])}` : "";
+    return `<span class="who">${esc(q)}<span class="truth ${kn.side || "unk"}" title="${kn.side ? "actually " + kn.side : "true side hidden"}"></span></span>
+      <span title="${esc(q)}: ${pct(v)} likely Evil${guess}"><span class="b" style="display:block;width:${Math.max(2, v * 100)}%"></span></span><span class="t">${pct(v)}</span>`;
+  }).join("");
+  return `<div><h5>Believes, as of turn ${bl.turn}: chance each player is Evil</h5><div class="bel" style="margin-top:6px">${rows}</div>
+    ${isRef() || gameOverBy(turn) ? '<div class="legend"><span><span class="truth good"></span>actually Good</span><span><span class="truth evil"></span>actually Evil</span></div>' : ""}</div>`;
+}
+function privateBlock(p, turn) {
+  if (!canSeePrivate(p)) return "";
+  const n = note(p, turn), th = thoughts(p, turn).filter((x) => x.kind === "think");
+  const parts = [];
+  if (n) parts.push(`<div><h5>Private decision document</h5>${md(n)}</div>`);
+  if (th.length) parts.push(`<div><h5>Reasoning trace</h5><div class="cot">${esc(th.map((x) => x.text).join("\n\n"))}</div></div>`);
+  parts.push(beliefBars(p, turn));
+  return parts.filter(Boolean).length ? `<div class="priv">${parts.join("")}</div>` : "";
+}
+function renderSpeech(beat, bd) {
+  const el = $("#speech"); if (!el) return;
+  const T = beat.turn;
+  if (beat.kind === "say") {
+    const kn = known(beat.who, T);
+    const ch = charImg(beat.who, T, true);
+    el.innerHTML = `<div class="sp-head"><span class="sp-char ${kn.side || ""} ${ch.cls}">${ch.html}</span><div><div class="sp-who">${esc(beat.who)}${kn.label ? ` <span class="pill ${kn.side === "good" || kn.side === "evil" ? kn.side : "brass"}">${esc(kn.label)}</span>` : ""} ${mdl(modelOf(beat.who), true)}</div>
+      <div class="sp-ctx">${esc(beat.chapter)} · ${esc(beat.ctx || "")} · turn ${T}</div></div></div>
+      <div class="sp-words ${beat.whisper ? "whisper" : ""}">${esc(beat.text)}</div>${privateBlock(beat.who, T)}`;
+  } else if (beat.kind === "vote") {
+    const e = beat.e;
+    const rows = Object.keys(e.votes).sort(bySeat).map((p) => `<span class="vg ${e.votes[p]}" title="${esc(p)} voted ${e.votes[p]}"><i>${e.votes[p] === "approve" ? "✓" : "✗"}</i><b>${esc(p)}</b>${known(p, T).side ? `<span class="dot ${known(p, T).side}"></span>` : ""}</span>`).join("");
+    const whys = S.b.players.filter((p) => canSeePrivate(p) && note(p, T)).map((p) => `<details class="why"><summary>${esc(p)} voted ${esc(e.votes[p])}: why</summary>${md(note(p, T))}</details>`).join("");
+    el.innerHTML = `<div class="sp-head"><span class="sp-av narr">⚖</span><div><div class="sp-who">Vote on ${esc(e.team.join(", "))}</div><div class="sp-ctx">${esc(beat.chapter)} · leader ${esc(e.leader)} · turn ${T}</div></div></div>
+      <div class="sp-narr"><span class="verdict ${e.approved ? "ok" : "no"}">${e.approved ? "Approved" : "Rejected"}</span>, ${e.approvals} of ${Object.keys(e.votes).length} approve. All votes were cast at the same time.</div>
+      <div class="votegrid">${rows}</div>${whys ? `<div class="priv">${whys}</div>` : ""}`;
+  } else if (beat.kind === "quest") {
+    const e = beat.e, c = cardsFor(T);
+    const failers = c ? Object.entries(c.cards).filter(([, x]) => x === "fail").map(([p]) => p) : [];
+    const whys = e.team.filter((p) => canSeePrivate(p) && note(p, T)).map((p) => `<details class="why"><summary>${esc(p)} on the quest: private reasoning</summary>${md(note(p, T))}</details>`).join("");
+    el.innerHTML = `<div class="sp-head"><span class="sp-av narr">⚔</span><div><div class="sp-who">Quest ${e.quest} ${e.success ? "succeeds" : "fails"}</div><div class="sp-ctx">Team ${esc(e.team.join(", "))} · needed ${e.fails_required} fail${e.fails_required > 1 ? "s" : ""} to fail · turn ${T}</div></div></div>
+      <div class="sp-narr">${e.successes} success and ${e.fails} fail card${e.fails === 1 ? "" : "s"}. The cards are shuffled, so nobody learns who played what.${c && isRef() ? ` <b>Referee only:</b> ${failers.length ? "fail played by " + esc(failers.join(", ")) : "everyone played success"}.` : c && c.own ? ` You played <b>${esc(Object.values(c.cards)[0])}</b>.` : ""}</div>${whys ? `<div class="priv">${whys}</div>` : ""}`;
+  } else if (beat.kind === "over") {
+    const e = beat.e;
+    el.innerHTML = `<div class="sp-head"><span class="sp-av narr">♛</span><div><div class="sp-who">${e.winner === "good" ? "Good" : "Evil"} wins</div><div class="sp-ctx">${esc(REASON[e.reason] || e.reason)} · turn ${T}</div></div></div>
+      <div class="chips">${Object.keys(e.roles).sort(bySeat).map((p) => `<span class="chip ${known(p, T).side || ""}">${esc(p)} · ${esc(e.roles[p])}</span>`).join("")}</div>`;
+  } else {
+    el.innerHTML = `<div class="sp-head"><span class="sp-av narr">❧</span><div><div class="sp-who">${esc(beat.chapter)}</div><div class="sp-ctx">${beat.turn ? "turn " + beat.turn : "before the first turn"}</div></div></div><div class="sp-narr">${esc(beat.text)}</div>`;
+  }
+}
+
+/* ---------- transport and playback ---------- */
+function chapters() {
+  const seen = new Map();
+  S.beats.forEach((b, k) => { if (!seen.has(b.chapter)) seen.set(b.chapter, k); });
+  return [...seen.entries()];
+}
+function renderTransport() {
+  const el = $("#transport"); if (!el) return;
+  const i = curIdx(), n = S.beats.length, beat = S.beats[i] || {};
+  const hasAudio = !!(S.b.audio && S.b.audio.lines && Object.keys(S.b.audio.lines).length);
+  const bd = boardAt(beat.turn || 0);
+  const chaps = chapters().map(([c, k]) => {
+    const m = c.match(/^Quest (\d)/); const qr = m ? bd.quests[+m[1] - 1] : null;
+    const res = m ? boardAt(1e9).quests[+m[1] - 1].res : null;
+    return `<button class="chap ${beat.chapter === c ? "on" : ""}" data-k="${k}">${m ? `<span class="q ${res && boardAt(beat.turn).quests[+m[1] - 1].res ? (res.success ? "s" : "f") : ""}"></span>` : ""}${esc(c)}</button>`;
+  }).join("");
+  el.innerHTML = `<div class="tp-row">
+      <button class="btn" id="bPrev" title="Previous moment" ${i <= 0 ? "disabled" : ""}>◀</button>
+      <button class="btn primary" id="bPlay" aria-pressed="${S.playing}">${S.playing ? "❚❚ Pause" : "▶ Play"}</button>
+      <button class="btn" id="bNext" title="Next moment" ${i >= n - 1 ? "disabled" : ""}>▶</button>
+      <input type="range" id="beatRange" min="0" max="${Math.max(0, n - 1)}" value="${i}" aria-label="Moment">
+      <span class="beatlbl num">${i + 1} / ${n}${S.mode === "live" && S.b.status.status === "running" ? (S.beat == null ? " · following live" : "") : ""}</span>
+      <div class="seg" role="group" aria-label="Speed">${[1, 1.5, 2].map((s) => `<button data-s="${s}" aria-pressed="${S.speed === s}">${s}×</button>`).join("")}</div>
+      <div class="seg" role="group" aria-label="Voice">${[["auto", hasAudio ? "AI voices" : "Voice"], ["off", "Mute"]].map(([v, l]) => `<button data-v="${v}" aria-pressed="${S.voice === v}">${l}</button>`).join("")}</div>
+    </div>
+    <div class="tp-row"><div class="chapters">${chaps}</div>
+      <span style="margin-left:auto;display:inline-flex;gap:8px;align-items:center"><span id="voiceStatus" class="vstat ${Voice.ok === false ? "st-bad" : Voice.ok ? "st-ok" : "muted"}">${esc(Voice.status || (hasAudio ? "AI voices ready: press Play (or Test voice)" : "No recorded voices for this game: browser voice"))}</span>
+      <button class="btn" id="bTest" title="Play one line now">🔊 Test voice</button></span></div>`;
+  $("#bPrev").onclick = () => { stopPlayback(); goBeat(i - 1); };
+  $("#bNext").onclick = () => { stopPlayback(); goBeat(i + 1); };
+  $("#bPlay").onclick = togglePlay;
+  $("#bTest").onclick = testVoice;
+  $("#beatRange").oninput = (e) => { stopPlayback(); goBeat(+e.target.value); };
+  el.querySelectorAll("[data-s]").forEach((b) => (b.onclick = () => { S.speed = +b.dataset.s; renderTransport(); }));
+  el.querySelectorAll("[data-v]").forEach((b) => (b.onclick = () => { S.voice = b.dataset.v; if (S.voice === "off") silence(); renderTransport(); }));
+  el.querySelectorAll(".chap").forEach((b) => (b.onclick = () => { stopPlayback(); goBeat(+b.dataset.k); }));
+}
+function goBeat(k) {
+  k = Math.max(0, Math.min(S.beats.length - 1, k));
+  S.beat = k >= S.beats.length - 1 && S.mode === "live" && S.b.status.status === "running" ? null : k;
+  renderStage();
+  if (S.tab === "chronicle") renderPane();
+}
+const Voice = {
+  ctx: null, src: null, cache: new Map(), status: "", ok: null,
+  unlock() {                       // must run inside a click handler
+    try {
+      if (!this.ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) this.ctx = new AC(); }
+      if (this.ctx && this.ctx.state !== "running") this.ctx.resume();
+      if (this.ctx) { const b = this.ctx.createBuffer(1, 1, 22050), s = this.ctx.createBufferSource(); s.buffer = b; s.connect(this.ctx.destination); s.start(0); }
+    } catch (e) { this.say("Audio is not available in this browser: " + e.message, false); }
+    try { if (window.speechSynthesis) { const u = new SpeechSynthesisUtterance(""); u.volume = 0; speechSynthesis.speak(u); } } catch {}
+  },
+  async buffer(url) {
+    if (this.cache.has(url)) return this.cache.get(url);
+    const p = (async () => { const r = await fetch(url); if (!r.ok) throw new Error(`voice file ${r.status}`); return await this.ctx.decodeAudioData(await r.arrayBuffer()); })();
+    this.cache.set(url, p); p.catch(() => this.cache.delete(url)); return p;
+  },
+  async play(src, onend) {
+    if (!this.ctx) throw new Error("press Play or Test voice first");
+    if (this.ctx.state !== "running") await this.ctx.resume();
+    const buf = await this.buffer(src.url);
+    this.stop();
+    const s = this.ctx.createBufferSource(); s.buffer = buf; s.connect(this.ctx.destination);
+    s.onended = () => { if (this.src === s) { this.src = null; onend && onend(); } };
+    this.src = s;
+    if (src.start != null) s.start(0, src.start, src.dur); else s.start(0);
+    return src.dur || buf.duration;
+  },
+  stop() { if (this.src) { const s = this.src; this.src = null; s.onended = null; try { s.stop(); } catch {} } },
+  say(msg, ok) { this.status = msg; this.ok = ok; const el = document.getElementById("voiceStatus"); if (el) { el.textContent = msg; el.className = "vstat " + (ok === false ? "st-bad" : ok ? "st-ok" : "muted"); } },
+};
+function silence() {
+  Voice.stop();
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch {}
+  clearTimeout(S.timer);
+}
+function stopPlayback() { S.playing = false; silence(); }
+function togglePlay() {
+  if (S.playing) { stopPlayback(); renderTransport(); return; }
+  Voice.unlock();
+  S.playing = true;
+  if (curIdx() >= S.beats.length - 1) S.beat = 0;
+  playBeat();
+}
+function audioSrc(file) {
+  const meta = S.b.audio && S.b.audio.lines && S.b.audio.lines[file];
+  if (!meta) return null;
+  if (S.mode === "live") return { url: `/api/game/${encodeURIComponent(S.gid)}/audio/${encodeURIComponent(file)}` };
+  const embedded = (S.b.audio.embedded || {})[meta.pack || file];
+  if (embedded) return meta.pack ? { url: embedded, start: meta.start, dur: meta.dur } : { url: embedded };
+  if (meta.pack && S.b.audio.packs) return { url: `audio/${encodeURIComponent(S.gid)}/${encodeURIComponent(meta.pack)}`, start: meta.start, dur: meta.dur };
+  return { url: `audio/${encodeURIComponent(S.gid)}/${encodeURIComponent(file)}` };
+}
+function preload(i) {
+  const b = S.beats[i];
+  if (b && b.kind === "say" && b.file && Voice.ctx) { const src = audioSrc(b.file); if (src) Voice.buffer(src.url).catch(() => {}); }
+}
+function testVoice() {
+  Voice.unlock();
+  const b = S.beats.find((x) => x.kind === "say" && x.file && audioSrc(x.file));
+  if (b) {
+    Voice.say(`Testing: ${b.who}'s voice...`, null);
+    Voice.play(audioSrc(b.file), () => Voice.say(`Voice works (${b.who}, ${voiceName(b.who)}).`, true))
+      .then(() => Voice.say(`Playing ${b.who} (${voiceName(b.who)})`, true))
+      .catch((e) => Voice.say(`Could not play the voice file: ${e.message}`, false));
+    return;
+  }
+  speakBrowser("This game has no recorded voices; this is your browser's voice.", "P1", () => {}, true);
+}
+const voiceName = (p) => (S.b.audio && S.b.audio.cast && S.b.audio.cast[p]) || "voice";
+function speakBrowser(text, who, done, test) {
+  try {
+    if (!window.speechSynthesis) throw new Error("no speech engine");
+    const u = new SpeechSynthesisUtterance(text.replace(/\bP(\d+)\b/g, "P $1"));
+    const v = browserVoice(who); if (v) u.voice = v;
+    u.pitch = 0.85 + (seatNum(who) % 5) * 0.08; u.rate = 1.05;
+    let started = false;
+    u.onstart = () => { started = true; Voice.say(`Browser voice: ${who}`, true); };
+    u.onend = () => done(); u.onerror = (e) => { Voice.say(`Browser voice failed (${e.error || "error"})`, false); done(); };
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+    setTimeout(() => { if (!started && !test) { Voice.say("Your browser has no speech voice here; showing text only.", false); } }, 1500);
+    return true;
+  } catch (e) { Voice.say("No voice available in this browser; showing text only.", false); return false; }
+}
+function browserVoice(p) {
+  try {
+    const vs = speechSynthesis.getVoices().filter((v) => /^en/i.test(v.lang));
+    return vs.length ? vs[seatNum(p) % vs.length] : null;
+  } catch { return null; }
+}
+function playBeat() {
+  if (!S.playing) return;
+  const i = curIdx(); S.beat = i; renderStage(); if (S.tab === "chronicle") renderPane();
+  const beat = S.beats[i];
+  const next = (ms) => { clearTimeout(S.timer); S.timer = setTimeout(() => { if (!S.playing) return; if (i >= S.beats.length - 1) { stopPlayback(); renderTransport(); return; } S.beat = i + 1; playBeat(); }, ms / S.speed); };
+  preload(i + 1); preload(i + 2);
+  if (beat.kind === "say" && S.voice !== "off") {
+    const src = beat.file ? audioSrc(beat.file) : null;
+    if (src) {
+      Voice.say(`Speaking: ${beat.who} (${voiceName(beat.who)})`, true);
+      Voice.play(src, () => next(450)).catch((e) => { Voice.say(`Voice failed: ${e.message}. Showing text.`, false); next(readMs(beat.text)); });
+      return;
+    }
+    if (speakBrowser(beat.text, beat.who, () => next(400))) return;
+  }
+  next(beat.kind === "say" ? readMs(beat.text) : beat.kind === "narr" ? (beat.minor ? 1300 : 2200) : 2800);
+}
+const readMs = (t) => Math.max(1800, words(t) * 300);
+
+/* ---------- models at seats ---------- */
+const modelOf = (p) => ((S.b && S.b.lineup) || {})[p];
+function mdl(label, big) {
+  if (!label) return "";
+  const c = ((S.b && S.b.model_colors) || {})[label] || (S.modelColors || {})[label];
+  return `<span class="mdl ${big ? "lg" : ""}" style="${c ? "--mc:" + esc(c) : ""}" title="Played by ${esc(label)}">${esc(label)}</span>`;
+}
+const lineupText = (labels) => [...new Set(labels)].join(" vs ");
+
+/* ---------- tabs ---------- */
+const TABS = [["chronicle", "Chronicle"], ["beliefs", "Beliefs"], ["terminals", "Terminals"], ["verify", "Verification"], ["stats", "Statistics"], ["arena", "Arena"], ["rules", "Rules"]];
+function renderTabs() {
+  const el = $("#tabs");
+  const a = S.b.audit;
+  const shown = TABS.filter(([k]) => (k !== "arena" || S.mode === "live" || S.standings) && !((PUBLIC || S.b.public_mode) && ["terminals", "verify", "stats"].includes(k)))
+    .map(([k, label]) => [k, k === "arena" && (PUBLIC || S.mode !== "live") ? "Standings" : label]);
+  el.innerHTML = shown.map(([k, label]) => `<button role="tab" aria-selected="${S.tab === k}" data-tab="${k}">${label}${k === "verify" && a && a.summary ? `<span class="count">${a.summary.passed}/${a.summary.checks}</span>` : ""}</button>`).join("");
+  el.querySelectorAll("button").forEach((x) => (x.onclick = () => { S.tab = x.dataset.tab; store.set("tab", S.tab); renderTabs(); renderPane(); }));
+}
+function renderPane() {
+  const el = $("#pane"); if (!el) return;
+  ({ chronicle: renderChronicle, beliefs: renderBeliefs, terminals: renderTerminals, verify: renderVerify, stats: renderStats, arena: renderArena, rules: renderRules }[S.tab] || renderChronicle)(el);
+}
+function chip(p, T) { const kn = known(p, T); return `<span class="chip ${kn.side === "good" || kn.side === "evil" ? kn.side : ""}" title="${esc(kn.label)}">${esc(p)}</span>`; }
+function whyBlock(p, turn) { const n = note(p, turn); return n ? `<details class="why"><summary>Private reasoning</summary>${md(n)}</details>` : ""; }
+
+/* ---------- tournament standings ---------- */
+function standingsTable(st) {
+  if (!st || !st.teams || !st.teams.length) return `<div class="empty">No finished tournament games yet.</div>`;
+  S.modelColors = { ...(S.modelColors || {}), ...Object.fromEntries(st.teams.map((t) => [t.name, t.color])) };
+  const p100 = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
+  const rows = st.teams.map((t) => `<tr><td class="num">${t.rank}</td><td>${mdl(t.name, true)}</td><td class="num">${t.games}</td><td class="num"><b>${t.score == null ? "–" : t.score.toFixed(3)}</b></td>
+      <td class="num">${p100(t.good.win_rate)} <small class="muted">(${t.good.games})</small></td><td class="num">${p100(t.evil.win_rate)} <small class="muted">(${t.evil.games})</small></td>
+      <td class="num">${t.evil_read == null ? "–" : t.evil_read.toFixed(2)}</td><td class="num">${p100(t.merlin.survival)} <small class="muted">(${t.merlin.games})</small></td>
+      <td class="num">${p100(t.assassin.accuracy)} <small class="muted">(${t.assassin.shots})</small></td><td class="num">${t.faults || ""}</td></tr>`).join("");
+  return `<div class="tblwrap"><table class="tbl"><thead><tr><th class="num">#</th><th>Team</th><th class="num">Games</th><th class="num" title="Mean of the Good and Evil win rates">Score</th><th class="num">Good</th><th class="num">Evil</th>
+    <th class="num" title="As a Good player other than Merlin, from final beliefs: average P(Evil) given to the real Evil players minus that given to Good players">Evil read</th><th class="num" title="Merlin not found by the Assassin, in games where the Assassin shot">Merlin safe</th><th class="num" title="Assassin named Merlin correctly">Assassin</th><th class="num" title="Moves the referee played for the team after invalid replies">Faults</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="muted small">Score is the mean of the Good and Evil win rates. Ties go to Evil read, Merlin survival, Assassin accuracy, then fewer faults.</p>`;
+}
+async function renderStandings(el) {
+  let st = S.standings;
+  if (S.mode === "live") { try { st = S.standings = await getJSON("/api/standings"); } catch (e) { el.innerHTML = `<div class="empty">Standings are unavailable (${esc(e.message)}).</div>`; return; } }
+  if (S.b && S.tab !== "arena") return;
+  const ids = new Set((st && st.game_list || []).map((g) => g.id));
+  const games = S.games.filter((g) => ids.has(g.id) || !st || !st.tag);
+  const rows = games.map((g) => `<tr data-g="${esc(g.id)}" style="cursor:pointer"><td>${g.status === "running" ? '<span class="pill live">live</span>' : g.winner ? `<span class="pill ${esc(g.winner)}">${esc(g.winner)} won</span>` : `<span class="pill err">${esc(g.status)}</span>`}</td>
+    <td>${(g.models || []).map((m) => mdl(m)).join(" ")}</td><td class="num">${g.status === "running" ? "turn " + esc(g.turn || 0) : esc((g.win_reason || "").replace(/_/g, " "))}</td></tr>`).join("");
+  const names = Object.fromEntries(((st && st.teams) || []).map((t) => [t.id, t.name]));
+  const prompts = Object.entries((st && st.team_prompts) || {}).map(([id, text]) => `<details><summary>${esc(names[id] || id)}</summary><pre style="white-space:pre-wrap">${esc(text)}</pre></details>`).join("");
+  el.innerHTML = `<div class="arena-card"><h3>Standings${st && st.tag ? " · " + esc(st.tag) : ""}</h3>
+    <div class="small muted" style="margin-bottom:8px">${st ? `${st.games} finished game${st.games === 1 ? "" : "s"}${st.stopped_games ? ", " + st.stopped_games + " stopped" : ""}` : ""}</div>
+    ${standingsTable(st)}${rows ? `<h3 style="margin-top:18px">Games</h3><div class="tblwrap"><table class="tbl"><tbody>${rows}</tbody></table></div>` : ""}
+    ${prompts ? `<h3 style="margin-top:18px">Team prompts</h3>${prompts}` : ""}</div>`;
+  el.querySelectorAll("tr[data-g]").forEach((tr) => (tr.onclick = () => { S.tab = "chronicle"; loadGame(tr.dataset.g); }));
+}
+
+/* ---------- arena: leaderboard and match launcher ---------- */
+async function renderArena(el) {
+  if (PUBLIC || S.mode !== "live") return renderStandings(el);
+  if (!el.querySelector(".arena-grid")) el.innerHTML = '<div class="empty">Loading the arena...</div>';
+  let lb, models;
+  let bots, st;
+  try { [lb, models, S.games, bots, st] = await Promise.all([getJSON(`/api/leaderboard?mock=${S.arenaMock ? 1 : 0}`), getJSON("/api/models"), getJSON("/api/games"), getJSON("/api/bots"), getJSON("/api/standings").catch(() => null)]); }
+  catch (e) { el.innerHTML = `<div class="empty">Arena data is unavailable (${esc(e.message)}).</div>`; return; }
+  if (S.b && S.tab !== "arena") return;
+  S.modelColors = lb.colors || {};
+  const p100 = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
+  const rows = lb.players.map((r, i) => `<tr><td class="num">${i + 1}</td><td>${mdl(r.label, true)}</td><td class="num">${r.seats}</td>
+      <td class="num" style="white-space:nowrap"><span class="lbbar" style="--mc:${esc(S.modelColors[r.label] || "var(--ink-3)")}"><span style="width:${(r.win_rate || 0) * 100}%"></span></span>${p100(r.win_rate)}</td>
+      <td class="num">${p100(r.good.win_rate)} <small class="muted">(${r.good.seats})</small></td><td class="num">${p100(r.evil.win_rate)} <small class="muted">(${r.evil.seats})</small></td>
+      <td class="num">${r.evil_read == null ? "–" : r.evil_read.toFixed(2)}</td><td class="num">${p100(r.merlin.survival)} <small class="muted">(${r.merlin.games})</small></td><td class="num">${p100(r.assassin.hit_rate)} <small class="muted">(${r.assassin.shots})</small></td>
+      <td class="num">${r.seconds_per_move == null ? "–" : r.seconds_per_move}</td><td class="num">${p100(r.retry_rate)}</td><td class="num">${r.cost_per_seat_game == null ? "–" : "$" + r.cost_per_seat_game.toFixed(3)}</td><td class="num">${r.stopped_games || ""}</td></tr>`).join("");
+  const table = lb.players.length ? `<div class="tblwrap"><table class="tbl"><thead><tr><th class="num">#</th><th>Player</th><th class="num">Seats</th><th class="num">Wins</th><th class="num">Good</th><th class="num">Evil</th><th class="num" title="As a Good player other than Merlin, from final beliefs: average P(Evil) given to the real Evil players minus that given to Good players. 1 is perfect, 0 is a coin flip.">Evil read</th><th class="num" title="Merlin not found by the Assassin, in games where the Assassin shot">Merlin safe</th><th class="num" title="Assassin named Merlin correctly">Shots hit</th><th class="num" title="Average seconds per model reply">s/move</th><th class="num" title="Moves that needed a corrected reply">Retries</th><th class="num" title="Average API cost per seat per game, where the provider reports cost (e.g. OpenRouter)">$ / game</th><th class="num" title="Games stopped by this player's error or timeout">Stopped</th></tr></thead><tbody>${rows}</tbody></table></div>`
+    : `<div class="empty">No ${S.arenaMock ? "" : "real "}arena games finished yet. Start a match on the right${S.arenaMock ? "" : ", or tick “include dry runs”"}.</div>`;
+  const opts = models.map((m) => {
+    const usable = !m.problem || S.launchMock;
+    const picked = usable && (S.pick || ["haiku-5.5", "gpt-6-luna", "qwen-3.8-flash-next"]).includes(m.key);
+    return `<label class="opt ${usable ? "" : "off"}"><input type="checkbox" name="m" value="${esc(m.key)}" ${usable ? "" : "disabled"} ${picked ? "checked" : ""}>
+      <span class="mdl lg" style="--mc:${esc(m.color)}">${esc(m.label)}</span><span><small>${esc(m.key)} · ${esc(m.backend)}</small><small>${!m.problem ? "ready" : S.launchMock ? "stand-in for this dry run" : esc(m.problem)}</small></span></label>`;
+  }).join("");
+  const botOpts = bots.map((b) => `<label class="opt"><input type="checkbox" name="m" value="${esc(b.key)}" ${(S.pick || []).includes(b.key) ? "checked" : ""}>
+      ${mdl(b.label, true)}<span><small>${esc(b.key)}</small><small>${b.key === "scripted" ? "built-in heuristic bot" : b.key === "random" ? "random legal moves" : "Python bot from bots/"}</small></span></label>`).join("");
+  el.innerHTML = `<div class="arena-grid">
+    <div class="arena-card"><div class="kpis"><div class="kpi"><div class="label">Finished games</div><div class="v">${lb.games}</div><div class="small muted">${S.arenaMock ? "including dry runs" : "real models only"}</div></div><div class="kpi"><div class="label">Players ranked</div><div class="v">${lb.players.length}</div><div class="small muted">models and bots</div></div><div class="kpi"><div class="label">Stopped games</div><div class="v ${lb.stopped_games ? "bad" : ""}">${lb.stopped_games}</div><div class="small muted">a player failed or timed out</div></div></div>
+      ${st && st.tag ? `<h3>Tournament standings · ${esc(st.tag)}</h3>${standingsTable(st)}` : ""}
+      <h3>Leaderboard</h3>${table}
+      <label class="row" style="margin-top:10px"><input type="checkbox" id="lbMock" ${S.arenaMock ? "checked" : ""}> include dry runs with stand-in models</label>
+      <p class="muted small">Seats and roles are dealt at random; win rates by side matter more than the total, and small samples swing a lot.</p>
+      ${recentMatches()}</div>
+    <form class="card launch" id="launch"><h3>Start a match</h3>${opts}
+      <details ${(S.pick || []).some((k) => bots.some((b) => b.key === k)) ? "open" : ""}><summary class="small" style="cursor:pointer;margin:6px 0">Add bots to the table</summary>${botOpts}</details>
+      <div class="row"><label>Players <select name="players">${[5, 6, 7, 8, 9, 10].map((n) => `<option ${n === (S.launchPlayers || 6) ? "selected" : ""}>${n}</option>`).join("")}</select></label>
+        <label>Games <input type="number" name="games" min="1" max="50" value="${S.launchGames || 1}"></label>
+        <label title="Games played at the same time">At once <input type="number" name="parallel" min="1" max="8" value="1"></label>
+        <label title="Discussion rounds per proposal">Rounds <input type="number" name="rounds" min="1" max="10" value="3"></label>
+        <label title="Rounds of Evil's private huddle before the Assassin names Merlin (0 for none)">Huddle <input type="number" name="huddle" min="0" max="10" value="1"></label></div>
+      <label class="row"><input type="checkbox" name="mock" ${S.launchMock ? "checked" : ""}> dry run with stand-in models (free, instant, random moves)</label>
+      <button class="btn primary" type="submit">Start match</button><div class="msg" id="launchMsg">${esc(S.launchMsg || "Seats are shared out evenly between the chosen models, then shuffled.")}</div></form></div>`;
+  $("#lbMock").onchange = (e) => { S.arenaMock = e.target.checked; renderArena(el); };
+  el.querySelectorAll("tr[data-g]").forEach((tr) => (tr.onclick = () => { S.tab = "chronicle"; loadGame(tr.dataset.g); }));
+  const f = $("#launch");
+  f.mock.onchange = () => { S.launchMock = f.mock.checked; S.pick = [...f.querySelectorAll("input[name=m]:checked")].map((x) => x.value); renderArena(el); };
+  f.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const body = { models: [...f.querySelectorAll("input[name=m]:checked")].map((x) => x.value), players: +f.players.value, games: +f.games.value, parallel: +f.parallel.value, rounds: +f.rounds.value, huddle_rounds: +f.huddle.value, mock: f.mock.checked };
+    S.pick = body.models; S.launchPlayers = body.players; S.launchGames = body.games;
+    const msg = $("#launchMsg");
+    try {
+      if (!body.models.length) throw new Error("choose at least one model");
+      const r = await fetch("/api/arena", { method: "POST", headers: { "content-type": "application/json", "x-avalon": "1" }, body: JSON.stringify(body) });
+      const out = await r.json();
+      if (!r.ok) throw new Error(out.error || r.status);
+      msg.className = "msg"; msg.textContent = S.launchMsg = `Started ${out.tag}. The first game opens here as soon as it begins.`;
+      followSeries(out.tag);
+    } catch (e) { msg.className = "msg err"; msg.textContent = `Could not start: ${e.message}`; }
+  };
+}
+function recentMatches() {
+  const list = S.games.filter((g) => g.driver === "bots" && (g.models || []).length && (S.arenaMock || !g.mock)).slice(0, 10);
+  if (!list.length) return "";
+  const rows = list.map((g) => `<tr data-g="${esc(g.id)}" style="cursor:pointer"><td>${g.status === "running" ? '<span class="pill live">live</span>' : g.winner ? `<span class="pill ${esc(g.winner)}">${esc(g.winner)} won</span>` : `<span class="pill err">${esc(g.status)}</span>`}</td>
+    <td>${g.models.map((m) => mdl(m)).join(" ")}</td><td class="num">${g.players}p</td><td class="num">${g.status === "running" ? "turn " + esc(g.turn || 0) : esc((g.win_reason || "").replace(/_/g, " "))}</td><td class="mono small" title="${esc(g.id)}">${esc(String(g.id).slice(9, 11) + ":" + String(g.id).slice(11, 13) + " · " + String(g.id).slice(-4))}</td></tr>`).join("");
+  return `<h3 style="margin-top:18px">Matches</h3><div class="tblwrap"><table class="tbl"><tbody>${rows}</tbody></table></div>`;
+}
+async function followSeries(tag) {
+  for (let i = 0; i < 40; i++) {
+    await new Promise((r) => setTimeout(r, 1500));
+    try {
+      S.games = await getJSON("/api/games");
+      const g = S.games.find((x) => x.tag === tag);
+      if (g) { S.tab = "chronicle"; S.launchMsg = ""; await loadGame(g.id); return; }
+    } catch (e) {}
+  }
+}
+function renderArenaOnly() {
+  $("#main").innerHTML = (PUBLIC ? '<div class="persp-note">No tournament games yet.</div>' : '<div class="persp-note">No games yet. Start one below, or run <code>bin/avalon arena --mock</code>.</div>') + '<section class="pane" id="pane"></section>';
+  renderArena($("#pane"));
+}
+
+/* ---------- chronicle ---------- */
+function renderChronicle(el) {
+  const beat = S.beats[curIdx()] || { turn: 0 };
+  const T = beat.turn;
+  const evs = visibleEvents().filter((e) => e.turn <= T);
+  if (!evs.length) { el.innerHTML = '<div class="empty">Nothing has happened yet at this point of the game. Press Play or drag the slider.</div>'; return; }
+  const blocks = []; let cur = null;
+  const open = (title) => { cur = { title, html: [] }; blocks.push(cur); };
+  open("Before the first quest");
+  let curQuest = null;
+  for (const e of evs) {
+    const t = e.turn;
+    if (e.type === "game_started") {
+      const ops = S.b.players.filter((p) => note(p, t)).map((p) => `<div class="msg"><div class="msg-h"><span class="who">${esc(p)}</span>${mdl(modelOf(p))}${known(p, t).label ? `<span class="dot ${known(p, t).side || ""}"></span><span class="muted">${esc(known(p, t).label)}</span>` : ""}</div><details class="why"><summary>Opening strategy (private)</summary>${md(note(p, t))}</details></div>`).join("");
+      cur.html.push(`<div class="card"><h4>The game begins <span class="meta">first leader ${esc(e.leader)}</span></h4>${ops ? `<div class="msgs">${ops}</div>` : ""}</div>`);
+    } else if (e.type === "proposal") {
+      if (curQuest !== e.quest) { curQuest = e.quest; open(`Quest ${e.quest}`); }
+      cur.html.push(`<div class="card"><h4>♛ ${esc(e.leader)} ${mdl(modelOf(e.leader))} proposes <span class="chips">${e.team.map((p) => chip(p, T)).join("")}</span><span class="meta">proposal ${e.proposal} · turn ${t}</span></h4>${e.message ? `<div class="msg" style="margin-top:8px"><p>${esc(e.message)}</p>${whyBlock(e.leader, t)}</div>` : whyBlock(e.leader, t)}</div>`);
+    } else if (e.type === "discussion") {
+      const msgs = e.entries.map((x) => x.message
+        ? `<div class="msg"><div class="msg-h"><span class="who">${esc(x.player)}</span>${mdl(modelOf(x.player))}${known(x.player, T).side ? `<span class="dot ${known(x.player, T).side}"></span>` : ""}${x.ready ? '<span class="pill">ready</span>' : ""}<span class="muted num" style="margin-left:auto">${words(x.message)} w</span></div><p>${esc(x.message)}</p>${whyBlock(x.player, t)}</div>`
+        : `<div class="msg passed"><div class="msg-h"><span class="who">${esc(x.player)}</span>${mdl(modelOf(x.player))}<span>passed${x.ready ? " · ready" : ""}</span></div>${whyBlock(x.player, t)}</div>`).join("");
+      cur.html.push(`<div class="card"><h4>Discussion round ${e.round} <span class="meta">turn ${t} · written simultaneously, published together</span></h4><div class="msgs">${msgs}</div></div>`);
+    } else if (e.type === "team_amended") cur.html.push(`<div class="card"><h4>♛ ${esc(e.leader)} changes the team to <span class="chips">${e.team.map((p) => chip(p, T)).join("")}</span></h4></div>`);
+    else if (e.type === "discussion_closed") cur.html.push(`<div class="meta" style="margin:-2px 0 10px 4px">Discussion closed after ${e.rounds} round${e.rounds === 1 ? "" : "s"}.</div>`);
+    else if (e.type === "vote_result") {
+      const toks = Object.keys(e.votes).sort(bySeat).map((p) => `<span class="vg ${e.votes[p]}"><i>${e.votes[p] === "approve" ? "✓" : "✗"}</i><b>${esc(p)}</b></span>`).join("");
+      cur.html.push(`<div class="card"><h4>Vote on <span class="chips">${e.team.map((p) => chip(p, T)).join("")}</span> <span class="verdict ${e.approved ? "ok" : "no"}">${e.approved ? "Approved" : "Rejected"}</span><span class="meta num">${e.approvals}/${Object.keys(e.votes).length} · turn ${t}</span></h4><div class="votegrid" style="margin-top:8px">${toks}</div></div>`);
+    } else if (e.type === "quest_cards") {
+      const failed = Object.entries(e.cards).filter(([, c]) => c === "fail").map(([p]) => p).sort(bySeat);
+      cur.html.push(`<div class="meta" style="margin:-4px 0 10px 4px">${e.own ? `You played ${esc(Object.values(e.cards)[0])}.` : `Referee only: ${failed.length ? "fail cards from " + failed.map(esc).join(", ") : "every card was a success"}.`}</div>`);
+    } else if (e.type === "quest_result") cur.html.push(`<div class="card"><h4>Quest ${e.quest} <span class="verdict ${e.success ? "ok" : "no"}">${e.success ? "succeeded" : "failed"}</span><span class="meta">${e.successes} success, ${e.fails} fail · team ${esc(e.team.join(", "))} · turn ${t}</span></h4></div>`);
+    else if (e.type === "assassination_phase") open("The assassination");
+    else if (e.type === "evil_huddle") cur.html.push(`<div class="card"><h4>Evil huddle, round ${e.round} <span class="meta">private to Evil · turn ${t}</span></h4><div class="msgs">${e.entries.map((x) => `<div class="msg"><div class="msg-h"><span class="who">${esc(x.player)}</span>${mdl(modelOf(x.player))}<span class="dot evil"></span>${x.suggested_target ? `<span class="muted">suggests ${esc(x.suggested_target)}</span>` : ""}</div><p>${esc(x.message || "(no message)")}</p>${whyBlock(x.player, t)}</div>`).join("")}</div></div>`);
+    else if (e.type === "assassination") cur.html.push(`<div class="card"><h4>The Assassin ${esc(e.assassin)} ${mdl(modelOf(e.assassin))} names ${chip(e.target, T)} <span class="verdict ${e.hit ? "no" : "ok"}">${e.hit ? "Merlin found" : "wrong guess"}</span></h4>${e.message ? `<div class="msg" style="margin-top:8px"><p>${esc(e.message)}</p></div>` : ""}${whyBlock(e.assassin, t)}</div>`);
+    else if (e.type === "game_over") { open("Game over"); cur.html.push(`<div class="card"><h4><span class="verdict ${e.winner === "good" ? "ok" : "no"}">${e.winner === "good" ? "Good" : "Evil"} wins</span> <span class="meta">${esc(REASON[e.reason] || e.reason)}</span></h4><div class="chips" style="margin-top:8px">${Object.keys(e.roles).sort(bySeat).map((p) => `<span class="chip ${known(p, T).side || ""}">${esc(p)} · ${esc(e.roles[p])}</span>`).join("")}</div></div>`); }
+    else if (e.type === "reflections") cur.html.push(`<div class="card"><h4>Post-game reflections <span class="meta">turn ${t}</span></h4><div class="msgs">${e.entries.map((x) => `<div class="msg ${x.message ? "" : "passed"}"><div class="msg-h"><span class="who">${esc(x.player)}</span>${mdl(modelOf(x.player))}</div>${x.message ? `<p>${esc(x.message)}</p>` : ""}${whyBlock(x.player, t)}</div>`).join("")}</div></div>`);
+  }
+  el.innerHTML = `<p class="small muted" style="margin-top:0">Everything up to the moment selected above, newest quest first.</p>` + blocks.filter((x) => x.html.length).map((x) => `<div class="quest-block"><h3>${esc(x.title)}</h3>${x.html.join("")}</div>`).reverse().join("");
+}
+
+/* ---------- beliefs ---------- */
+function beliefSeries(p) {
+  const out = [];
+  for (const t of S.b.turns) { const s = t.seats[p]; if (s && s.submission && s.submission.beliefs) out.push({ turn: t.turn, b: s.submission.beliefs, g: s.submission.role_guesses }); }
+  return out;
+}
+function discernment(b) {
+  const ev = Object.keys(b).filter((q) => trueSide(q) === "evil"), gd = Object.keys(b).filter((q) => trueSide(q) === "good");
+  if (!ev.length || !gd.length) return null;
+  const m = (xs) => xs.reduce((s, q) => s + b[q], 0) / xs.length;
+  return m(ev) - m(gd);
+}
+function heatColor(v) { return `color-mix(in oklab, var(--evil) ${Math.round(v * 92)}%, var(--panel))`; }
+function renderBeliefs(el) {
+  const v = viewer();
+  const seats = isRef() ? S.b.players : v ? [v] : [];
+  if (!seats.length) { el.innerHTML = '<div class="empty">Beliefs are private to each player. Choose "Referee" or a player in "Seen as" to look inside.</div>'; return; }
+  if (!S.beliefSeat || !seats.includes(S.beliefSeat)) S.beliefSeat = seats.find((p) => trueSide(p) === "good" && roleKey(p) === "merlin") || seats[0];
+  const obs = S.beliefSeat, series = beliefSeries(obs);
+  const pick = seats.length > 1 ? `<div class="seg" role="group" aria-label="Whose beliefs" style="margin-bottom:12px">${seats.map((p) => `<button data-p="${esc(p)}" aria-pressed="${p === obs}">${esc(p)}</button>`).join("")}</div>` : "";
+  if (!series.length) { el.innerHTML = pick + '<div class="empty">No belief reports for this seat (games before belief tracking, or the seat never acted).</div>'; bindBeliefPick(el); return; }
+  const targets = Object.keys(series[series.length - 1].b).sort(bySeat);
+  const T = (S.beats[curIdx()] || {}).turn || 1e9;
+  const head = `<tr><th></th>${series.map((s) => `<th title="turn ${s.turn}" style="${s.turn > T ? "opacity:.35" : ""}">${s.turn}</th>`).join("")}<th>truth</th></tr>`;
+  const rows = targets.map((q) => { const kn = isRef() || gameOverBy(T) ? known(q, T) : known(q, T);
+    return `<tr><td class="lbl">${esc(q)}</td>${series.map((s) => { const x = s.b[q]; return x == null ? "<td></td>" : `<td title="turn ${s.turn}: ${pct(x)} likely Evil${s.g && s.g[q] ? ", guessed " + esc(s.g[q]) : ""}" style="background:${heatColor(x)};color:${x > .55 ? "#fff" : "var(--ink)"};${s.turn > T ? "opacity:.35" : ""}">${Math.round(x * 100)}</td>`; }).join("")}<td>${kn.side ? `<span class="chip ${kn.side === "good" || kn.side === "evil" ? kn.side : ""}">${esc(kn.label || kn.side)}</span>` : '<span class="muted">hidden</span>'}</td></tr>`; }).join("");
+  const sparks = isRef() ? S.b.players.map((p) => sparkCard(p)).join("") : "";
+  el.innerHTML = `${pick}
+    <div class="chart"><div class="label" style="margin-bottom:8px">${esc(obs)} (${esc(known(obs, 1e9).label || "")}): probability each player is Evil, per turn</div>
+      <div style="overflow-x:auto"><table class="heat">${head}${rows}</table></div>
+      <div class="legend"><span>Cells: 0 = sure Good, 100 = sure Evil. Columns after the current moment are faded.</span></div></div>
+    ${isRef() ? `<h3 style="font-size:18px;margin:6px 0 8px">How well each player read the table</h3>
+      <p class="small muted" style="margin-top:0">Discernment = average P(Evil) given to the players who really are Evil minus the average given to the players who really are Good. 1 is a perfect read, 0 is no better than a coin.</p>
+      <div class="sparks">${sparks}</div>` : ""}`;
+  bindBeliefPick(el);
+}
+function bindBeliefPick(el) { el.querySelectorAll("[data-p]").forEach((b) => (b.onclick = () => { S.beliefSeat = b.dataset.p; renderBeliefs(el); })); }
+function sparkCard(p) {
+  const s = beliefSeries(p).map((x) => ({ t: x.turn, d: discernment(x.b) })).filter((x) => x.d != null);
+  const kn = known(p, 1e9);
+  if (s.length < 1) return `<div class="spark"><b>${esc(p)}</b> <span class="muted small">${esc(kn.label)}</span><div class="small muted">no beliefs</div></div>`;
+  const W = 220, H = 64, L = 4, R = 4, Tp = 6, Bt = 6;
+  const xs = (k) => L + (s.length === 1 ? (W - L - R) / 2 : (k * (W - L - R)) / (s.length - 1));
+  const ys = (v) => Tp + (H - Tp - Bt) * (1 - (v + 1) / 2);
+  const pts = s.map((x, k) => `${xs(k)},${ys(x.d)}`).join(" ");
+  const area = `${xs(0)},${ys(0)} ${pts} ${xs(s.length - 1)},${ys(0)}`;
+  const last = s[s.length - 1];
+  const col = kn.side === "evil" ? "var(--evil)" : "var(--good)";
+  return `<div class="spark"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b>${esc(p)} <span class="muted small" style="font-weight:500">${esc(kn.label)}</span></b><span class="num" style="font-weight:700">${last.d.toFixed(2)}</span></div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(p)} discernment over turns, last ${last.d.toFixed(2)}"><line x1="${L}" x2="${W - R}" y1="${ys(0)}" y2="${ys(0)}" stroke="var(--line-2)" stroke-dasharray="3 3"/>
+      <polygon points="${area}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="${xs(s.length - 1)}" cy="${ys(last.d)}" r="3.5" fill="${col}" stroke="var(--panel)" stroke-width="1.5"/></svg>
+    <div class="small muted">${s.length} reports · dashed line = no information</div></div>`;
+}
+
+/* ---------- terminals ---------- */
+function renderTerminals(el) {
+  if (!isRef()) { el.innerHTML = '<div class="empty">Terminals show every player\'s private work, so only the Referee perspective can see them.</div>'; return; }
+  const screens = S.b.screens || {}, procs = S.b.procs || {}, seats = S.b.seats || {};
+  if (!Object.values(screens).some(Boolean)) { el.innerHTML = '<div class="empty">No terminal captures for this game (bots have no terminal).</div>'; return; }
+  const source = S.b.status.driver === "codex" ? "Each pane shows one player's Codex tool and message stream" : S.b.status.driver === "bots" ? "Each model seat shows its latest replies, reasoning dimmed above the answer" : "Each pane mirrors one player's Claude Code terminal";
+  el.innerHTML = `<p class="muted small" style="margin-top:0">${source}${S.b.status.status === "running" ? ", refreshed every 2 seconds" : " (last captured output)"}.</p><div class="terms">${(S.b.status.driver === "bots" ? S.b.players.filter((p) => (procs[p] || {}).model) : S.b.players).map((p) => {
+    const pr = procs[p] || {}, uid = (pr.Uid || "").split(" ")[0] || (seats[p] || {}).uid || "?";
+    return `<div class="termbox"><div class="termbar"><b>${esc(p)}</b><span class="dot ${trueSide(p) || ""}"></span><span>${esc((S.b.role_names || {})[p] || "")}</span>
+      ${mdl(modelOf(p))}<span style="margin-left:auto" class="mono">${pr.model ? esc(pr.model_backend) + " · " + esc(pr.model) : "uid " + esc(uid)}${pr.pid ? " · pid " + esc(pr.pid) : ""}${pr.NoNewPrivs ? " · nnp " + esc(pr.NoNewPrivs) : ""}${pr.Seccomp ? " · seccomp " + esc(pr.Seccomp) : ""}</span></div>
+      <pre class="term ${(procs[p] || {}).model ? "wrap" : ""}">${ansi(screens[p] || "(no capture yet)")}</pre></div>`;
+  }).join("")}</div>`;
+  el.querySelectorAll(".term").forEach((t) => (t.scrollTop = t.scrollHeight));
+}
+
+/* ---------- verification ---------- */
+function renderVerify(el) {
+  if (!isRef()) { el.innerHTML = '<div class="empty">The isolation audit is a referee view. Choose "Referee" in "Seen as".</div>'; return; }
+  const a = S.b.audit;
+  if (!a || a.error) { el.innerHTML = `<div class="empty">No audit available yet${a && a.error ? ": " + esc(a.error) : ""}.</div>`; return; }
+  const sm = a.summary || { checks: 0, passed: 0, failed: [] }, seats = a.seats || {};
+  const totalTools = Object.values(seats).reduce((s, x) => s + (x.tool_calls || 0), 0);
+  const totalDenied = Object.values(seats).reduce((s, x) => s + (x.denied || 0), 0);
+  const viol = Object.values(seats).reduce((s, x) => s + x.violations.length + x.foreign_canaries_seen.length, 0);
+  const codex = S.b.status.driver === "codex";
+  const layers = codex ? [
+    ["Separate player sessions", "Each seat has its own conversation, role card, notes and memory. Codex seats use the same host user, not separate Linux uids."],
+    ["Filesystem permission profile", "Player commands can read their own workspace and the public record, and write only their own notes, submissions, scratch and memory. Startup probes check actual allowed and denied operations."],
+    ["Player tool limits", "Network access for player commands, apps, browser, plugins and external MCP tools is disabled. The signed-in model client runs outside this tool sandbox."],
+    ["Submission checks", "The referee requires valid moves, private decision notes and updated memory before accepting a submission."],
+    ["Referee barrier", "All required players must finish before a round is published. Recovery reuses saved accepted moves and publishes each turn once."],
+    ["Audit scope", "Checks use explicit file-change paths, filesystem probes and cross-player canaries. Command text is not a complete file-read trace. Linux Landlock, separate uids and seccomp are not claimed for local Codex."],
+  ] : [
+    ["Own Unix user per seat", "Private folders are mode 700 and owned by the seat's uid; seats cannot read, signal or trace each other."],
+    ["Landlock (kernel)", "Read/write only the seat's own folder; read-only public repo and runtime. TCP connect only to the API port; no listening sockets."],
+    ["seccomp filter", "No bind/listen, SysV or POSIX IPC, ptrace, keyrings, namespaces, mounts or io_uring."],
+    ["Claude Code permissions", "--restricted, a fixed tool list, dontAsk mode (nothing prompts; anything not allowed is denied), explicit path rules."],
+    ["Hook gates", "PreToolUse re-checks every path; the Stop gate requires reading the public repo, a private decision doc and a valid submission."],
+    ["Referee barrier", "Each turn is collected from every actor before one public commit; quest cards aggregated, huddles routed only to Evil."],
+  ];
+  const mark = (c) => (c.ok ? '<span class="ok-mark">✓ pass</span>' : '<span class="bad-mark">✗ fail</span>');
+  const rows = a.checks.filter((c) => !c.seat).map((c) => `<tr><td>${mark(c)}</td><td>${esc(c.check)}</td><td class="muted">${esc(c.detail)}</td></tr>`).join("");
+  const seatChecks = a.checks.filter((c) => c.seat), names = [...new Set(seatChecks.map((c) => c.check))], seatIds = Object.keys(seats).sort(bySeat);
+  const matrix = names.length ? `<div class="tblwrap" style="margin-top:10px"><table class="tbl"><thead><tr><th>Per-seat check</th>${seatIds.map((p) => `<th>${esc(p)}</th>`).join("")}</tr></thead><tbody>${names.map((n) => `<tr><td>${esc(n)}</td>${seatIds.map((p) => { const c = seatChecks.find((x) => x.seat === p && x.check === n); return `<td title="${esc(c ? c.detail : "not checked")}">${c ? (c.ok ? '<span class="ok-mark">✓</span>' : '<span class="bad-mark">✗</span>') : '<span class="muted">-</span>'}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>` : "";
+  const seatRows = seatIds.map((p) => { const s = seats[p], z = s.zones || {}, pr = s.process || {}; const zc = (k) => (z[k] ? z[k].ok : 0);
+    return `<tr><td><b>${esc(p)}</b></td><td><span class="dot ${trueSide(p) || ""}"></span> ${esc((S.b.role_names || {})[p] || "")}</td><td class="num">${esc(s.uid)}</td><td>${pr.NoNewPrivs === "1" ? '<span class="ok-mark">on</span>' : esc(pr.NoNewPrivs || "-")}</td><td>${pr.Seccomp === "2" ? '<span class="ok-mark">filter</span>' : esc(pr.Seccomp || "-")}</td><td class="num">${s.tool_calls}</td><td class="num">${zc("own")}</td><td class="num">${zc("public")}</td><td class="num">${s.denied}</td><td>${s.violations.length ? `<span class="bad-mark">${s.violations.length}</span>` : '<span class="ok-mark">0</span>'}</td><td>${s.foreign_canaries_seen.length ? `<span class="bad-mark">${esc(s.foreign_canaries_seen.join(","))}</span>` : '<span class="ok-mark">clean</span>'}</td><td class="num">${s.stop_blocks}</td></tr>`; }).join("");
+  const denied = seatIds.flatMap((p) => (seats[p].denied_attempts || []).map((d) => ({ p, ...d })));
+  el.innerHTML = `<div class="kpis">
+      <div class="kpi"><div class="label">Audit checks</div><div class="v ${sm.failed.length ? "bad" : "ok"}">${sm.passed}/${sm.checks}</div><div class="small muted">${sm.failed.length ? sm.failed.length + " failing" : "all passing"}</div></div>
+      <div class="kpi"><div class="label">Tool calls audited</div><div class="v">${totalTools}</div><div class="small muted">from each seat's own transcript</div></div>
+      <div class="kpi"><div class="label">Blocked attempts</div><div class="v">${totalDenied}</div><div class="small muted">denied before touching anything</div></div>
+      <div class="kpi"><div class="label">Observed violations</div><div class="v ${viol ? "bad" : "ok"}">${viol}</div><div class="small muted">reported file changes or leaked canaries</div></div></div>
+    <h3 style="font-size:18px;margin-bottom:8px">Isolation layers</h3><div class="layers">${layers.map(([t, d]) => `<div class="layer"><b>${esc(t)}</b>${esc(d)}</div>`).join("")}</div>
+    <h3 style="font-size:18px;margin:6px 0 8px">Checks</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Result</th><th>Game-wide check</th><th>Evidence</th></tr></thead><tbody>${rows}</tbody></table></div>${matrix}
+    <div class="chart" id="barrierChart" style="margin-top:14px"></div>
+    <h3 style="font-size:18px;margin:6px 0 8px">Per-seat sandbox evidence</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Seat</th><th>Role</th><th class="num">uid</th><th>no_new_privs</th><th>seccomp</th><th class="num">Tool calls</th><th class="num">Own-folder ops</th><th class="num">Public reads</th><th class="num">Blocked</th><th>Violations</th><th>Canaries</th><th class="num">Stop-gate blocks</th></tr></thead><tbody>${seatRows}</tbody></table></div>
+    ${denied.length ? `<h3 style="font-size:18px;margin:18px 0 8px">Blocked attempts</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Seat</th><th>Tool</th><th>Input</th><th>Stopped by</th><th>Target</th></tr></thead><tbody>${denied.slice(0, 80).map((d) => `<tr><td><b>${esc(d.p)}</b></td><td>${esc(d.tool)}</td><td><code>${esc(d.input)}</code></td><td>${esc(d.outcome.replace("denied:", ""))}</td><td>${esc((d.zones || []).join(", "))}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+  drawBarrier($("#barrierChart"));
+}
+function drawBarrier(box) {
+  const turns = S.b.turns;
+  if (!turns.length) { box.innerHTML = '<div class="muted">No completed turns yet.</div>'; return; }
+  const W = Math.max(1100, turns.length * 16 + 70), H = 250, L = 46, R = 12, Tp = 14, Bt = 30;
+  const dur = turns.map((t) => t.closed_at - t.opened_at), maxY = Math.max(1, ...dur) * 1.08;
+  const x = (i) => L + (i + 0.5) * ((W - L - R) / turns.length), y = (v) => Tp + (H - Tp - Bt) * (1 - v / maxY);
+  const raw = maxY / 4, mag = Math.pow(10, Math.floor(Math.log10(raw))), step = [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw) || raw;
+  let g = ""; for (let v = 0; v <= maxY; v += step) { const vv = Math.round(v * 100) / 100; g += `<line x1="${L}" x2="${W - R}" y1="${y(vv)}" y2="${y(vv)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(vv) + 4}" text-anchor="end" font-size="11" fill="var(--ink-3)">${vv}s</text>`; }
+  const bw = Math.max(3, Math.min(10, (W - L - R) / turns.length - 4));
+  turns.forEach((t, i) => {
+    g += `<rect x="${x(i) - bw / 2}" y="${y(dur[i])}" width="${bw}" height="${Math.max(1, y(0) - y(dur[i]))}" rx="2" fill="var(--line-2)"/><line x1="${x(i) - bw / 2 - 2}" x2="${x(i) + bw / 2 + 2}" y1="${y(dur[i])}" y2="${y(dur[i])}" stroke="var(--brass)" stroke-width="2"/>`;
+    for (const [p, s] of Object.entries(t.seats)) { if (!s.done_at) continue; const sd = trueSide(p); g += `<circle cx="${x(i)}" cy="${y(Math.max(0, s.done_at - t.opened_at))}" r="3.2" fill="${sd === "evil" ? "var(--evil)" : "var(--good)"}" stroke="var(--panel)" stroke-width="1.5"/>`; }
+    g += `<rect class="hit" data-i="${i}" x="${x(i) - 8}" y="${Tp}" width="16" height="${H - Tp - Bt}" fill="transparent"/>`;
+  });
+  const every = Math.ceil(turns.length / 24);
+  turns.forEach((t, i) => { if (i % every === 0) g += `<text x="${x(i)}" y="${H - 12}" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">${t.turn}</text>`; });
+  box.innerHTML = `<div class="label" style="margin-bottom:6px">Barrier timing: when each actor submitted, and when the referee published</div><div style="overflow-x:auto"><svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W, 900)}px" role="img" aria-label="Submission times per turn">${g}</svg></div>
+    <div class="legend"><span><span class="truth good"></span>Good seat submitted</span><span><span class="truth evil"></span>Evil seat submitted</span><span><svg width="16" height="12"><line x1="1" x2="15" y1="6" y2="6" stroke="var(--brass)" stroke-width="2"/></svg>Public commit, after the last submission</span><span>x: turn · y: seconds since the turn opened</span></div>`;
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; box.appendChild(tip);
+  box.querySelectorAll(".hit").forEach((r) => {
+    r.addEventListener("mouseenter", () => { const t = turns[+r.dataset.i]; const subs = Object.values(t.seats).map((s) => s.done_at).filter(Boolean); tip.textContent = `Turn ${t.turn} · ${KIND[t.kind] || t.kind} · ${t.actors.length} actor(s) · published at ${fmtS(t.closed_at - t.opened_at)} · spread ${fmtS(subs.length ? Math.max(...subs) - Math.min(...subs) : 0)}`; tip.hidden = false; });
+    r.addEventListener("mousemove", (ev) => { const bb = box.getBoundingClientRect(); tip.style.left = ev.clientX - bb.left + "px"; tip.style.top = ev.clientY - bb.top + "px"; });
+    r.addEventListener("mouseleave", () => (tip.hidden = true));
+  });
+}
+
+/* ---------- statistics ---------- */
+function renderStats(el) {
+  const all = S.stats;
+  if (!all) { el.innerHTML = `<div class="empty">${S.mode === "live" ? "Loading statistics..." : "No statistics were published with this page."}</div>`; return; }
+  const kinds = Object.keys(all);
+  if (!kinds.length) { el.innerHTML = '<div class="empty">No finished games yet. Run a batch with <code>avalon batch --games 20</code>.</div>'; return; }
+  const cur = S.b.status.driver === "codex" ? "codex" : S.b.status.driver === "scripted" || S.b.status.driver === "bots" ? S.b.status.driver : S.b.status.mock ? "claude-mock" : "claude";
+  if (!S.statsKind || !all[S.statsKind]) S.statsKind = all[cur] ? cur : kinds[0];
+  const st = all[S.statsKind];
+  const picker = `<div class="seg" role="group" aria-label="Players" style="margin-bottom:12px">${kinds.map((k) => `<button data-k="${esc(k)}" aria-pressed="${k === S.statsKind}">${esc(all[k].label)} · ${all[k].games}</button>`).join("")}</div>`;
+  const reasons = Object.entries(st.reasons || {}).sort((a, b) => b[1] - a[1]), maxR = Math.max(...reasons.map((r) => r[1]), 1);
+  const roleRows = Object.entries(st.roles || {}).map(([r, v]) => `<tr><td><span class="dot ${ROLE_SIDE[r] || ""}"></span> ${esc(ROLE_NAME[r] || r)}</td><td class="num">${v.games}</td><td class="num">${pct(v.win_rate)}</td><td class="num">${v.discernment == null ? "-" : v.discernment.toFixed(2)}</td></tr>`).join("");
+  const vt = st.votes || {}, vrow = (k, label) => (vt[k] ? `<tr><td>${label}</td><td class="num">${vt[k].approve}</td><td class="num">${vt[k].reject}</td><td class="num">${pct(vt[k].approve_rate)}</td></tr>` : "");
+  const games = (st.list || []).slice(-40).reverse().map((g) => `<tr><td class="mono">${esc(g.id)}</td><td><span class="pill ${g.winner}">${esc(g.winner)}</span></td><td>${esc(REASON[g.reason] || g.reason)}</td><td class="num">${g.players}</td><td class="num">${g.turns}</td><td class="num">${g.minutes}</td></tr>`).join("");
+  const c = st.compliance || {}, lc = st.learning_curve || {};
+  const lcRows = Object.keys(lc).sort().map((q) => `<div class="row" title="after quest ${q}: ${lc[q].toFixed(2)}"><span>After quest ${esc(q)}</span><div class="bar good" style="width:${Math.max(1, Math.max(0, lc[q]) * 100)}%"></div><span class="num muted">${lc[q].toFixed(2)}</span></div>`).join("");
+  const claims = st.claims || {};
+  el.innerHTML = `${picker}<p class="muted small" style="margin-top:0">${st.games} finished game${st.games === 1 ? "" : "s"} played by ${esc(st.label.toLowerCase())}.${S.statsKind === "claude-mock" ? " The mock model plays random legal moves, so these numbers test the harness, not strategy." : S.statsKind === "scripted" ? " Heuristic bots without Claude: a baseline." : S.statsKind === "bots" ? " Contributed Python bots, possibly mixed with scripted seats." : ""}</p>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Good win rate</div><div class="v" style="color:var(--good)">${pct(st.good_win_rate)}</div><div class="small muted">${st.winners.good || 0} of ${st.games}</div></div>
+      <div class="kpi"><div class="label">Evil win rate</div><div class="v" style="color:var(--evil)">${pct(1 - st.good_win_rate)}</div><div class="small muted">${st.winners.evil || 0} of ${st.games}</div></div>
+      <div class="kpi"><div class="label">Assassin accuracy</div><div class="v">${pct(st.assassination.hit_rate)}</div><div class="small muted">${st.assassination.hits}/${st.assassination.attempts} found Merlin</div></div>
+      <div class="kpi"><div class="label">Good players' read</div><div class="v">${st.beliefs && st.beliefs.good_final_discernment != null ? st.beliefs.good_final_discernment.toFixed(2) : "-"}</div><div class="small muted">final discernment, 1 = perfect</div></div>
+      <div class="kpi"><div class="label">Discussion rounds</div><div class="v">${st.proposals.avg_discussion_rounds ?? "-"}</div><div class="small muted">average per proposal (max 10)</div></div>
+      <div class="kpi"><div class="label">Evil fail-card rate</div><div class="v">${pct(st.quest_cards.evil_fail_rate)}</div><div class="small muted">when an Evil player was on a quest</div></div></div>
+    <div class="grid2">
+      <div class="chart"><div class="label" style="margin-bottom:8px">How games ended</div><div class="bars">${reasons.map(([r, n]) => `<div class="row" title="${esc(REASON[r] || r)}: ${n}"><span>${esc(REASON[r] || r)}</span><div class="bar ${REASON_SIDE[r] || "n"}" style="width:${(n / maxR) * 100}%"></div><span class="num muted">${n}</span></div>`).join("")}</div>
+        <div class="legend"><span><span class="truth good"></span>Good win</span><span><span class="truth evil"></span>Evil win</span></div></div>
+      <div class="chart"><div class="label" style="margin-bottom:8px">Do Good players learn? Mean discernment after each quest</div>${lcRows ? `<div class="bars">${lcRows}</div>` : '<div class="muted small">Needs games with belief reports.</div>'}</div></div>
+    <div class="grid2">
+      <div class="tblwrap"><table class="tbl"><thead><tr><th>Role</th><th class="num">Seats</th><th class="num">Win rate</th><th class="num">Final read</th></tr></thead><tbody>${roleRows}</tbody></table></div>
+      <div class="tblwrap"><table class="tbl"><thead><tr><th>Voter</th><th class="num">Approve</th><th class="num">Reject</th><th class="num">Rate</th></tr></thead><tbody>${vrow("good_on_clean_team", "Good, on all-Good teams")}${vrow("good_on_evil_team", "Good, on teams with Evil")}${vrow("evil", "Evil, any team")}</tbody></table></div></div>
+    <div class="grid2">
+      <div class="chart"><div class="label" style="margin-bottom:6px">Role claims in public messages</div><div class="small">${Object.keys(claims).length ? Object.entries(claims).map(([k, v]) => `${esc(k)}: <b>${v.good || 0}</b> by Good, <b>${v.evil || 0}</b> by Evil`).join("<br>") : '<span class="muted">No role claims found.</span>'}</div></div>
+      <div class="chart"><div class="label" style="margin-bottom:6px">Compliance</div><div class="small">${c.submissions || 0} submissions · ${c.defaulted || 0} defaulted · ${c.stop_blocks || 0} Stop-gate blocks (agents fixed and resubmitted) · ${st.messages.count} public messages, ${st.messages.avg_words ?? "-"} words on average (max ${st.messages.max_words ?? "-"})</div></div></div>
+    <h3 style="font-size:18px;margin:6px 0 8px">Games</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Game</th><th>Winner</th><th>How</th><th class="num">Players</th><th class="num">Turns</th><th class="num">Minutes</th></tr></thead><tbody>${games}</tbody></table></div>`;
+  el.querySelectorAll(".seg button").forEach((x) => (x.onclick = () => { S.statsKind = x.dataset.k; renderStats(el); }));
+}
+function renderRules(el) { el.innerHTML = `<div class="card">${md(S.b.rules || "")}</div>`; }
+
+/* ---------- seat dossier ---------- */
+function openSeat(p) { S.seat = p; S.seatTab = "decisions"; renderDrawer(); }
+function closeSeat() { S.seat = null; document.querySelectorAll(".scrim,.drawer").forEach((n) => n.remove()); }
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && S.seat) closeSeat(); });
+function renderDrawer() {
+  document.querySelectorAll(".scrim,.drawer").forEach((n) => n.remove());
+  const p = S.seat; if (!p) return;
+  const priv = canSeePrivate(p), T = (S.beats[curIdx()] || {}).turn || 0, kn = known(p, T);
+  const tabs = priv ? [["decisions", "Decisions"], ["memory", "Memory"], ["transcript", "Transcript"], ["activity", "Hook log"], ["role", "Role card"]] : [["decisions", "Public actions"]];
+  if (!tabs.some(([k]) => k === S.seatTab)) S.seatTab = "decisions";
+  const sc = document.createElement("div"); sc.className = "scrim"; sc.onclick = closeSeat;
+  const dr = document.createElement("aside"); dr.className = "drawer"; dr.setAttribute("aria-label", `${p} dossier`);
+  const seat = (S.b.seats || {})[p] || {};
+  dr.innerHTML = `<div class="drawer-h"><div class="row1"><h2>${esc(p)}</h2>${kn.label ? `<span class="pill ${kn.side === "good" || kn.side === "evil" ? kn.side : "brass"}">${esc(kn.label)}</span>` : ""}<button class="btn close" id="closeDr">Close</button></div>
+      <div class="small muted mono">${priv && seat.uid ? `uid ${esc(seat.uid)} · session ${esc((seat.model_thread_id || seat.session_id || "").slice(0, 8))}` : priv ? "" : "Private details are hidden from this perspective."}</div>
+      <nav class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" data-t="${k}" aria-selected="${S.seatTab === k}">${l}</button>`).join("")}</nav></div><div class="drawer-b" id="drb"></div>`;
+  document.body.append(sc, dr);
+  $("#closeDr").onclick = closeSeat;
+  dr.querySelectorAll("nav button").forEach((x) => (x.onclick = () => { S.seatTab = x.dataset.t; renderDrawer(); }));
+  const body = $("#drb");
+  if (S.seatTab === "decisions") body.innerHTML = drawerDecisions(p, priv);
+  else if (S.seatTab === "memory") {
+    const history = (S.b.memory_history || {})[p] || {};
+    const saved = Object.keys(history).map(Number).filter((t) => t <= T).sort((a, b) => b - a)[0];
+    body.innerHTML = saved == null ? '<div class="empty">No saved memory at this replay moment.</div>'
+      : `<p class="small muted">Private memory saved after turn ${saved}. Later knowledge is hidden when you rewind.</p>${md(history[String(saved)])}`;
+  }
+  else if (S.seatTab === "transcript") drawerTranscript(p, body);
+  else if (S.seatTab === "activity") body.innerHTML = drawerHooks(p);
+  else body.innerHTML = `${md((S.b.role_cards || {})[p] || "")}${(S.b.team_prompts || {})[p] ? `<h4 style="margin-top:14px">Team prompt</h4><pre style="white-space:pre-wrap">${esc(S.b.team_prompts[p])}</pre>` : ""}<h4 style="margin-top:14px">Night-phase knowledge</h4><pre class="json">${esc(JSON.stringify((S.b.knowledge || {})[p] || {}, null, 2))}</pre>`;
+}
+function drawerDecisions(p, priv) {
+  const T = (S.beats[curIdx()] || {}).turn || 1e9;
+  const rows = S.b.turns.filter((t) => t.turn <= T && t.seats[p] && (priv || t.kind !== "evil_huddle")).reverse();
+  if (!rows.length) return '<div class="empty">No turns for this seat yet.</div>';
+  return rows.map((t) => {
+    const s = t.seats[p], secret = ["quest", "evil_huddle", "assassinate"].includes(t.kind);
+    let sub = s.submission;
+    if (!priv) sub = secret || !sub ? null : Object.fromEntries(Object.entries(sub).filter(([k]) => !["beliefs", "role_guesses"].includes(k)));
+    const n = note(p, t.turn), secs = s.done_at ? s.done_at - t.opened_at : null;
+    return `<div class="dturn"><div class="dturn-h"><b>Turn ${t.turn}</b><span>${esc(KIND[t.kind] || t.kind)}${t.round ? " round " + t.round : ""}</span>
+      <span>${s.status === "done" ? '<span class="st-ok">submitted</span>' : `<span class="st-bad">${esc(s.status)}</span>`}${s.defaulted ? ` <span class="st-bad" title="${esc(s.fault ? (s.fault.errors || []).join("; ") : "")}">${s.fault ? "fault: default move (" + esc(s.fault.cause.replace(/_/g, " ")) + ")" : "defaulted"}</span>` : ""}</span>
+      ${secs != null ? `<span class="num">${fmtS(secs)}</span>` : ""}${priv && s.tool_calls != null ? `<span class="num">${s.tool_calls} tool calls</span>` : ""}${priv && s.stop_blocks ? `<span class="st-warn">${s.stop_blocks} stop-gate block${s.stop_blocks > 1 ? "s" : ""}</span>` : ""}</div>
+      ${sub ? `<pre class="json">${esc(JSON.stringify(sub, null, 2))}</pre>` : secret ? '<div class="muted small">Secret action.</div>' : ""}
+      ${n ? `<details ${rows.length < 6 ? "open" : ""}><summary class="small" style="cursor:pointer;color:var(--brass);font-weight:600">Private decision document (${words(n)} words)</summary>${md(n)}</details>` : ""}</div>`;
+  }).join("");
+}
+function drawerHooks(p) {
+  const h = ((S.b.hooks || {})[p] || []).slice().reverse();
+  if (!h.length) return '<div class="empty">No hook events.</div>';
+  return `<div class="tblwrap"><table class="tbl"><thead><tr><th>Time</th><th>Event</th><th>Detail</th></tr></thead><tbody>${h.map((e) => {
+    const t = e.ts ? new Date(e.ts * 1000).toLocaleTimeString() : "";
+    let d = "";
+    if (e.event === "PreToolUse") d = `${esc(e.tool)} ${e.guard === "deny" ? '<span class="bad-mark">guard denied</span>' : ""} <code>${esc(e.input || "")}</code>`;
+    else if (e.event === "Stop") d = `turn ${esc(e.turn ?? "-")} · ${esc(e.status)}${e.errors ? " · " + esc(e.errors.join("; ")) : ""}`;
+    else if (e.event === "turn_done") d = `turn ${esc(e.turn)} · ${e.valid ? '<span class="ok-mark">valid</span>' : '<span class="bad-mark">invalid</span>'}`;
+    else if (e.event === "UserPromptSubmit") d = `<code>${esc((e.prompt || "").slice(0, 160))}</code>`;
+    else d = esc(e.message || e.source || e.tool || "");
+    return `<tr><td class="num muted">${esc(t)}</td><td>${esc(e.event)}</td><td>${d}</td></tr>`;
+  }).join("")}</tbody></table></div>`;
+}
+async function drawerTranscript(p, body) {
+  let items = (S.b.transcripts || {})[p] || S.transcripts[p];
+  if (!items && S.mode === "live") {
+    body.innerHTML = '<div class="empty">Loading transcript...</div>';
+    try { items = S.transcripts[p] = await getJSON(`/api/game/${encodeURIComponent(S.gid)}/transcript/${encodeURIComponent(p)}`); }
+    catch (e) { body.innerHTML = `<div class="empty">Could not load the transcript: ${esc(e.message)}</div>`; return; }
+  }
+  if (!items || !items.length) { body.innerHTML = '<div class="empty">No transcript for this seat (bots have none).</div>'; return; }
+  const actor = S.b.status.driver === "codex" ? (S.b.status.model || "Codex") : "Claude Code";
+  body.innerHTML = `<p class="small muted" style="margin-top:0">Read from this seat's own ${esc(actor)} session log.</p><div class="tl">${items.filter((it) => it.kind !== "system").slice(-400).map((it) => {
+    if (it.kind === "tool") {
+      const denied = it.is_error && /denied|not allowed|No such tool|Permission|is outside/.test(it.result || "");
+      const inp = it.input || {}, brief = inp.file_path || inp.command || inp.pattern || inp.url || JSON.stringify(inp).slice(0, 200);
+      return `<div class="it ${denied ? "denied" : ""}"><div class="k">${esc(it.tool)}${denied ? " · denied" : it.is_error ? " · error" : ""}</div><code>${esc(brief)}</code>${it.tool === "Write" && inp.content ? `<pre>${esc(inp.content)}</pre>` : ""}${it.result && (denied || it.is_error || it.tool === "Bash") ? `<pre>${esc(it.result)}</pre>` : ""}</div>`;
+    }
+    const label = { prompt: "Referee", say: actor, think: "Reasoning", feedback: "Stop gate" }[it.kind] || it.kind;
+    return `<div class="it ${it.kind}"><div class="k">${label}</div><div style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(it.text)}</div></div>`;
+  }).join("")}</div>`;
+}
+
+window.__avalon = { S, goBeat, render, Voice };   // test hook (screenshots)
+/* ---------- boot ---------- */
+$("#gameSel").onchange = (e) => loadGame(e.target.value);
+$("#perspSel").onchange = (e) => { S.persp = e.target.value; store.set("persp", S.persp); stopPlayback(); S._cards = {}; S.beats = buildBeats(); if (S.beat != null && S.beat >= S.beats.length) S.beat = null; render(); };
+const savedTab = store.get("tab"); if (savedTab && TABS.some(([k]) => k === savedTab)) S.tab = savedTab;
+const hash = (location.hash || "").slice(1); if (TABS.some(([k]) => k === hash)) S.tab = hash;
+const savedP = store.get("persp"); if (savedP) S.persp = savedP;
+try { if (window.speechSynthesis) speechSynthesis.getVoices(); } catch {}
+const raw = ($("#avalon-data").textContent || "").trim();
+if (raw) {
+  S.mode = "static";
+  const b = JSON.parse(raw);
+  S.stats = b.stats || null; S.games = b.games_index || []; S.standings = b.standings || null;
+  S.cache[b.id] = b;
+  setGame(b);
+  const want = new URLSearchParams(location.search).get("game");   // replay.html?game=ID (tournament sites)
+  if (want && want !== b.id && S.games.some((g) => g.id === want)) loadGame(want);
+} else {
+  loadGames().catch((e) => { $("#main").innerHTML = `<div class="empty" style="margin-top:24px">Could not reach the referee API: ${esc(e.message)}</div>`; });
+  setInterval(poll, 2000);
+}
+})();
+</script>

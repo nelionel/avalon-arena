@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Avalon asset preview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f0e7;color:#173e32;font:15px system-ui,sans-serif}main{max-width:1150px;margin:0 auto;padding:28px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:28px}.board{background:#fcf8ea;align-self:start}.board svg{display:block;width:100%;height:auto}aside{padding:16px 0}h1{font-size:24px;margin:0 0 8px}p{line-height:1.5;color:#5b6b5c;margin-bottom:26px}label{display:block;font-weight:600;font-size:13px;margin:20px 0 7px}select,button{width:100%;background:#fcf8ea;border:1px solid #bec7b4;border-radius:5px;padding:10px;color:#173e32;font:inherit}button{cursor:pointer;margin-top:12px}button.primary{background:#173e32;color:#fcf8ea}fieldset{padding:0;border:0;margin:20px 0}legend{font-weight:600;font-size:13px}.results{display:grid;grid-template-columns:22px 1fr;align-items:center;gap:8px;margin-top:10px}.results select{padding:7px;font-size:13px}.note{font-size:12px;color:#71806e;margin-top:18px}a{color:inherit}@media(max-width:760px){main{grid-template-columns:1fr;padding:16px;gap:10px}aside{padding:0 8px}} 
+</style></head><body><main><div class="board" id="board"></div><aside><h1>Avalon assets</h1><p>The approved minimalist board, rebuilt as editable vector shapes.</p>
+<label for="mission">Current mission</label><select id="mission"><option value="0">None</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
+<label for="rejections">Rejected proposals</label><select id="rejections"><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>
+<fieldset><legend>Mission results</legend><div class="results"><label for="result-1" style="margin:0">1</label><select id="result-1"><option value="">Pending</option><option value="success">Success</option><option value="fail" selected>Fail</option></select><label for="result-2" style="margin:0">2</label><select id="result-2"><option value="">Pending</option><option value="success" selected>Success</option><option value="fail">Fail</option></select><label for="result-3" style="margin:0">3</label><select id="result-3"><option value="">Pending</option><option value="success">Success</option><option value="fail">Fail</option></select><label for="result-4" style="margin:0">4</label><select id="result-4"><option value="">Pending</option><option value="success">Success</option><option value="fail">Fail</option></select><label for="result-5" style="margin:0">5</label><select id="result-5"><option value="">Pending</option><option value="success">Success</option><option value="fail">Fail</option></select></div></fieldset>
+<button class="primary" id="download">Download current SVG</button><button id="reset">Reset to approved state</button><p class="note">Open this file directly. It works offline. Asset paths and integration examples are in README.md.</p></aside></main>
+<script type="module">const CASTLE = {"viewBox":[0,0,792,424],"placement":[232,140],"grid":4,"paths":[{"fill":"#123e2e","d":"M64 376h8v4h-8zM64 380h12v8h-12zM68 368h4v8h-4zM76 360h12v4h-12zM84 364h8v4h-8zM84 380h12v8h-12zM88 368h8v12h-8zM124 332h8v24h-8zM156 304h4v4h-4zM156 300h8v4h-8zM168 300h4v4h-4zM172 340h4v8h-4zM172 332h16v8h-16zM180 320h8v12h-8zM224 200h28v4h-28zM224 204h72v4h-72zM228 208h16v4h-16zM232 192h20v8h-20zM232 188h24v4h-24zM232 184h56v4h-56zM240 172h40v12h-40zM248 168h32v4h-32zM252 156h20v12h-20zM260 132h8v24h-8zM260 188h28v12h-28zM260 200h36v4h-36zM268 208h16v4h-16zM360 324h60v48h-60zM368 128h36v4h-36zM368 312h40v8h-40zM368 320h44v4h-44zM368 132h88v8h-88zM376 304h24v8h-24zM376 124h28v4h-28zM376 120h32v4h-32zM376 112h76v8h-76zM384 100h56v12h-56zM388 96h52v4h-52zM396 80h32v4h-32zM396 84h36v12h-36zM400 72h28v8h-28zM404 60h20v12h-20zM412 8h4v24h-4zM412 36h4v24h-4zM412 32h8v4h-8zM412 120h40v8h-40zM412 128h44v4h-44zM520 228h28v8h-28zM520 236h72v4h-72zM528 224h24v4h-24zM528 216h56v8h-56zM532 240h4v4h-4zM536 204h40v12h-40zM544 188h24v16h-24zM552 168h8v16h-8zM552 184h12v4h-12zM556 224h28v4h-28zM556 228h36v8h-36zM632 364h4v4h-4zM644 324h16v8h-16zM676 352h8v24h-8zM704 384h16v12h-16zM712 372h8v12h-8zM712 396h8v4h-8zM712 368h16v4h-16zM732 376h8v24h-8z"},{"fill":"#536c5b","d":"M64 368h4v8h-4zM64 388h12v4h-12zM72 360h4v4h-4zM72 376h4v4h-4zM76 356h12v4h-12zM84 368h4v12h-4zM92 364h4v4h-4zM124 356h8v4h-8zM132 348h8v8h-8zM132 332h40v16h-40zM132 324h48v8h-48zM140 316h40v8h-40zM148 312h24v4h-24zM156 296h16v4h-16zM156 308h16v4h-16zM160 304h12v4h-12zM164 300h4v4h-4zM224 208h4v4h-4zM228 196h4v4h-4zM228 236h60v4h-60zM236 212h8v20h-8zM236 232h12v4h-12zM244 168h4v4h-4zM244 208h24v4h-24zM248 156h4v12h-4zM252 192h8v12h-8zM256 152h4v4h-4zM256 188h4v4h-4zM256 228h32v8h-32zM268 216h20v12h-20zM272 212h12v4h-12zM284 208h8v4h-8zM288 196h4v4h-4zM288 280h8v4h-8zM288 284h20v64h-20zM312 256h4v4h-4zM312 228h12v8h-12zM312 236h64v20h-64zM320 256h56v4h-56zM328 260h20v8h-20zM340 228h8v4h-8zM360 228h16v8h-16zM364 260h12v8h-12zM384 96h4v4h-4zM384 140h8v4h-8zM392 84h4v12h-4zM400 304h4v8h-4zM404 124h8v8h-8zM408 120h4v4h-4zM408 312h4v8h-4zM412 256h8v4h-8zM416 8h4v24h-4zM416 36h4v24h-4zM432 84h4v12h-4zM436 140h8v4h-8zM440 96h4v16h-4zM452 256h8v4h-8zM456 128h4v12h-4zM476 304h16v12h-16zM476 280h48v20h-48zM476 316h48v32h-48zM480 300h16v4h-16zM488 264h12v4h-12zM488 268h16v12h-16zM504 300h20v8h-20zM504 312h20v4h-20zM508 308h16v4h-16zM520 268h4v4h-4zM520 240h12v4h-12zM536 240h56v4h-56zM540 200h4v4h-4zM544 184h8v4h-8zM548 228h8v8h-8zM552 224h4v4h-4zM564 184h4v4h-4zM568 200h4v4h-4zM628 364h4v4h-4zM628 352h48v12h-48zM632 340h40v12h-40zM636 364h40v4h-40zM644 332h16v8h-16zM652 368h24v8h-24zM660 324h4v8h-4zM676 376h8v4h-8zM680 348h4v4h-4zM700 384h4v12h-4zM704 380h8v4h-8zM708 376h4v4h-4zM712 400h8v4h-8zM728 368h4v8h-4zM728 392h4v8h-4zM732 400h8v4h-8z"},{"fill":"#7b8b78","d":"M68 364h16v4h-16zM72 356h4v4h-4zM72 368h4v8h-4zM72 392h4v4h-4zM76 388h20v4h-20zM80 384h4v4h-4zM88 360h4v4h-4zM96 376h4v12h-4zM120 332h4v28h-4zM132 356h8v4h-8zM140 352h4v4h-4zM140 348h8v4h-8zM156 348h4v4h-4zM168 348h8v4h-8zM176 340h4v4h-4zM224 196h4v4h-4zM228 212h8v24h-8zM228 240h16v4h-16zM236 244h8v8h-8zM244 220h4v4h-4zM244 228h12v4h-12zM244 224h24v4h-24zM248 232h8v4h-8zM252 220h16v4h-16zM256 216h12v4h-12zM260 240h8v4h-8zM260 212h12v4h-12zM272 156h4v12h-4zM276 248h8v4h-8zM276 264h8v16h-8zM276 240h12v4h-12zM276 280h12v4h-12zM276 292h12v12h-12zM280 244h4v4h-4zM284 284h4v8h-4zM284 304h4v8h-4zM284 324h4v8h-4zM284 344h4v4h-4zM284 212h8v4h-8zM288 216h4v24h-4zM292 196h4v4h-4zM292 208h4v4h-4zM296 348h8v4h-8zM296 280h12v4h-12zM308 228h4v32h-4zM316 256h4v4h-4zM324 260h4v4h-4zM328 268h8v4h-8zM336 228h4v4h-4zM336 232h16v4h-16zM348 228h4v4h-4zM360 372h60v4h-60zM372 268h4v4h-4zM376 260h4v8h-4zM376 140h8v4h-8zM376 252h24v8h-24zM376 300h24v4h-24zM384 388h12v4h-12zM388 144h4v8h-4zM388 168h4v16h-4zM388 392h8v4h-8zM392 80h4v4h-4zM392 260h8v4h-8zM392 264h12v4h-12zM392 140h44v4h-44zM408 12h4v12h-4zM408 36h4v24h-4zM412 252h20v4h-20zM420 256h12v8h-12zM424 264h8v4h-8zM436 144h8v4h-8zM444 140h8v4h-8zM444 184h8v16h-8zM444 256h8v4h-8zM444 260h12v8h-12zM448 252h24v4h-24zM460 256h16v4h-16zM476 300h4v4h-4zM492 304h4v12h-4zM496 300h8v4h-8zM500 264h4v4h-4zM504 308h4v4h-4zM516 228h4v12h-4zM520 264h8v4h-8zM520 272h8v8h-8zM524 224h4v4h-4zM524 268h4v4h-4zM524 280h4v68h-4zM528 244h8v8h-8zM532 212h4v4h-4zM536 200h4v4h-4zM568 248h12v4h-12zM568 244h16v4h-16zM572 200h4v4h-4zM584 224h4v4h-4zM628 340h4v12h-4zM632 368h12v4h-12zM652 376h24v4h-24zM660 332h4v8h-4zM672 344h4v4h-4zM672 348h8v4h-8zM704 376h4v4h-4zM712 364h20v4h-20zM720 372h8v4h-8zM720 392h8v8h-8zM720 400h12v4h-12zM728 376h4v16h-4zM732 372h8v4h-8z"},{"fill":"#9da98c","d":"M64 364h4v4h-4zM68 392h4v4h-4zM76 384h4v4h-4zM76 376h8v8h-8zM76 392h8v4h-8zM88 356h4v4h-4zM96 372h4v4h-4zM96 388h4v4h-4zM140 356h4v4h-4zM148 348h8v4h-8zM160 348h8v4h-8zM176 344h4v4h-4zM180 340h8v4h-8zM220 200h4v8h-4zM228 188h4v8h-4zM228 244h8v4h-8zM228 268h8v24h-8zM244 272h4v28h-4zM244 216h12v4h-12zM244 212h16v4h-16zM244 240h16v4h-16zM248 220h4v4h-4zM252 152h4v4h-4zM256 136h4v16h-4zM264 260h4v4h-4zM268 240h8v4h-8zM276 244h4v4h-4zM276 284h8v8h-8zM276 304h8v4h-8zM276 324h8v8h-8zM276 260h16v4h-16zM280 168h4v16h-4zM284 244h4v16h-4zM284 312h4v12h-4zM284 332h4v12h-4zM284 264h8v16h-8zM284 348h12v4h-12zM288 188h4v8h-4zM288 240h4v4h-4zM296 200h4v8h-4zM304 348h4v4h-4zM320 260h4v4h-4zM324 228h4v8h-4zM324 264h4v4h-4zM328 312h8v48h-8zM336 268h12v4h-12zM348 260h16v4h-16zM348 388h36v4h-36zM348 392h40v4h-40zM348 396h80v4h-80zM356 324h4v48h-4zM364 320h4v4h-4zM364 268h8v4h-8zM372 140h4v4h-4zM376 248h4v4h-4zM376 268h4v4h-4zM380 260h12v4h-12zM384 144h4v8h-4zM384 168h4v16h-4zM384 164h8v4h-8zM384 184h8v4h-8zM388 248h4v4h-4zM392 144h4v8h-4zM392 268h16v4h-16zM396 76h4v4h-4zM396 388h36v8h-36zM400 300h4v4h-4zM400 164h8v4h-8zM400 260h20v4h-20zM404 264h8v4h-8zM404 200h24v4h-24zM408 8h4v4h-4zM408 24h4v12h-4zM408 252h4v8h-4zM408 156h12v4h-12zM412 320h8v4h-8zM416 384h4v4h-4zM420 264h4v4h-4zM424 268h8v4h-8zM428 156h4v4h-4zM432 152h4v4h-4zM436 148h8v4h-8zM440 264h4v4h-4zM444 252h4v4h-4zM444 292h4v4h-4zM444 372h4v4h-4zM444 144h8v4h-8zM444 156h8v28h-8zM444 200h8v12h-8zM444 296h8v20h-8zM444 324h8v48h-8zM444 268h12v4h-12zM444 316h12v4h-12zM444 320h16v4h-16zM452 140h4v4h-4zM456 260h8v4h-8zM472 252h4v4h-4zM476 348h52v4h-52zM496 312h8v4h-8zM516 276h4v4h-4zM524 216h4v8h-4zM524 244h4v8h-4zM524 260h4v4h-4zM528 276h8v12h-8zM528 252h12v8h-12zM528 328h12v4h-12zM532 204h4v8h-4zM532 260h4v4h-4zM532 324h4v4h-4zM536 244h4v8h-4zM540 196h4v4h-4zM540 340h8v8h-8zM544 268h4v4h-4zM544 304h24v4h-24zM548 260h4v8h-4zM560 260h4v8h-4zM572 328h12v8h-12zM572 324h16v4h-16zM576 336h8v12h-8zM576 252h12v72h-12zM580 248h8v4h-8zM584 244h4v4h-4zM628 368h4v4h-4zM644 368h8v4h-8zM672 340h4v4h-4zM684 376h4v4h-4zM700 376h4v8h-4zM720 388h4v4h-4z"},{"fill":"#b9c3a6","d":"M8 408h4v4h-4zM12 404h8v4h-8zM12 412h768v4h-768zM16 400h4v4h-4zM20 396h16v4h-16zM36 388h8v4h-8zM44 380h12v4h-12zM76 368h8v4h-8zM80 372h4v4h-4zM96 364h4v4h-4zM100 376h4v4h-4zM100 372h8v4h-8zM104 368h4v4h-4zM104 364h12v4h-12zM112 360h8v4h-8zM116 356h4v4h-4zM128 324h4v8h-4zM136 316h4v8h-4zM140 312h4v4h-4zM152 296h4v16h-4zM164 104h8v4h-8zM164 132h8v4h-8zM176 312h4v4h-4zM180 316h4v4h-4zM188 324h4v4h-4zM188 340h8v4h-8zM200 340h28v4h-28zM220 196h4v4h-4zM220 208h4v4h-4zM224 212h4v96h-4zM224 308h52v4h-52zM224 320h52v12h-52zM224 312h60v8h-60zM224 332h60v8h-60zM236 300h8v4h-8zM236 304h12v4h-12zM236 252h40v8h-40zM236 340h44v8h-44zM240 168h4v4h-4zM240 264h4v20h-4zM240 292h4v8h-4zM240 260h12v4h-12zM244 164h4v4h-4zM248 152h4v4h-4zM248 244h28v8h-28zM252 276h8v4h-8zM252 288h8v4h-8zM252 280h12v8h-12zM256 132h4v4h-4zM256 304h16v4h-16zM268 260h4v4h-4zM268 296h4v8h-4zM268 268h8v8h-8zM268 284h8v12h-8zM272 152h4v4h-4zM272 264h4v4h-4zM272 280h4v4h-4zM276 164h4v4h-4zM296 196h4v4h-4zM296 208h4v4h-4zM308 292h12v12h-12zM308 372h12v4h-12zM308 264h16v8h-16zM308 304h16v68h-16zM308 272h168v20h-168zM312 224h16v4h-16zM328 296h112v4h-112zM328 292h116v4h-116zM332 300h44v4h-44zM336 324h20v48h-20zM336 320h24v4h-24zM336 312h32v8h-32zM336 304h40v8h-40zM340 224h12v4h-12zM348 264h12v4h-12zM348 268h16v4h-16zM352 372h4v4h-4zM356 232h4v4h-4zM360 224h76v4h-76zM368 124h8v4h-8zM372 148h4v72h-4zM372 144h8v4h-8zM372 220h64v4h-64zM380 108h4v4h-4zM380 232h4v4h-4zM380 244h4v8h-4zM380 264h12v8h-12zM380 228h20v4h-20zM384 216h52v4h-52zM388 92h4v4h-4zM388 208h44v8h-44zM392 176h8v12h-8zM392 200h8v4h-8zM392 204h40v4h-40zM396 72h4v4h-4zM396 172h4v4h-4zM396 196h4v4h-4zM396 232h4v4h-4zM396 144h12v8h-12zM396 248h12v4h-12zM400 60h4v12h-4zM400 252h4v4h-4zM400 244h8v4h-8zM400 236h28v4h-28zM404 56h4v4h-4zM404 156h4v8h-4zM404 240h4v4h-4zM404 300h36v8h-36zM404 308h40v4h-40zM408 188h8v4h-8zM408 176h12v12h-12zM408 228h24v8h-24zM412 168h4v8h-4zM412 264h8v8h-8zM412 312h32v8h-32zM416 240h8v4h-8zM420 56h4v4h-4zM420 320h24v4h-24zM420 40h28v4h-28zM424 60h4v12h-4zM424 332h16v8h-16zM424 324h20v8h-20zM424 340h20v32h-20zM428 72h4v8h-4zM428 144h4v4h-4zM428 80h8v4h-8zM428 160h8v4h-8zM428 168h8v12h-8zM428 192h8v12h-8zM428 164h12v4h-12zM432 184h8v8h-8zM432 268h8v4h-8zM436 180h4v4h-4zM436 240h8v8h-8zM440 252h4v4h-4zM440 248h12v4h-12zM444 108h4v4h-4zM448 44h4v8h-4zM456 140h4v4h-4zM456 264h20v8h-20zM460 292h16v80h-16zM460 24h24v4h-24zM468 372h8v4h-8zM472 260h4v4h-4zM480 48h4v4h-4zM480 276h8v4h-8zM488 260h16v4h-16zM504 264h4v12h-4zM508 276h8v4h-8zM516 260h4v4h-4zM516 224h8v4h-8zM520 244h4v16h-4zM528 288h4v4h-4zM528 344h4v4h-4zM528 340h8v4h-8zM528 304h16v8h-16zM528 312h44v8h-44zM532 200h4v4h-4zM532 336h8v4h-8zM532 296h12v8h-12zM536 332h4v4h-4zM536 292h8v4h-8zM536 264h12v4h-12zM540 244h4v4h-4zM540 284h4v4h-4zM540 248h8v4h-8zM540 260h8v4h-8zM540 252h12v8h-12zM540 324h24v4h-24zM540 320h32v4h-32zM548 168h4v16h-4zM548 244h4v4h-4zM552 272h8v24h-8zM552 328h12v8h-12zM552 308h16v4h-16zM556 336h12v4h-12zM560 168h4v12h-4zM560 244h4v4h-4zM560 340h8v4h-8zM564 260h12v8h-12zM568 280h4v8h-4zM568 268h8v12h-8zM568 288h8v8h-8zM572 256h4v4h-4zM572 296h4v8h-4zM576 204h4v12h-4zM584 216h4v4h-4zM588 224h4v4h-4zM588 348h12v4h-12zM592 240h4v4h-4zM600 352h4v4h-4zM600 356h28v4h-28zM640 332h4v8h-4zM644 148h8v4h-8zM656 320h4v4h-4zM660 148h8v4h-8zM668 152h4v8h-4zM684 352h4v24h-4zM692 380h8v4h-8zM700 372h8v4h-8zM720 376h8v12h-8zM740 388h8v4h-8zM748 392h4v4h-4zM748 396h20v4h-20zM764 400h4v4h-4zM764 404h16v4h-16zM768 408h8v4h-8z"},{"fill":"#acbda0","d":"M12 408h756v4h-756zM20 400h692v4h-692zM20 404h744v4h-744zM36 392h32v4h-32zM36 396h312v4h-312zM44 384h20v8h-20zM56 376h8v8h-8zM76 372h4v4h-4zM84 392h264v4h-264zM96 368h4v4h-4zM100 388h248v4h-248zM100 384h316v4h-316zM100 380h592v4h-592zM104 376h548v4h-548zM108 368h200v8h-200zM116 364h192v4h-192zM120 360h188v4h-188zM144 312h4v4h-4zM144 352h164v8h-164zM172 312h4v4h-4zM176 348h108v4h-108zM180 344h56v4h-56zM196 340h4v4h-4zM228 184h4v4h-4zM228 248h8v12h-8zM228 300h8v8h-8zM228 340h8v4h-8zM228 260h12v8h-12zM228 292h12v8h-12zM236 172h4v12h-4zM236 268h4v16h-4zM236 284h8v8h-8zM244 244h4v8h-4zM244 268h4v4h-4zM244 300h4v4h-4zM244 264h8v4h-8zM248 304h8v4h-8zM268 152h4v4h-4zM268 264h4v4h-4zM268 280h4v4h-4zM268 276h8v4h-8zM272 260h4v4h-4zM272 296h4v12h-4zM276 252h8v8h-8zM276 308h8v4h-8zM276 320h8v4h-8zM280 340h4v8h-4zM288 184h4v4h-4zM288 244h4v16h-4zM308 260h12v4h-12zM320 292h8v8h-8zM320 300h12v4h-12zM320 372h32v4h-32zM324 268h4v4h-4zM324 312h4v48h-4zM324 304h12v8h-12zM324 360h12v12h-12zM356 372h4v4h-4zM360 264h4v4h-4zM360 320h4v4h-4zM368 140h4v4h-4zM376 228h4v8h-4zM376 244h4v4h-4zM376 148h8v4h-8zM376 164h8v24h-8zM376 216h8v4h-8zM376 208h12v8h-12zM376 200h16v8h-16zM376 196h20v4h-20zM376 188h24v8h-24zM376 236h24v4h-24zM376 156h28v8h-28zM376 240h28v4h-28zM376 152h56v4h-56zM380 144h4v4h-4zM384 248h4v4h-4zM384 232h12v4h-12zM384 244h16v4h-16zM392 172h4v4h-4zM392 248h4v4h-4zM392 164h8v8h-8zM400 200h4v4h-4zM400 228h8v8h-8zM400 256h8v4h-8zM404 252h4v4h-4zM408 268h4v4h-4zM408 240h8v4h-8zM408 144h20v4h-20zM408 148h28v4h-28zM408 244h28v4h-28zM408 248h32v4h-32zM420 268h4v4h-4zM420 324h4v48h-4zM420 156h8v8h-8zM420 372h24v4h-24zM420 384h280v4h-280zM424 240h12v4h-12zM428 184h4v8h-4zM428 180h8v4h-8zM428 236h24v4h-24zM428 396h284v4h-284zM432 144h4v4h-4zM432 252h8v4h-8zM432 264h8v4h-8zM432 156h12v4h-12zM432 204h12v8h-12zM432 256h12v8h-12zM432 212h20v4h-20zM432 228h20v8h-20zM432 388h268v8h-268zM436 160h8v4h-8zM436 168h8v12h-8zM436 192h8v12h-8zM436 152h16v4h-16zM436 216h16v12h-16zM440 164h4v4h-4zM440 180h4v12h-4zM440 268h4v4h-4zM440 296h4v12h-4zM440 332h4v8h-4zM444 148h8v4h-8zM444 240h8v8h-8zM448 292h12v4h-12zM448 372h20v4h-20zM452 296h8v20h-8zM452 324h8v48h-8zM456 316h4v4h-4zM464 260h8v4h-8zM476 352h124v8h-124zM476 360h152v12h-152zM476 372h176v4h-176zM496 304h8v8h-8zM504 276h4v4h-4zM516 240h4v4h-4zM516 264h4v12h-4zM520 260h4v4h-4zM524 252h4v8h-4zM528 260h4v4h-4zM528 296h4v8h-4zM528 324h4v4h-4zM528 336h4v4h-4zM528 264h8v4h-8zM528 292h8v4h-8zM528 332h8v4h-8zM528 320h12v4h-12zM528 268h16v8h-16zM528 348h60v4h-60zM532 344h8v4h-8zM532 288h12v4h-12zM536 260h4v4h-4zM536 284h4v4h-4zM536 324h4v4h-4zM536 340h4v4h-4zM536 276h8v8h-8zM540 328h12v8h-12zM540 336h16v4h-16zM544 244h4v4h-4zM544 308h8v4h-8zM548 340h12v4h-12zM548 248h20v4h-20zM548 344h28v4h-28zM552 164h8v4h-8zM552 244h8v4h-8zM552 256h20v4h-20zM552 252h24v4h-24zM560 180h4v4h-4zM564 244h4v4h-4zM564 324h8v12h-8zM568 296h4v8h-4zM568 304h8v8h-8zM568 336h8v8h-8zM572 280h4v8h-4zM572 312h4v12h-4zM584 220h4v4h-4zM584 328h4v20h-4zM592 228h4v12h-4zM652 140h8v4h-8zM688 376h4v4h-4zM708 372h4v4h-4zM724 388h4v4h-4zM740 392h8v8h-8zM740 400h24v4h-24zM776 408h4v4h-4z"},{"fill":"#ce9525","d":"M248 272h4v24h-4zM248 296h8v4h-8zM252 264h4v4h-4zM260 264h4v4h-4zM260 296h8v4h-8zM264 268h4v28h-4zM404 168h4v28h-4zM404 196h20v4h-20zM408 164h4v4h-4zM408 160h12v4h-12zM416 164h8v4h-8zM420 168h4v28h-4zM420 20h36v8h-36zM420 28h60v12h-60zM452 40h28v8h-28zM544 272h8v8h-8zM544 300h24v4h-24zM548 280h4v8h-4zM548 296h20v4h-20zM552 264h8v4h-8zM560 288h8v8h-8zM564 272h4v16h-4z"},{"fill":"#dca938","d":"M248 268h16v4h-16zM248 300h20v4h-20zM252 260h12v4h-12zM252 272h12v4h-12zM252 292h12v4h-12zM256 264h4v4h-4zM256 296h4v4h-4zM260 276h4v4h-4zM260 288h4v4h-4zM264 264h4v4h-4zM400 168h4v32h-4zM408 168h4v8h-4zM408 192h12v4h-12zM412 164h4v4h-4zM416 168h4v8h-4zM416 188h4v4h-4zM420 16h36v4h-36zM424 164h4v36h-4zM448 40h4v4h-4zM452 48h28v4h-28zM456 24h4v4h-4zM480 28h4v20h-4zM544 280h4v8h-4zM544 296h4v4h-4zM544 288h8v8h-8zM548 268h20v4h-20zM552 260h8v4h-8zM560 272h4v16h-4z"},{"fill":"#477a9d","d":"M156 116h24v8h-24zM164 108h8v8h-8zM164 124h8v8h-8zM644 152h24v8h-24zM652 144h8v8h-8zM652 160h8v8h-8z"}]};
+
+const DETAILS = {"digit2":{"width":39,"height":57,"d":"M0 13h10v2h-10zM0 16h10v1h-10zM0 12h11v1h-11zM0 15h11v1h-11zM0 11h12v1h-12zM0 10h13v1h-13zM0 9h14v1h-14zM1 46h12v1h-12zM1 44h13v2h-13zM1 47h13v1h-13zM1 8h38v1h-38zM1 48h38v9h-38zM2 7h35v1h-35zM3 43h13v1h-13zM3 6h33v1h-33zM4 42h12v1h-12zM4 4h31v2h-31zM5 41h12v1h-12zM6 40h13v1h-13zM6 2h26v1h-26zM6 3h27v1h-27zM7 39h12v1h-12zM8 38h13v1h-13zM8 0h22v1h-22zM8 1h23v1h-23zM9 37h12v1h-12zM10 36h13v1h-13zM11 35h13v1h-13zM12 34h13v1h-13zM13 33h12v1h-12zM14 32h13v1h-13zM15 31h13v1h-13zM16 30h13v1h-13zM17 29h14v1h-14zM18 28h13v1h-13zM19 27h14v1h-14zM20 26h13v1h-13zM21 25h13v1h-13zM22 24h14v1h-14zM23 23h13v1h-13zM24 9h15v2h-15zM24 22h15v1h-15zM26 11h13v2h-13zM26 20h13v2h-13zM27 19h12v1h-12zM28 13h11v6h-11zM33 44h6v4h-6z"},"digit3":{"width":39,"height":58,"d":"M0 16h9v1h-9zM0 13h10v3h-10zM0 41h10v3h-10zM0 11h11v2h-11zM0 44h11v2h-11zM0 10h13v1h-13zM0 46h13v2h-13zM0 9h14v1h-14zM0 8h38v1h-38zM0 48h38v1h-38zM2 6h34v1h-34zM2 49h34v2h-34zM2 7h35v1h-35zM4 4h30v2h-30zM4 52h30v1h-30zM4 51h31v1h-31zM6 2h26v1h-26zM6 53h26v1h-26zM6 3h27v1h-27zM7 55h24v1h-24zM7 54h25v1h-25zM8 0h22v2h-22zM8 56h22v1h-22zM14 27h18v2h-18zM14 29h19v1h-19zM14 25h20v2h-20zM14 30h20v1h-20zM14 31h21v1h-21zM14 24h22v1h-22zM14 32h22v1h-22zM22 57h2v1h-2zM24 23h13v1h-13zM24 33h13v1h-13zM24 10h14v1h-14zM24 9h15v1h-15zM24 22h15v1h-15zM24 46h15v2h-15zM25 57h3v1h-3zM25 34h14v1h-14zM26 11h13v2h-13zM26 20h13v2h-13zM26 35h13v1h-13zM26 44h13v2h-13zM27 19h12v1h-12zM27 36h12v1h-12zM28 13h11v6h-11zM28 37h11v7h-11z"},"digit4":{"width":41,"height":54,"d":"M0 30h10v1h-10zM0 31h11v1h-11zM0 28h12v2h-12zM0 32h41v9h-41zM2 27h11v1h-11zM2 26h12v1h-12zM4 25h10v1h-10zM4 24h11v1h-11zM4 23h12v1h-12zM6 22h11v1h-11zM6 21h12v1h-12zM8 18h11v3h-11zM10 16h11v2h-11zM11 15h23v1h-23zM12 13h22v2h-22zM13 12h21v1h-21zM14 11h20v1h-20zM15 9h19v2h-19zM16 8h18v1h-18zM17 7h17v1h-17zM18 5h16v2h-16zM19 49h18v1h-18zM20 3h14v2h-14zM20 48h17v1h-17zM20 50h17v4h-17zM21 2h13v1h-13zM23 0h11v2h-11zM23 16h11v16h-11zM23 41h11v7h-11z"},"roman1":{"width":14,"height":30,"d":"M0 0h14v4h-14zM0 29h14v1h-14zM1 26h13v3h-13zM3 4h11v1h-11zM4 5h7v21h-7z"},"roman2":{"width":31,"height":30,"d":"M0 4h1v1h-1zM0 0h14v4h-14zM0 26h14v4h-14zM3 5h7v20h-7zM3 4h8v1h-8zM3 25h8v1h-8zM17 0h14v4h-14zM17 26h14v4h-14zM20 4h8v1h-8zM20 25h8v1h-8zM21 5h6v20h-6zM29 4h1v1h-1z"},"roman3":{"width":47,"height":31,"d":"M0 4h11v1h-11zM0 0h14v4h-14zM0 26h14v4h-14zM3 5h7v21h-7zM12 4h1v1h-1zM16 0h14v1h-14zM16 3h14v1h-14zM16 26h14v3h-14zM16 29h15v1h-15zM17 1h13v2h-13zM19 25h8v1h-8zM19 4h9v1h-9zM20 5h7v20h-7zM29 4h1v1h-1zM33 30h2v1h-2zM33 0h14v4h-14zM33 26h14v4h-14zM36 5h7v19h-7zM36 25h8v1h-8zM36 4h10v1h-10zM37 24h6v1h-6z"},"roman4":{"width":47,"height":30,"d":"M0 0h14v4h-14zM0 26h14v4h-14zM1 4h10v1h-10zM3 25h8v1h-8zM4 5h6v3h-6zM4 15h6v3h-6zM4 23h6v2h-6zM4 8h7v7h-7zM4 18h7v5h-7zM12 4h1v1h-1zM16 0h14v4h-14zM17 4h1v1h-1zM19 4h9v1h-9zM20 5h7v3h-7zM20 8h8v1h-8zM20 9h9v1h-9zM20 10h10v2h-10zM22 12h8v1h-8zM22 13h9v3h-9zM23 16h8v1h-8zM24 17h16v2h-16zM25 19h14v3h-14zM26 22h12v1h-12zM27 23h10v3h-10zM29 26h6v4h-6zM33 16h7v1h-7zM33 13h9v3h-9zM35 12h7v1h-7zM35 9h9v3h-9zM35 0h12v4h-12zM37 5h7v4h-7zM37 4h10v1h-10z"},"roman5":{"width":31,"height":30,"d":"M0 4h1v1h-1zM0 0h13v4h-13zM2 4h9v1h-9zM3 5h7v4h-7zM3 9h9v1h-9zM3 10h10v2h-10zM6 12h7v1h-7zM6 14h8v1h-8zM6 13h9v1h-9zM6 15h9v2h-9zM8 17h15v5h-15zM9 22h12v1h-12zM10 23h11v2h-11zM11 25h9v1h-9zM12 28h6v1h-6zM12 26h7v2h-7zM12 29h7v1h-7zM17 13h8v4h-8zM18 12h7v1h-7zM18 9h9v3h-9zM19 0h12v4h-12zM21 5h6v4h-6zM21 4h8v1h-8zM30 4h1v1h-1z"},"mission-prefix":{"width":115,"height":21,"d":"M0 0h4v2h-4zM0 8h4v13h-4zM0 2h5v1h-5zM0 3h6v2h-6zM0 5h7v2h-7zM0 7h16v1h-16zM6 8h5v2h-5zM7 10h2v2h-2zM9 5h7v2h-7zM10 4h7v1h-7zM11 2h6v2h-6zM12 0h4v1h-4zM12 8h4v11h-4zM12 1h5v1h-5zM12 19h5v1h-5zM13 20h3v1h-3zM21 3h7v1h-7zM21 0h8v3h-8zM21 17h8v4h-8zM23 4h4v13h-4zM33 4h4v5h-4zM33 16h4v1h-4zM33 9h12v1h-12zM33 2h14v2h-14zM33 17h14v2h-14zM34 19h11v1h-11zM34 10h12v1h-12zM35 15h1v1h-1zM35 20h10v1h-10zM35 0h11v1h-11zM35 1h12v1h-12zM35 11h12v1h-12zM43 12h4v5h-4zM44 4h3v1h-3zM51 4h4v4h-4zM51 16h4v1h-4zM51 8h5v1h-5zM51 9h13v1h-13zM51 18h14v1h-14zM51 3h15v1h-15zM51 17h15v1h-15zM52 15h3v1h-3zM52 2h14v1h-14zM53 20h10v1h-10zM53 10h11v1h-11zM53 19h11v1h-11zM53 1h12v1h-12zM54 0h10v1h-10zM54 11h12v1h-12zM61 12h5v1h-5zM62 4h4v1h-4zM62 13h4v4h-4zM69 0h9v3h-9zM69 17h9v4h-9zM71 3h5v8h-5zM71 14h5v1h-5zM71 16h5v1h-5zM72 11h4v3h-4zM72 15h4v1h-4zM82 4h4v13h-4zM82 2h14v2h-14zM82 17h14v1h-14zM83 18h12v1h-12zM84 20h9v1h-9zM84 0h10v2h-10zM84 19h10v1h-10zM92 4h4v13h-4zM100 0h4v2h-4zM100 8h4v13h-4zM100 2h5v1h-5zM100 3h6v2h-6zM100 5h7v1h-7zM100 6h8v2h-8zM105 8h4v1h-4zM106 9h4v2h-4zM106 11h9v1h-9zM108 12h7v3h-7zM110 15h5v3h-5zM111 1h4v8h-4zM111 10h4v1h-4zM111 18h4v2h-4zM112 0h3v1h-3zM112 9h3v1h-3zM112 20h3v1h-3z"},"fails":{"width":102,"height":23,"d":"M0 6h1v1h-1zM0 4h4v2h-4zM0 16h4v2h-4zM0 15h5v1h-5zM0 14h7v1h-7zM0 18h14v1h-14zM0 2h15v2h-15zM0 19h15v4h-15zM1 13h7v1h-7zM1 12h12v1h-12zM2 0h11v2h-11zM2 11h11v1h-11zM4 10h10v1h-10zM6 9h9v1h-9zM10 4h5v5h-5zM33 6h9v1h-9zM33 7h10v3h-10zM34 19h6v4h-6zM35 4h4v2h-4zM35 10h4v9h-4zM35 3h9v1h-9zM36 1h8v2h-8zM38 0h6v1h-6zM47 17h4v2h-4zM47 16h5v1h-5zM47 8h13v1h-13zM47 9h14v1h-14zM47 15h14v1h-14zM47 19h16v2h-16zM48 14h13v1h-13zM49 21h7v2h-7zM49 6h9v1h-9zM49 7h10v1h-10zM49 13h12v1h-12zM50 12h11v1h-11zM56 10h5v1h-5zM56 16h5v3h-5zM57 11h4v1h-4zM57 21h6v1h-6zM58 22h5v1h-5zM65 19h9v3h-9zM66 6h6v4h-6zM66 22h8v1h-8zM67 10h5v1h-5zM68 0h3v1h-3zM68 3h3v1h-3zM68 1h4v2h-4zM68 11h4v8h-4zM76 0h6v1h-6zM76 2h6v1h-6zM76 1h7v1h-7zM76 19h9v4h-9zM77 3h5v1h-5zM78 4h4v4h-4zM78 8h5v11h-5zM88 18h3v1h-3zM88 10h4v2h-4zM88 12h11v1h-11zM88 13h12v1h-12zM88 8h14v2h-14zM88 19h14v2h-14zM89 21h11v2h-11zM89 14h13v1h-13zM90 7h12v1h-12zM90 15h12v1h-12zM91 6h11v1h-11zM97 16h5v1h-5zM97 18h5v1h-5zM98 17h4v1h-4z"},"rejected":{"width":333,"height":21,"d":"M0 4h4v5h-4zM0 13h4v8h-4zM0 12h5v1h-5zM0 0h12v1h-12zM0 1h13v1h-13zM0 11h13v1h-13zM0 2h14v1h-14zM0 10h14v1h-14zM0 3h15v1h-15zM0 9h15v1h-15zM7 12h5v1h-5zM8 13h4v1h-4zM9 14h4v1h-4zM9 15h5v1h-5zM10 4h5v1h-5zM10 8h5v1h-5zM10 16h5v1h-5zM11 5h4v3h-4zM11 17h4v4h-4zM19 4h4v4h-4zM19 13h4v4h-4zM19 8h5v1h-5zM19 12h6v1h-6zM19 9h12v3h-12zM19 1h15v3h-15zM19 17h15v4h-15zM20 0h14v1h-14zM38 15h4v2h-4zM38 17h14v2h-14zM40 19h11v1h-11zM41 20h9v1h-9zM46 0h8v4h-8zM48 4h4v13h-4zM58 13h4v3h-4zM58 12h5v1h-5zM58 16h5v1h-5zM58 9h12v3h-12zM58 1h15v1h-15zM58 17h15v4h-15zM59 4h3v4h-3zM59 8h4v1h-4zM59 0h14v1h-14zM59 2h14v2h-14zM77 4h4v13h-4zM77 2h14v1h-14zM77 3h15v1h-15zM77 17h15v2h-15zM79 0h10v1h-10zM79 20h10v1h-10zM79 1h11v1h-11zM79 19h11v1h-11zM88 4h3v3h-3zM88 15h4v2h-4zM95 1h16v3h-16zM96 0h14v1h-14zM101 4h4v17h-4zM115 4h4v5h-4zM115 13h4v4h-4zM115 12h5v1h-5zM115 9h12v3h-12zM115 0h14v4h-14zM115 20h14v1h-14zM115 17h15v3h-15zM134 4h4v13h-4zM134 0h11v1h-11zM134 1h12v1h-12zM134 19h12v2h-12zM134 2h13v1h-13zM134 3h14v1h-14zM134 17h14v2h-14zM144 4h4v13h-4zM171 4h4v5h-4zM171 13h4v8h-4zM171 12h7v1h-7zM171 0h12v2h-12zM171 11h12v1h-12zM171 10h13v1h-13zM171 2h14v2h-14zM171 9h14v1h-14zM181 4h4v5h-4zM189 5h4v3h-4zM189 13h4v3h-4zM189 4h5v1h-5zM189 8h5v1h-5zM189 12h6v1h-6zM189 1h13v1h-13zM189 11h13v1h-13zM189 10h14v1h-14zM189 2h15v2h-15zM189 9h15v1h-15zM190 16h3v5h-3zM190 0h12v1h-12zM196 12h5v1h-5zM197 13h5v1h-5zM198 14h5v1h-5zM199 15h4v1h-4zM199 16h5v1h-5zM200 4h4v5h-4zM200 17h4v4h-4zM208 4h4v13h-4zM208 2h14v2h-14zM208 18h14v1h-14zM208 17h15v1h-15zM210 20h10v1h-10zM210 1h11v1h-11zM210 19h11v1h-11zM211 0h9v1h-9zM218 4h4v8h-4zM218 12h5v5h-5zM227 4h4v5h-4zM227 13h4v8h-4zM227 12h7v1h-7zM227 0h12v2h-12zM227 11h12v1h-12zM227 2h14v1h-14zM227 9h14v2h-14zM227 3h15v1h-15zM237 4h4v1h-4zM237 8h4v1h-4zM238 5h3v3h-3zM246 4h4v13h-4zM246 2h14v2h-14zM246 17h14v2h-14zM248 1h10v1h-10zM248 19h10v2h-10zM249 0h9v1h-9zM256 4h4v13h-4zM264 4h4v5h-4zM264 16h4v1h-4zM264 9h12v1h-12zM264 3h14v1h-14zM264 17h14v2h-14zM265 19h11v1h-11zM265 10h12v1h-12zM265 2h13v1h-13zM266 20h10v1h-10zM266 1h12v1h-12zM266 11h12v1h-12zM267 12h1v1h-1zM267 0h11v1h-11zM273 12h5v1h-5zM274 4h4v1h-4zM275 13h3v4h-3zM283 8h3v4h-3zM283 16h3v5h-3zM283 12h14v4h-14zM284 6h4v2h-4zM285 5h3v1h-3zM285 3h9v2h-9zM286 2h7v1h-7zM287 0h5v1h-5zM287 1h6v1h-6zM291 5h3v1h-3zM291 6h4v1h-4zM292 7h3v1h-3zM293 8h3v1h-3zM293 9h4v3h-4zM293 16h4v5h-4zM301 1h4v16h-4zM301 17h14v4h-14zM302 0h3v1h-3zM319 5h4v4h-4zM319 16h4v1h-4zM319 4h5v1h-5zM319 9h13v2h-13zM319 3h14v1h-14zM319 17h14v2h-14zM320 2h13v1h-13zM321 20h10v1h-10zM321 19h11v1h-11zM321 1h12v1h-12zM321 11h12v1h-12zM322 0h11v1h-11zM329 12h4v1h-4zM330 4h3v1h-3zM330 13h3v4h-3z"},"counter2":{"width":73,"height":22,"d":"M0 4h3v1h-3zM0 3h4v1h-4zM0 14h4v4h-4zM0 13h6v1h-6zM0 2h14v1h-14zM0 18h14v4h-14zM1 12h6v1h-6zM1 1h11v1h-11zM1 11h11v1h-11zM2 0h10v1h-10zM3 10h9v1h-9zM3 9h11v1h-11zM6 8h8v1h-8zM9 3h5v1h-5zM10 4h4v4h-4zM10 17h4v1h-4zM29 19h5v2h-5zM30 18h5v1h-5zM31 21h2v1h-2zM31 16h4v2h-4zM32 15h5v1h-5zM33 14h4v1h-4zM33 13h5v1h-5zM34 11h4v1h-4zM34 12h5v1h-5zM35 10h5v1h-5zM36 9h4v1h-4zM36 8h5v1h-5zM37 5h5v3h-5zM39 3h4v2h-4zM39 2h6v1h-6zM40 0h4v1h-4zM41 1h4v1h-4zM59 4h4v4h-4zM59 16h4v2h-4zM59 3h5v1h-5zM59 8h5v1h-5zM59 9h12v1h-12zM59 10h13v1h-13zM59 19h13v1h-13zM59 0h14v3h-14zM59 11h14v1h-14zM59 18h14v1h-14zM60 20h11v1h-11zM61 21h4v1h-4zM65 8h3v1h-3zM69 12h4v6h-4zM70 8h1v1h-1z"}};
+
+
+const PALETTE = Object.freeze({
+  background: '#FCF8EA', ink: '#0B3C30', sage: '#B3C1A6',
+  sageOutline: '#ADBA9E', gold: '#D29A25', blue: '#477A9D',
+  red: '#B94F40', white: '#FCF8EA', muted: '#64765E',
+});
+
+// Original compact bitmap glyphs: each filled cell becomes a vector rectangle.
+// No font download, font licensing dependency, or live text reflow.
+const FONT = {
+ '0':['01110','11011','11011','11011','11011','11011','01110'],
+ '1':['00100','01100','00100','00100','00100','00100','01110'],
+ '2':['01110','11011','00011','00110','01100','11000','11111'],
+ '3':['11110','00011','00011','01110','00011','00011','11110'],
+ '4':['00110','01110','11010','11010','11111','00010','00010'],
+ '5':['11111','11000','11000','11110','00011','00011','11110'],
+ '6':['01110','11000','11000','11110','11011','11011','01110'],
+ '7':['11111','00011','00110','00110','01100','01100','01100'],
+ '8':['01110','11011','11011','01110','11011','11011','01110'],
+ '9':['01110','11011','11011','01111','00011','00011','01110'],
+ A:['01110','11011','11011','11111','11011','11011','11011'],
+ C:['01111','11000','11000','11000','11000','11000','01111'],
+ D:['11110','11011','11011','11011','11011','11011','11110'],
+ E:['11111','11000','11000','11110','11000','11000','11111'],
+ F:['11111','11000','11000','11110','11000','11000','11000'],
+ I:['111','010','010','010','010','010','111'],
+ J:['00111','00011','00011','00011','00011','11011','01110'],
+ L:['11000','11000','11000','11000','11000','11000','11111'],
+ M:['11011','11111','11111','11011','11011','11011','11011'],
+ N:['11001','11101','11101','11011','11011','11011','11001'],
+ O:['01110','11011','11011','11011','11011','11011','01110'],
+ P:['11110','11011','11011','11110','11000','11000','11000'],
+ R:['11110','11011','11011','11110','11100','11010','11011'],
+ S:['01111','11000','11000','01110','00011','00011','11110'],
+ T:['11111','00100','00100','00100','00100','00100','00100'],
+ U:['11011','11011','11011','11011','11011','11011','01110'],
+ V:['11011','11011','11011','11011','11011','01110','00100'],
+ a:['00000','00000','01110','00011','01111','11011','01111'],
+ f:['00110','01100','01100','11110','01100','01100','01100'],
+ i:['010','000','110','010','010','010','111'],
+ l:['110','010','010','010','010','010','111'],
+ s:['00000','00000','01111','11000','01110','00011','11110'],
+ '/':['00001','00010','00010','00100','01000','01000','10000'],
+ ' ':['000','000','000','000','000','000','000'],
+};
+const ESC = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
+const theme = p => ({...PALETTE, ...p});
+
+function documentSvg(body, width, height, title, description = '') {
+ return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${ESC(title)}" shape-rendering="crispEdges"><title>${ESC(title)}</title>${description ? `<desc>${ESC(description)}</desc>` : ''}${body}</svg>`;
+}
+function textPixels(value, x, y, unit, color, anchor = 'middle') {
+ const chars = [...String(value)];
+ const widths = chars.map(ch => {
+   if (!FONT[ch]) throw new TypeError(`Missing bitmap glyph: ${ch}`);
+   return FONT[ch][0].length;
+ });
+ const width = (widths.reduce((a,b) => a+b, 0) + Math.max(0,chars.length-1)) * unit;
+ let left = x - (anchor === 'middle' ? width/2 : 0), d = '';
+ for (let i=0;i<chars.length;i++) {
+   FONT[chars[i]].forEach((row, ry) => {
+     let rx = 0;
+     while(rx < row.length) {
+       if (row[rx] !== '1') { rx++; continue; }
+       const start = rx;
+       while (row[rx] === '1') rx++;
+       d += `M${left+start*unit} ${y+ry*unit}h${(rx-start)*unit}v${unit}h${-(rx-start)*unit}z`;
+     }
+   });
+   left += (widths[i]+1)*unit;
+ }
+ return `<g aria-label="${ESC(value)}"><title>${ESC(value)}</title><path fill="${color}" d="${d}"/></g>`;
+}
+
+function traced(name, x, y, color, scale=1) {
+ const v=DETAILS[name];
+ return `<path fill="${color}" transform="translate(${x-v.width*scale/2} ${y}) scale(${scale})" d="${v.d}"/>`;
+}
+function currentLabel(number,x,y,color) {
+ const glyph=DETAILS['digit'+number], prefix=DETAILS['mission-prefix'];
+ const digitWidth=glyph?glyph.width*21/glyph.height:(FONT[String(number)][0].length*3);
+ const total=prefix.width+20+digitWidth;
+ return traced('mission-prefix',x-total/2+prefix.width/2,y,color)
+   +(glyph?traced('digit'+number,x+total/2-digitWidth/2,y,color,21/glyph.height):textPixels(number,x+total/2-digitWidth/2,y,3,color));
+}
+
+// Pixel-circle shape uses an even grid; all edges remain horizontal or vertical.
+function disk(cx, cy, radius, fill, step = 6) {
+ const bands = Math.round(radius*2/step), top = cy - bands*step/2;
+ let d='';
+ for(let row=0;row<bands;row++) {
+   const dy=(row+.5)*step-bands*step/2;
+   const half=Math.max(step/2, Math.round(Math.sqrt(Math.max(0,radius*radius-dy*dy))/step)*step);
+   d += `M${cx-half} ${top+row*step}h${half*2}v${step}h${-half*2}z`;
+ }
+ return `<path fill="${fill}" d="${d}"/>`;
+}
+function ring(cx, cy, r, outer, inner, step=6) {
+ return disk(cx,cy,r,outer,step)+disk(cx,cy,r-step,inner,step);
+}
+function pointer(cx, y, color) {
+ return `<path fill="${color}" d="M${cx-18} ${y+18}h36v6h-36zM${cx-12} ${y+12}h24v6h-24zM${cx-6} ${y+6}h12v6h-12zM${cx-3} ${y}h6v6h-6z"/>`;
+}
+function badge(kind, cx, cy, p) {
+ const bg = kind === 'success' ? p.blue : p.red;
+ const glyph = kind === 'success'
+   ? ['00000001','00000011','00000110','11001100','01111000','00110000']
+   : ['1100011','0110110','0011100','0001000','0011100','0110110','1100011'];
+ let d='';
+ const s=4, x=cx-glyph[0].length*s/2, y=cy-glyph.length*s/2;
+ glyph.forEach((row,ry)=>[...row].forEach((v,rx)=>{if(v==='1')d+=`M${x+rx*s} ${y+ry*s}h${s}v${s}h-${s}z`;}));
+ return disk(cx,cy,32,bg,4)+`<path fill="${p.white}" d="${d}"/>`;
+}
+function castleBody(x=0,y=0) {
+ return `<g id="castle" transform="translate(${x} ${y})" aria-label="Pixel castle">`+CASTLE.paths.map((p,i)=>`<g id="castle-color-${i}" fill="${p.fill}"><path d="${p.d}"/></g>`).join('')+'</g>';
+}
+function missionBody({number=1,teamSize=2,result=null,current=false,requiredFails=1,showDetails=true}, p) {
+ const roman=['I','II','III','IV','V'][number-1];
+ let s=`<g data-mission="${number}" aria-label="Mission ${number}, ${teamSize} agents${current?', current':''}${result?', '+result:''}">`;
+ s+=traced('roman'+number,104,0,p.ink);
+ s+=ring(104,140,90,current?p.gold:p.ink,p.sage);
+ s+=DETAILS['digit'+teamSize]?traced('digit'+teamSize,104,110,p.ink):textPixels(teamSize,104,112,8,p.ink);
+ if(result)s+=badge(result,current?48:104,current?214:222,p);
+ if(current) s+=pointer(104,238,p.gold);
+ if(showDetails && current)s+=currentLabel(number,104,269,p.ink);
+ if(showDetails && requiredFails>1)s+=traced('fails',104,current?306:244,p.muted);
+ return s+'</g>';
+}
+function rejectionBody({count=0}, p) {
+ let s='<g id="rejection-tracker" aria-label="'+count+' of 5 rejected proposals">';
+ s+=traced('rejected',220,0,p.ink);
+ for(let i=0;i<5;i++) {
+   const cx=76+i*72,cy=70;
+   s+=`<g id="proposal-${i+1}" data-filled="${i<count}">`;
+   s+=i<count?disk(cx,cy,22,p.red,4):ring(cx,cy,22,p.sageOutline,p.background,4);
+   s+='</g>';
+ }
+ return s+(count===2?traced('counter2',220,119,p.ink):textPixels(`${count} / 5`,220,120,3.3,p.ink))+'</g>';
+}
+
+const DEMO_STATE = Object.freeze({
+ currentMission:3, teamSizes:[2,3,3,4,4],
+ missionResults:['fail','success',null,null,null],
+ requiredFails:[1,1,1,2,1], rejectedProposals:2,
+});
+function validate(state) {
+ if(state.currentMission!==null && (!Number.isInteger(state.currentMission)||state.currentMission<1||state.currentMission>5))throw new RangeError('currentMission must be null or 1–5');
+ if(!Number.isInteger(state.rejectedProposals)||state.rejectedProposals<0||state.rejectedProposals>5)throw new RangeError('rejectedProposals must be 0–5');
+ for(const key of ['teamSizes','missionResults','requiredFails'])if(!Array.isArray(state[key])||state[key].length!==5)throw new RangeError(`${key} must contain exactly five entries`);
+ if(state.teamSizes.some(n=>!Number.isInteger(n)||n<1||n>9))throw new RangeError('teamSizes entries must be integers from 1 to 9');
+ if(state.requiredFails.some(n=>!Number.isInteger(n)||n<1||n>2))throw new RangeError('requiredFails entries must be 1 or 2');
+ if(state.missionResults.some(r=>![null,'success','fail'].includes(r)))throw new TypeError('missionResults entries must be null, success, or fail');
+}
+function renderBoard(options={}) {
+ const s={...DEMO_STATE,...options},p=theme(s.palette); validate(s);
+ let body=s.transparent?'':`<rect id="background" width="1254" height="1254" fill="${p.background}"/>`;
+ body+=castleBody(232,140);
+ for(let i=0;i<5;i++)body+=`<g id="mission-${i+1}" transform="translate(${78+i*222} 624)">`+missionBody({number:i+1,teamSize:s.teamSizes[i],result:s.missionResults[i],current:s.currentMission===i+1,requiredFails:s.requiredFails[i]},p)+'</g>';
+ body+=`<g transform="translate(407 1008)">`+rejectionBody({count:s.rejectedProposals},p)+'</g>';
+ return documentSvg(body,1254,1254,'Avalon mission board',`Five mission slots. ${s.currentMission===null?'No active mission.':'Mission '+s.currentMission+' active.'} ${s.rejectedProposals} of 5 proposals rejected. Team sizes: ${s.teamSizes.join(', ')}.`);
+}
+function renderCastle() { return documentSvg(castleBody(),792,424,'Pixel castle'); }
+function renderBackground({transparent=false,palette}={}) {
+ const p=theme(palette);
+ return documentSvg((transparent?'':`<rect width="1254" height="1254" fill="${p.background}"/>`)+castleBody(232,140),1254,1254,'Castle board background');
+}
+function renderMission(options={}) {
+ const s={number:1,teamSize:2,result:null,current:false,requiredFails:1,showDetails:true,...options};
+ if(!Number.isInteger(s.number)||s.number<1||s.number>5)throw new RangeError('number must be 1–5');
+ validate({...DEMO_STATE,teamSizes:[s.teamSize,2,2,2,2],missionResults:[s.result,null,null,null,null],requiredFails:[s.requiredFails,1,1,1,1]});
+ return documentSvg(missionBody(s,theme(s.palette)),208,s.current&&s.requiredFails>1?336:304,`Mission ${s.number}`);
+}
+function renderRejectionTrack({count=0,palette}={}) {
+ validate({...DEMO_STATE,rejectedProposals:count});
+ return documentSvg(rejectionBody({count},theme(palette)),440,152,`${count} of 5 proposals rejected`);
+}
+function renderIcon(name,{palette}={}) {
+ const p=theme(palette);let body;
+ if(name==='success'||name==='fail')body=badge(name,36,36,p);
+ else if(name==='proposal-filled')body=disk(36,36,22,p.red,4);
+ else if(name==='proposal-empty')body=ring(36,36,22,p.sageOutline,p.background,4);
+ else if(name==='current-pointer')body=pointer(36,22,p.gold);
+ else if(name==='current-ring') {
+   // Even-odd clip retains genuine transparency in the center of this overlay.
+   const outer=disk(96,96,90,p.gold,6).match(/d="([^"]+)"/)[1];
+   const inner=disk(96,96,84,p.gold,6).match(/d="([^"]+)"/)[1];
+   body=`<path fill="${p.gold}" fill-rule="evenodd" d="${outer}${inner}"/>`;
+   return documentSvg(body,192,192,'Current mission ring');
+ } else throw new TypeError(`Unknown icon: ${name}`);
+ return documentSvg(body,72,72,name.replaceAll('-',' '));
+}
+
+
+const board=document.querySelector('#board');
+function state(){return {currentMission:Number(document.querySelector('#mission').value)||null,rejectedProposals:Number(document.querySelector('#rejections').value),missionResults:[1,2,3,4,5].map(n=>document.querySelector('#result-'+n).value||null)}}
+function draw(){board.innerHTML=renderBoard(state())}
+document.querySelectorAll('select').forEach(el=>el.addEventListener('change',draw));
+document.querySelector('#reset').addEventListener('click',()=>{document.querySelector('#mission').value='3';document.querySelector('#rejections').value='2';[1,2,3,4,5].forEach(n=>document.querySelector('#result-'+n).value=DEMO_STATE.missionResults[n-1]||'');draw()});
+document.querySelector('#download').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([renderBoard(state())],{type:'image/svg+xml'}));const a=document.createElement('a');a.href=url;a.download='avalon-board.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});draw();
+</script></body></html>

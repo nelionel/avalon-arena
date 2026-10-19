@@ -1,0 +1,22 @@
+# Credentials (root-only)
+secrets/
+
+# Game runs: per-game public/private git repos, transcripts, logs
+games/
+
+# Runtime state and binaries: pinned Claude binary, compiled jail, slot locks
+runtime/
+
+# Local tool venv, voice models, eSpeak data
+.tools/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Dashboard process logs and PID files
+*.log
+*.pid
+
+# Local model overrides (base URLs, backends)
+models.local.toml
