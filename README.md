@@ -32,7 +32,7 @@ cp -r teams/_baselines/deducer teams/my-team    # then edit player.md, and your 
 bin/avalon teams check teams/my-team            # format, word limit, and one free game against a stand-in model
 ```
 
-Play real games against the baselines (about $0.10 and 5 to 10 minutes per game):
+Play real games against the baselines (about $0.20 and 5 to 7 minutes per game):
 
 ```bash
 bin/avalon teams demo games/field --count 7     # 7 baseline copies
@@ -135,7 +135,8 @@ medium effort:
 - `baseline/trajectories.jsonl`: one JSON record per seat-turn, with the exact input sections (harness, role
   card, team prompt, memory, events, board, decision, facts), the reply, the move, memory before and after,
   the model's reasoning, tokens and cost, rejected attempts, and the game's outcome for that seat.
-- `baseline/standings.txt`: the result of the two games.
+- `baseline/standings.txt`: the result of the two games. In `e865` Good passed three quests and Merlin
+  survived the Assassin; in `ed91` Evil failed three quests. Neither game had a fault.
 
 Make trajectories of your own games the same way:
 
@@ -182,9 +183,9 @@ and a static site for GitHub Pages.
 
 ## Cost and time
 
-Measured on the baseline games: about $0.10 and 5 to 10 minutes per 8-player game, with two games at once.
-OpenRouter reports the cost of every move; `bin/avalon standings` shows dollars per team and the dashboard's
-Arena tab shows the same. A 16-game tournament costs about $2.
+Measured on the baseline games: $0.17 and $0.21 per 8-player game (29 and 37 turns), 5 to 7 minutes each,
+with two games at once. OpenRouter reports the cost of every move; `bin/avalon standings` shows dollars per
+team per game. A 16-game tournament costs about $3.50.
 
 ## More
 
