@@ -120,12 +120,18 @@ your team.
 
 [teams/_baselines](teams/_baselines) has four starting points:
 
-| Baseline | Idea |
-|---|---|
-| `minimal` | the essentials in 250 words |
-| `deducer` | a structured notebook and explicit belief updates |
-| `cautious-merlin` | keeping Merlin hidden from the Assassin |
-| `coordinated-evil` | conventions Evil players can follow without talking |
+| Baseline | Idea | Score | Good wins | Evil wins |
+|---|---|---|---|---|
+| **`deducer`** | a structured notebook and explicit belief updates | **0.68** | 45% (9 of 20) | 92% (11 of 12) |
+| `coordinated-evil` | conventions Evil players can follow without talking | 0.48 | 30% (6 of 20) | 67% (8 of 12) |
+| `cautious-merlin` | keeping Merlin hidden from the Assassin | 0.48 | 30% (6 of 20) | 67% (8 of 12) |
+| `minimal` | the essentials in 250 words | 0.35 | 20% (4 of 20) | 50% (6 of 12) |
+
+**`deducer` is the strongest baseline: start from it.** The scores come from a 16-game tournament of the four
+baselines, two copies each, run exactly as the evaluation runs (seed 2026). Both copies of `deducer` placed
+first and second; each row above combines a baseline's two copies. Evil won 11 of the 16 games, so the Good
+side is where the most room is. Sixteen games is a small sample: treat differences under about 0.15 as noise.
+[baseline/tournament-16.txt](baseline/tournament-16.txt) has the full standings.
 
 [baseline/](baseline) holds real games of these four, two copies each, all eight seats played by Haiku 5.5 at
 medium effort:
@@ -135,8 +141,9 @@ medium effort:
 - `baseline/trajectories.jsonl`: one JSON record per seat-turn, with the exact input sections (harness, role
   card, team prompt, memory, events, board, decision, facts), the reply, the move, memory before and after,
   the model's reasoning, tokens and cost, rejected attempts, and the game's outcome for that seat.
-- `baseline/standings.txt`: the result of the two games. In `e865` Good passed three quests and Merlin
+- `baseline/standings.txt`: the result of those two games. In `e865` Good passed three quests and Merlin
   survived the Assassin; in `ed91` Evil failed three quests. Neither game had a fault.
+- `baseline/tournament-16.txt`: the standings of the 16-game tournament above.
 
 Make trajectories of your own games the same way:
 
@@ -183,9 +190,10 @@ and a static site for GitHub Pages.
 
 ## Cost and time
 
-Measured on the baseline games: $0.17 and $0.21 per 8-player game (29 and 37 turns), 5 to 7 minutes each,
-with two games at once. OpenRouter reports the cost of every move; `bin/avalon standings` shows dollars per
-team per game. A 16-game tournament costs about $3.50.
+Measured on the baseline tournament: 16 games cost $2.91 ($0.18 per 8-player game) and took 29 minutes
+with four games at once, about 7 minutes per game. Four games at once needs `concurrency = 32` for
+`haiku-5.5-or` in `models.local.toml`; the default 16 allows two. OpenRouter reports the cost of every move;
+`bin/avalon standings` shows dollars per team per game.
 
 ## More
 

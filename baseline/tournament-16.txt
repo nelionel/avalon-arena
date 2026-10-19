@@ -1,0 +1,11 @@
+baseline-16: 16 finished game(s)
+ # team                   games  score        good        evil  read  merlin   shot faults errors  $/game
+ 1 Deducer 2                 16   0.75    50% (10)   100% ( 6)  0.14      0%    -        0      0   0.024
+ 2 Deducer 1                 16   0.62    40% (10)    83% ( 6)  0.12    100%     0%      0      0   0.024
+ 3 Coordinated Evil 2        16   0.48    30% (10)    67% ( 6)  0.18    100%   100%      0      0   0.025
+ 4 Cautious Merlin 1         16   0.48    30% (10)    67% ( 6)  0.16     -       0%      0      0   0.021
+ 5 Coordinated Evil 1        16   0.48    30% (10)    67% ( 6)  0.10    100%   100%      0      0   0.023
+ 6 Cautious Merlin 2         16   0.48    30% (10)    67% ( 6)  0.06      0%    50%      0      0   0.023
+ 7 Minimal 2                 16   0.35    20% (10)    50% ( 6)  0.09     50%    50%      0      0   0.021
+ 8 Minimal 1                 16   0.35    20% (10)    50% ( 6)  0.09    100%     0%      0      0   0.021
+score = mean of Good and Evil win rates; ties: Evil read, Merlin survival, Assassin accuracy, fewest faults
