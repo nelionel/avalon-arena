@@ -14,6 +14,7 @@ You need Python 3.11 or newer and one [OpenRouter](https://openrouter.ai) key. T
 - [Improve on the baseline](#improve-on-the-baseline)
 - [Submit](#submit)
 - [How solutions are evaluated](#how-solutions-are-evaluated)
+- [Compare two solutions head to head](#compare-two-solutions-head-to-head)
 - [Cost and time](#cost-and-time)
 
 ## Quick start
@@ -130,7 +131,8 @@ your team.
 **`deducer` is the strongest baseline: start from it.** The scores come from a 16-game tournament of the four
 baselines, two copies each, run exactly as the evaluation runs (seed 2026). Both copies of `deducer` placed
 first and second; each row above combines a baseline's two copies. Evil won 11 of the 16 games, so the Good
-side is where the most room is. Sixteen games is a small sample: treat differences under about 0.15 as noise.
+side is where the most room is. Sixteen games is a small sample. Resampling them, `deducer` comes out on top
+94% of the time, and its lead over the next baseline has a 90% interval of -0.01 to 0.34.
 [baseline/tournament-16.txt](baseline/tournament-16.txt) has the full standings.
 
 [baseline/](baseline) holds real games of these four, two copies each, all eight seats played by Haiku 5.5 at
@@ -187,6 +189,47 @@ bin/avalon standings --tag final
 
 Stopped games do not count. [TOURNAMENT.md](TOURNAMENT.md) has the details, including the live spectator site
 and a static site for GitHub Pages.
+
+**How much 16 games can tell.** Over 16 games a team plays Good 10 times and Evil 6 times, and all players on
+the winning side share the win. A single team's score is uncertain by about ±0.2 (a 90% interval measured by
+resampling the baseline tournament), so two teams in one series are only clearly apart when their scores
+differ by about 0.3 or more. For closer calls, play more games or compare the two head to head.
+
+## Compare two solutions head to head
+
+```bash
+bin/avalon versus teams/a teams/b --games 16 --parallel 4 --seed 1
+bin/avalon versus --report                     # print the newest series again (--report TAG for another)
+```
+
+Games come in pairs that share the seats, the role deal and the first leader. In the first game of a pair, A
+plays all five Good seats (Merlin, Percival, 3 Loyal Servants) and B all three Evil seats (Morgana, the
+Assassin, Oberon). In the second game they swap. So every game is one A-against-B trial, and each prompt
+plays each side equally often. The report shows each prompt's wins as Good, as Evil and in total, and A's
+share of all wins with a 95% interval. A real 4-game check of `deducer` against `minimal`:
+
+```
+versus-live-check: 4 finished game(s), model haiku-5.5-or
+   prompt                          as Good        as Evil          total
+A  Deducer                    1 of 2 (50%)   1 of 2 (50%)         2 of 4
+B  Minimal                    1 of 2 (50%)   1 of 2 (50%)         2 of 4
+A wins 50% of games (95% interval 15% to 85%): not separated yet (the interval includes 50%), so play more games.
+```
+
+Four games say almost nothing. When the interval lies above 50%, A beats B more often than not; below 50%, B
+does. The interval narrows with more games:
+
+| Games | 95% interval when the share is 50% |
+|---|---|
+| 16 | 28% to 72% |
+| 32 | 34% to 66% |
+| 64 | 38% to 62% |
+| 100 | 40% to 60% |
+
+So 16 games separate a prompt that wins about three games in four from its rival; telling 60% from 50% takes
+about 100. Each game costs $0.10 to $0.20. `--games` must be even, and `--mock` makes a free dry run. Teams can
+use this too: `bin/avalon versus teams/my-team teams/_baselines/deducer` measures a draft against the
+strongest baseline.
 
 ## Cost and time
 

@@ -10,6 +10,7 @@
   avalon teams check teams/                check tournament submissions, then play them in a stand-in game
   avalon tournament --teams teams/ --games 16 --parallel 2    one seat per team, roles balanced (TOURNAMENT.md)
   avalon standings                         tournament standings by team
+  avalon versus teams/a teams/b --games 16 head-to-head: A plays all Good seats against B, then they swap
   avalon trajectories GAME_ID ...          one JSONL record per seat-turn of the prompt players
   avalon models                            which models are configured and ready on this machine
   avalon resume GAME_ID                    resume an interrupted local Codex game
@@ -283,6 +284,21 @@ def main(argv=None):
     to.add_argument("--timeout", type=float, default=600, help="seconds per turn before a safe default move")
     to.add_argument("--max-rounds", type=int, default=3, help="discussion rounds per proposal (max 10)")
     to.add_argument("--no-reflect", action="store_true")
+    vs = sub.add_parser("versus", help="head-to-head: one prompt plays every Good seat, the other every Evil seat, "
+                        "then they swap; reports how often each wins")
+    vs.add_argument("a", nargs="?", help="team folder A")
+    vs.add_argument("b", nargs="?", help="team folder B")
+    vs.add_argument("--games", type=int, default=16, help="an even number: pairs of games with the sides swapped")
+    vs.add_argument("--model", default="haiku-5.5-or", help="models.toml key both prompts play with")
+    vs.add_argument("--parallel", type=int, default=1, help="games at once")
+    vs.add_argument("--seed", type=int, help="makes the seats and role deals reproducible")
+    vs.add_argument("--tag")
+    vs.add_argument("--mock", action="store_true", help="stand-in model: a free dry run")
+    vs.add_argument("--timeout", type=float, default=600, help="seconds per turn before a safe default move")
+    vs.add_argument("--max-rounds", type=int, default=3, help="discussion rounds per proposal (max 10)")
+    vs.add_argument("--no-reflect", action="store_true")
+    vs.add_argument("--report", nargs="?", const="", metavar="TAG", help="print an earlier series (default: the newest)")
+    vs.add_argument("--json", action="store_true", help="with --report: JSON")
     sd = sub.add_parser("standings", help="tournament standings by team")
     sd.add_argument("--tag", help="the series (default: the newest)")
     sd.add_argument("--json", action="store_true")
@@ -356,6 +372,24 @@ def main(argv=None):
         except (RuntimeError, ValueError, TeamError) as e:
             sys.exit(f"avalon tournament: {e}")
         print("\n" + format_standings(compute_standings(tag)))
+    elif a.cmd == "versus":
+        from .tournament.teams import TeamError, load_team
+        from .tournament.versus import compute_versus, format_versus, run_versus
+        try:
+            if a.report is not None:
+                v = compute_versus(a.report or None)
+                print(json.dumps(v, indent=1) if a.json else format_versus(v))
+                return
+            if not (a.a and a.b):
+                sys.exit("avalon versus: give two team folders (A and B), or --report TAG")
+            base = os.environ.get("AVALON_CWD") or os.getcwd()
+            ta, tb = load_team(os.path.join(base, a.a)), load_team(os.path.join(base, a.b))
+            tag, _ = asyncio.run(run_versus(ta, tb, a.games, model=a.model, parallel=a.parallel, seed=a.seed, tag=a.tag,
+                                            mock=a.mock, timeout=a.timeout, max_rounds=min(10, a.max_rounds),
+                                            reflect=not a.no_reflect))
+        except (RuntimeError, ValueError, TeamError) as e:
+            sys.exit(f"avalon versus: {e}")
+        print("\n" + format_versus(compute_versus(tag)))
     elif a.cmd == "standings":
         from .tournament.series import compute_standings, format_standings
         st = compute_standings(a.tag)

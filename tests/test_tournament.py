@@ -25,7 +25,7 @@ from avalon.drivers import model_player  # noqa: E402
 from avalon.drivers.local_bot import turnspec  # noqa: E402
 from avalon.models import HTTPChat, ModelError, Reply  # noqa: E402
 from avalon.roles import PRESETS, ROLES, validate_roles  # noqa: E402
-from avalon.tournament import player, publish, series, teams  # noqa: E402
+from avalon.tournament import player, publish, series, teams, versus  # noqa: E402
 
 DEDUCER_LINE = "Strategy: the structured deducer"      # a line of a baseline prompt: must not leak before the reveal
 
@@ -446,6 +446,54 @@ class TournamentTests(GameDirs):
             with self.assertRaises(RuntimeError):
                 await series.run_tournament(teams.load_teams(self.root / "teams"), 1, model="haiku-5.5-or")
         self.assertFalse(referee.GAMES.exists() and any(referee.GAMES.iterdir()))
+
+
+class VersusTests(GameDirs):
+    async def test_pairs_swap_sides_on_one_deal_and_count_wins_by_prompt(self):
+        a, b = teams.load_team(self.field[0]), teams.load_team(self.field[1])
+        tag, gids = await versus.run_versus(a, b, 6, model="haiku-5.5-or", parallel=3, seed=4, mock=True, tag="vs",
+                                            max_rounds=1)
+        self.assertEqual((tag, len(gids)), ("vs", 6))
+        manifest = json.loads((referee.GAMES / ".vs.versus.json").read_text())
+        for i, (plan, gid) in enumerate(zip(manifest["schedule"], manifest["game_ids"])):
+            self.assertEqual(plan["good"], "ab"[i % 2])                        # A is Good first, then the sides swap
+            if i % 2:
+                self.assertEqual(plan["roles"], manifest["schedule"][i - 1]["roles"])      # one deal per pair
+            seats = json.loads((referee.GAMES / gid / "referee" / "status.json").read_text())["config"]["seats"]
+            roles = json.loads((referee.GAMES / gid / "referee" / "roles.json").read_text())
+            self.assertEqual(roles, plan["roles"])
+            good, evil = (a, b) if plan["good"] == "a" else (b, a)
+            for p, role in roles.items():                                       # one prompt holds a whole side
+                self.assertEqual(seats[p], f"team:{(good if ROLES[role].side == 'good' else evil).path}")
+        v = versus.compute_versus("vs")
+        self.assertEqual((v["games"], v["stopped_games"], v["a_wins"] + v["b_wins"]), (6, 0, 6))
+        self.assertEqual(v["played"], {"a": {"good": 3, "evil": 3}, "b": {"good": 3, "evil": 3}})
+        for g in v["game_list"]:
+            s = json.loads((referee.GAMES / g["id"] / "referee" / "summary.json").read_text())
+            self.assertEqual(g["winner"], g["good"] if s["winner"] == "good" else versus.OTHER[g["good"]])
+        low, high = v["interval"]
+        self.assertTrue(0 <= low <= v["a_share"] <= high <= 1)
+        self.assertIn("A wins", versus.format_versus(v))
+
+    async def test_cli_plays_and_reports_a_series(self):
+        from avalon import cli
+        with patch("sys.stdout") as out:                  # the CLI runs its own event loop: give it a thread
+            await asyncio.to_thread(cli.main, ["versus", str(self.field[0]), str(self.field[2]), "--games", "2",
+                                               "--mock", "--tag", "vs-cli", "--max-rounds", "1"])
+            await asyncio.to_thread(cli.main, ["versus", "--report", "vs-cli", "--json"])
+        printed = "".join(c.args[0] for c in out.write.call_args_list)
+        self.assertIn('"games": 2', printed)
+        with self.assertRaises(SystemExit):
+            await asyncio.to_thread(cli.main, ["versus", str(self.field[0]), str(self.field[2]), "--games", "3", "--mock"])
+
+    def test_wilson_interval_and_pair_schedule(self):
+        self.assertEqual(versus.wilson(0, 0), (None, None))
+        self.assertEqual(versus.wilson(8, 16), (0.28, 0.72))
+        self.assertGreater(versus.wilson(30, 32)[0], 0.5)
+        self.assertEqual(versus.pairs(8, 5), versus.pairs(8, 5))                 # reproducible with a seed
+        self.assertEqual(sorted(versus.pairs(2, 1)[0]["roles"].values()), sorted(series.TOURNAMENT_ROLES))
+        with self.assertRaises(ValueError):
+            versus.pairs(3, 1)
 
 
 class TeamCheckTests(unittest.TestCase):

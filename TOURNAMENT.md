@@ -78,6 +78,12 @@ go to Evil read (as a Good player other than Merlin: average final P(Evil) given
 that given to Good players), then Merlin survival, then Assassin accuracy, then fewer faults. Stopped games do
 not count.
 
+## Two prompts head to head
+
+`bin/avalon versus teams/a teams/b --games 16` plays pairs of games on one deal: A holds every Good seat and
+B every Evil seat, then they swap. It reports how often each prompt wins, with a 95% interval. See
+[the README](README.md#compare-two-solutions-head-to-head).
+
 ## Trajectories
 
 ```bash
