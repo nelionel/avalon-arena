@@ -45,22 +45,39 @@ const FONT = {
  '/':['00001','00010','00010','00100','01000','01000','10000'],
  ' ':['000','000','000','000','000','000','000'],
 };
+// Bold 7 x 9 digits for the team size inside each mission circle.
+const BIG = {
+ '1':['0001100','0011100','0111100','0001100','0001100','0001100','0001100','0001100','0111111'],
+ '2':['0111110','1100011','0000011','0000110','0001100','0011000','0110000','1100000','1111111'],
+ '3':['0111110','1100011','0000011','0000011','0011110','0000011','0000011','1100011','0111110'],
+ '4':['0000110','0001110','0011110','0110110','1100110','1111111','0000110','0000110','0000110'],
+ '5':['1111111','1100000','1100000','1111110','0000011','0000011','0000011','1100011','0111110'],
+ '6':['0011110','0110000','1100000','1111110','1100011','1100011','1100011','1100011','0111110'],
+ '7':['1111111','0000011','0000110','0001100','0001100','0011000','0011000','0011000','0011000'],
+ '8':['0111110','1100011','1100011','1100011','0111110','1100011','1100011','1100011','0111110'],
+ '9':['0111110','1100011','1100011','1100011','0111111','0000011','0000011','0000110','0111100'],
+};
+// Serif Roman numerals for the mission headings.
+const ROMAN = {
+ I:['1111','0110','0110','0110','0110','0110','1111'],
+ V:['1100011','1100011','0110110','0110110','0110110','0011100','0001000'],
+};
 const ESC = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 const theme = p => ({...PALETTE, ...p});
 
 function documentSvg(body, width, height, title, description = '') {
  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${ESC(title)}" shape-rendering="crispEdges"><title>${ESC(title)}</title>${description ? `<desc>${ESC(description)}</desc>` : ''}${body}</svg>`;
 }
-function textPixels(value, x, y, unit, color, anchor = 'middle') {
+function textPixels(value, x, y, unit, color, anchor = 'middle', font = FONT) {
  const chars = [...String(value)];
  const widths = chars.map(ch => {
-   if (!FONT[ch]) throw new TypeError(`Missing bitmap glyph: ${ch}`);
-   return FONT[ch][0].length;
+   if (!font[ch]) throw new TypeError(`Missing bitmap glyph: ${ch}`);
+   return font[ch][0].length;
  });
  const width = (widths.reduce((a,b) => a+b, 0) + Math.max(0,chars.length-1)) * unit;
  let left = x - (anchor === 'middle' ? width/2 : 0), d = '';
  for (let i=0;i<chars.length;i++) {
-   FONT[chars[i]].forEach((row, ry) => {
+   font[chars[i]].forEach((row, ry) => {
      let rx = 0;
      while(rx < row.length) {
        if (row[rx] !== '1') { rx++; continue; }
@@ -71,7 +88,10 @@ function textPixels(value, x, y, unit, color, anchor = 'middle') {
    });
    left += (widths[i]+1)*unit;
  }
- return `<g aria-label="${ESC(value)}"><title>${ESC(value)}</title><path fill="${color}" d="${d}"/></g>`;
+ // Small text lands on fractional screen pixels when the board is scaled down; antialias it so every
+ // stroke keeps the same weight instead of snapping to uneven widths.
+ const smooth = unit < 4 ? ' shape-rendering="geometricPrecision"' : '';
+ return `<g aria-label="${ESC(value)}"${smooth}><title>${ESC(value)}</title><path fill="${color}" d="${d}"/></g>`;
 }
 
 function traced(name, x, y, color, scale=1) {
@@ -79,11 +99,7 @@ function traced(name, x, y, color, scale=1) {
  return `<path fill="${color}" transform="translate(${x-v.width*scale/2} ${y}) scale(${scale})" d="${v.d}"/>`;
 }
 function currentLabel(number,x,y,color) {
- const glyph=DETAILS['digit'+number], prefix=DETAILS['mission-prefix'];
- const digitWidth=glyph?glyph.width*21/glyph.height:(FONT[String(number)][0].length*3);
- const total=prefix.width+20+digitWidth;
- return traced('mission-prefix',x-total/2+prefix.width/2,y,color)
-   +(glyph?traced('digit'+number,x+total/2-digitWidth/2,y,color,21/glyph.height):textPixels(number,x+total/2-digitWidth/2,y,3,color));
+ return textPixels(`MISSION ${number}`,x,y,3,color);
 }
 
 // Pixel-circle shape uses an even grid; all edges remain horizontal or vertical.
@@ -97,8 +113,8 @@ function disk(cx, cy, radius, fill, step = 6) {
  }
  return `<path fill="${fill}" d="${d}"/>`;
 }
-function ring(cx, cy, r, outer, inner, step=6) {
- return disk(cx,cy,r,outer,step)+disk(cx,cy,r-step,inner,step);
+function ring(cx, cy, r, outer, inner, step=3, thick=2*step) {
+ return disk(cx,cy,r,outer,step)+disk(cx,cy,r-thick,inner,step);
 }
 function pointer(cx, y, color) {
  return `<path fill="${color}" d="M${cx-18} ${y+18}h36v6h-36zM${cx-12} ${y+12}h24v6h-24zM${cx-6} ${y+6}h12v6h-12zM${cx-3} ${y}h6v6h-6z"/>`;
@@ -111,7 +127,7 @@ function badge(kind, cx, cy, p) {
  let d='';
  const s=4, x=cx-glyph[0].length*s/2, y=cy-glyph.length*s/2;
  glyph.forEach((row,ry)=>[...row].forEach((v,rx)=>{if(v==='1')d+=`M${x+rx*s} ${y+ry*s}h${s}v${s}h-${s}z`;}));
- return disk(cx,cy,32,bg,4)+`<path fill="${p.white}" d="${d}"/>`;
+ return disk(cx,cy,32,bg,2)+`<path fill="${p.white}" d="${d}"/>`;
 }
 function castleBody(x=0,y=0) {
  return `<g id="castle" transform="translate(${x} ${y})" aria-label="Pixel castle">`+CASTLE.paths.map((p,i)=>`<g id="castle-color-${i}" fill="${p.fill}"><path d="${p.d}"/></g>`).join('')+'</g>';
@@ -119,25 +135,25 @@ function castleBody(x=0,y=0) {
 function missionBody({number=1,teamSize=2,result=null,current=false,requiredFails=1,showDetails=true}, p) {
  const roman=['I','II','III','IV','V'][number-1];
  let s=`<g data-mission="${number}" aria-label="Mission ${number}, ${teamSize} agents${current?', current':''}${result?', '+result:''}">`;
- s+=traced('roman'+number,104,0,p.ink);
+ s+=textPixels(roman,104,2,4,p.ink,'middle',ROMAN);
  s+=ring(104,140,90,current?p.gold:p.ink,p.sage);
- s+=DETAILS['digit'+teamSize]?traced('digit'+teamSize,104,110,p.ink):textPixels(teamSize,104,112,8,p.ink);
+ s+=textPixels(teamSize,104,113,6,p.ink,'middle',BIG);
  if(result)s+=badge(result,current?48:104,current?214:222,p);
  if(current) s+=pointer(104,238,p.gold);
  if(showDetails && current)s+=currentLabel(number,104,269,p.ink);
- if(showDetails && requiredFails>1)s+=traced('fails',104,current?306:244,p.muted);
+ if(showDetails && requiredFails>1)s+=textPixels(`${requiredFails} fails`,104,current?306:result?262:244,3,p.muted);   // below the badge
  return s+'</g>';
 }
 function rejectionBody({count=0}, p) {
  let s='<g id="rejection-tracker" aria-label="'+count+' of 5 rejected proposals">';
- s+=traced('rejected',220,0,p.ink);
+ s+=textPixels('REJECTED PROPOSALS',220,0,3,p.ink);
  for(let i=0;i<5;i++) {
    const cx=76+i*72,cy=70;
    s+=`<g id="proposal-${i+1}" data-filled="${i<count}">`;
-   s+=i<count?disk(cx,cy,22,p.red,4):ring(cx,cy,22,p.sageOutline,p.background,4);
+   s+=i<count?disk(cx,cy,22,p.red,2):ring(cx,cy,22,p.sageOutline,p.background,2,4);
    s+='</g>';
  }
- return s+(count===2?traced('counter2',220,119,p.ink):textPixels(`${count} / 5`,220,120,3.3,p.ink))+'</g>';
+ return s+textPixels(`${count} / 5`,220,120,3,p.ink)+'</g>';
 }
 
 export const DEMO_STATE = Object.freeze({
@@ -179,13 +195,13 @@ export function renderRejectionTrack({count=0,palette}={}) {
 export function renderIcon(name,{palette}={}) {
  const p=theme(palette);let body;
  if(name==='success'||name==='fail')body=badge(name,36,36,p);
- else if(name==='proposal-filled')body=disk(36,36,22,p.red,4);
- else if(name==='proposal-empty')body=ring(36,36,22,p.sageOutline,p.background,4);
+ else if(name==='proposal-filled')body=disk(36,36,22,p.red,2);
+ else if(name==='proposal-empty')body=ring(36,36,22,p.sageOutline,p.background,2,4);
  else if(name==='current-pointer')body=pointer(36,22,p.gold);
  else if(name==='current-ring') {
    // Even-odd clip retains genuine transparency in the center of this overlay.
-   const outer=disk(96,96,90,p.gold,6).match(/d="([^"]+)"/)[1];
-   const inner=disk(96,96,84,p.gold,6).match(/d="([^"]+)"/)[1];
+   const outer=disk(96,96,90,p.gold,3).match(/d="([^"]+)"/)[1];
+   const inner=disk(96,96,84,p.gold,3).match(/d="([^"]+)"/)[1];
    body=`<path fill="${p.gold}" fill-rule="evenodd" d="${outer}${inner}"/>`;
    return documentSvg(body,192,192,'Current mission ring');
  } else throw new TypeError(`Unknown icon: ${name}`);

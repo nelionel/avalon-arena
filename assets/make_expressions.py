@@ -1,8 +1,11 @@
 """Build the dashboard's character art with three expressions.
 
-  default  square eyes                (most of the game)
-  happy    the original ^ ^ eyes      (their team won)
-  sad      -_- flat eyes and mouth    (their team lost)
+  default  square eyes   (most of the game)
+  happy    ^ ^ eyes       (their team won)
+  sad      - - eyes       (their team lost)
+
+Faces have eyes only: the original eyes, and the eyebrows drawn with them, are erased and redrawn in one
+style for every character, with no mouth.
 
 Input: the extracted pose frames in assets/characters_src/frames (treated as
 image data only). Output: avalon/dashboard/static/chars/<role>_<expr>_{idle,talk}.webp
@@ -95,14 +98,23 @@ def _find_eyes(img: np.ndarray, thr: int):
     return eyes, face, lab
 
 
+def chevron(d: ImageDraw.ImageDraw, cx: float, cy: float, ew: int, col):
+    """A pixel-art ^: two-block strokes rising to a peak, about as wide as the eye."""
+    u = max(3, round(ew / 8))
+    rows = ["...##...", "..####..", ".##..##.", "##....##"]
+    x0, y0 = cx - 4 * u, cy - 2 * u
+    for ry, row in enumerate(rows):
+        for rx, v in enumerate(row):
+            if v == "#":
+                d.rectangle([x0 + rx * u, y0 + ry * u, x0 + (rx + 1) * u - 1, y0 + (ry + 1) * u - 1], fill=col)
+
+
 def edit(img: np.ndarray, expr: str, ref: tuple[int, int] | None = None) -> Image.Image:
     """ref = (eye width, eye height) measured once per character, so eyes keep one size."""
-    if expr == "happy":
-        return Image.fromarray(img)
     eyes, face, lab = find_eyes(img)
     out = img.copy()
     rgb = out[..., :3]
-    for e in eyes:                                      # erase the chevrons
+    for e in eyes:                                      # erase the original eyes (and the brows drawn with them)
         m = np.zeros(lab.shape, bool)
         m[e["sl"]] = e["mask"]
         m = ndimage.binary_dilation(m, iterations=3)
@@ -121,11 +133,8 @@ def edit(img: np.ndarray, expr: str, ref: tuple[int, int] | None = None) -> Imag
         elif expr == "sad":
             bw, bh = int(0.95 * ew), max(9, int(0.28 * eh))
             d.rectangle([cx - bw / 2, cy - bh / 2 + eh * 0.15, cx + bw / 2, cy + bh / 2 + eh * 0.15], fill=col)
-    if expr == "sad":                                   # the "_" between the eyes
-        mx = (eyes[0]["cx"] + eyes[1]["cx"]) / 2
-        my = max(e["cy"] for e in eyes) + eh * 0.95
-        mw, mh = int(0.55 * ew), max(7, int(0.2 * eh))
-        d.rectangle([mx - mw / 2, my - mh / 2, mx + mw / 2, my + mh / 2], fill=col)
+        elif expr == "happy":
+            chevron(d, cx, cy, ew, col)
     return im
 
 
